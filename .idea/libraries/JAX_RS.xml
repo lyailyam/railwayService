@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="JAX-RS" type="JAX-RS">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../jar_files.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

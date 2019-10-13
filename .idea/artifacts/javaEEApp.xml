@@ -1,0 +1,6 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-ear" name="javaEEApp">
+    <output-path>$PROJECT_DIR$/out/artifacts/javaEEApp</output-path>
+    <root id="root" />
+  </artifact>
+</component>
