@@ -5,7 +5,7 @@ import javax.ws.rs.core.Response;
 
 import com.google.gson.Gson;
 
-@Path("/test")
+@Path("/items")
 public class TestService {
     @GET
     public Response getList() {
