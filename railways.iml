@@ -4,6 +4,7 @@
     <facet type="web" name="Web">
       <configuration>
         <descriptors>
+          <deploymentDescriptor name="context.xml" url="file://$MODULE_DIR$/src/main/resources/META-INF/context.xml" />
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/src/main/webapp/WEB-INF/web.xml" />
         </descriptors>
         <webroots>
@@ -59,5 +60,7 @@
     <orderEntry type="library" name="Maven: org.glassfish.jersey.containers:jersey-container-servlet:2.26" level="project" />
     <orderEntry type="library" name="Maven: org.glassfish.jersey.media:jersey-media-sse:2.26" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.5" level="project" />
+    <orderEntry type="library" name="Maven: mysql:mysql-connector-java:8.0.17" level="project" />
+    <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:3.6.1" level="project" />
   </component>
 </module>

@@ -14,6 +14,7 @@ public class MyApplication extends Application {
 
     public MyApplication() {
         singletons.add(new TestService());
+        singletons.add(new TestDB());
     }
 
     @Override
