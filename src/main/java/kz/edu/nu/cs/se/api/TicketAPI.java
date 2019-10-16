@@ -12,20 +12,27 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-@Path("/ticket")
+@Path("/tickets")
 public class TicketAPI {
-
     @GET
-    @Path("{id: [0-9]+}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUserTickets(@PathParam("id") String id) {
+    public Response getTickets(@QueryParam("user_id") Integer userId,
+                                   @DefaultValue("5") @QueryParam("limit") Integer limit,
+                                   @DefaultValue("0") @QueryParam("offset") Integer offset) {
+
+        String sql;
+        if (userId != null) {
+            sql = "SELECT * FROM `railways-service`.`ticket` WHERE user_id = " + userId + " LIMIT " + limit + " OFFSET " + offset;
+        } else {
+            sql = "SELECT * FROM `railways-service`.`ticket` LIMIT " + limit + " OFFSET " + offset;
+        }
+
         Gson gson = new Gson();
-        try {
-            // TODO : Check if id exists at the first place
-            Connection conn = DBConnector.getDatabaseConnection();
-            String sql = "SELECT * FROM `railways-service`.`ticket`WHERE `user_id` = " + id;
+
+        try(Connection conn = DBConnector.getDatabaseConnection();
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
+            ResultSet rs = stmt.executeQuery(sql)) {
+            // TODO : Check if id exists at the first place
 
             List<Ticket> ticketList = new CopyOnWriteArrayList<Ticket>();
 
@@ -42,34 +49,80 @@ public class TicketAPI {
                 ticketList.add(t);
             }
 
-            rs.close();
-            stmt.close();
-            conn.close();
-
             return Response.ok(gson.toJson(ticketList)).build();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return Response.ok(gson.toJson(new String("error"))).build();
+        // TODO: Return a proper return with proper error status and message
+        return Response.ok("test").build();
     }
 
     @POST
-    @Path("{id: [0-9]+}")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response createUserTickets(@PathParam("id") String id, String body) {
-        Gson gson = new Gson();
+    public Response createUserTickets(Ticket ticket) {
+        String sql = "INSERT INTO `railways-service`.`ticket` (user_id, price, seat_id, trip_id, status) "
+                + String.format("VALUES (%s,%s,%s,%s,'%s')", ticket.getUserId(), ticket.getPrice(),
+                ticket.getSeatId(), ticket.getTripId(), ticket.getStatus());
 
-        // Parsing JSON from POST request body
-        Ticket t = gson.fromJson(body, Ticket.class);
-
-        // TODO: upload the ticket data into the database
-
-        System.out.println(t.getId());
-        return Response.ok(gson.toJson(new String("test"))).build();
+        try(Connection conn = DBConnector.getDatabaseConnection();
+            Statement stmt = conn.createStatement()) {
+            int rs = stmt.executeUpdate(sql);
+            return Response.status(rs).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // TODO: Return a proper return with proper error status and message
+        return Response.ok("test").build();
     }
 
+    @GET
+    @Path("/{ticket_id: [0-9]+}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTicket(@PathParam("ticket_id") Integer ticketId) {
+        String sql = "SELECT * FROM `railways-service`.`ticket` WHERE id = " + ticketId;
 
+        Gson gson = new Gson();
+
+        try(Connection conn = DBConnector.getDatabaseConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql)) {
+            // TODO : Check if id exists at the first place
+
+            rs.next();
+
+            // TODO: Consider using constructor?
+            Ticket ticket = new Ticket();
+            ticket.setId(rs.getInt("id"));
+            ticket.setUserId(rs.getInt("user_id"));
+            ticket.setTripId(rs.getInt("trip_id"));
+            ticket.setSeatId(rs.getInt("seat_id"));
+            ticket.setPrice(rs.getDouble("price"));
+            ticket.setStatus(rs.getString("status"));
+
+            return Response.ok(gson.toJson(ticket)).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // TODO: Return a proper return with proper error status and message
+        return Response.ok("test").build();
+    }
+
+    @DELETE
+    @Path("/{ticket_id: [0-9]+}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteTicket(@PathParam("ticket_id") Integer ticketId) {
+        String sql = "DELETE FROM `railways-service`.`ticket` WHERE id = " + ticketId;
+
+        try(Connection conn = DBConnector.getDatabaseConnection();
+            Statement stmt = conn.createStatement()) {
+            int rs = stmt.executeUpdate(sql);
+
+            return Response.status(rs).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // TODO: Return a proper return with proper error status and message
+        return Response.ok("test").build();
+    }
 }
 

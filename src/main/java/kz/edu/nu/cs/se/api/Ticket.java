@@ -1,12 +1,11 @@
 package kz.edu.nu.cs.se.api;
 
-
 public class Ticket {
-    private int id;
-    private int userId;
-    private int tripId;
-    private int seatId;
-    private double price;
+    private Integer id;
+    private Integer userId;
+    private Integer tripId;
+    private Integer seatId;
+    private Double price;
     private String status;
 
     public Ticket(int id, int userId, int tripId, int seatId, double price, String status) {
@@ -22,52 +21,51 @@ public class Ticket {
 
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public void setTripId(int tripId) {
-        this.tripId = tripId;
-    }
-
-    public void setSeatId(int seatId) {
-        this.seatId = seatId;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public int getUserId() {
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getUserId() {
         return userId;
     }
 
-    public int getTripId() {
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public Integer getTripId() {
         return tripId;
     }
 
-    public int getSeatId() {
+    public void setTripId(Integer tripId) {
+        this.tripId = tripId;
+    }
+
+    public Integer getSeatId() {
         return seatId;
     }
 
-    public double getPrice() {
+    public void setSeatId(Integer seatId) {
+        this.seatId = seatId;
+    }
+
+    public Double getPrice() {
         return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
     public String getStatus() {
         return status;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
