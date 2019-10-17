@@ -1,4 +1,4 @@
-package kz.edu.nu.cs.se.api;
+package kz.edu.nu.cs.se.models;
 
 public class Ticket {
     private Integer id;

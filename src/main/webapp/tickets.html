@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tickets</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        var tickets = {
+            items : [],
+        };
+        var limit = 50;
+
+        function displayTicketList() {
+            $("#ticket-list").html("");
+            tickets.items.forEach(function (e) {
+                $("#ticket-list").append("<li>"
+                    + e.id + ' '
+                    + e.price + ' '
+                    + e.userId + ' '
+                    + e.tripId + ' '
+                    + e.price + ' '
+                    + "</li>");
+            });
+
+        }
+        function getTicketList(page) {
+            $.ajax({
+                url : 'api/tickets?limit='+limit+'10&offset=' + 0,
+                dataType : 'json',
+                success : function(r) {
+                    tickets.items = r;
+                    console.log(tickets);
+                    displayTicketList();
+                }
+            });
+        }
+
+
+        $(document).ready(function () {
+            getTicketList(0);
+
+        });
+    </script>
+</head>
+<body>
+    <h1>Tickets</h1>
+    <ul id="ticket-list"></ul>
+
+
+</body>
+</html>

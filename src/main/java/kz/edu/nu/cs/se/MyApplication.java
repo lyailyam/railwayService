@@ -1,7 +1,6 @@
 package kz.edu.nu.cs.se;
 
-import kz.edu.nu.cs.se.api.Ticket;
-import kz.edu.nu.cs.se.api.TicketAPI;
+import kz.edu.nu.cs.se.services.TicketService;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -19,7 +18,7 @@ public class MyApplication extends Application {
     public MyApplication() {
         singletons.add(new TestService());
         singletons.add(new TestDB());
-        singletons.add(new TicketAPI());
+        singletons.add(new TicketService());
     }
 
     @Override

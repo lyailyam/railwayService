@@ -1,10 +1,11 @@
-package kz.edu.nu.cs.se.api;
+package kz.edu.nu.cs.se.services;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.google.gson.Gson;
 import kz.edu.nu.cs.se.DBConnector;
+import kz.edu.nu.cs.se.models.Ticket;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Path("/tickets")
-public class TicketAPI {
+public class TicketService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTickets(@QueryParam("user_id") Integer userId,
