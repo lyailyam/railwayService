@@ -2,10 +2,143 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Test</title>
+    <title>NU Railway Service</title>
+    <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
+          rel = "stylesheet">
+    <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <style>
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+        }
+        .topnav {
+            background-color: #333;
+            overflow: hidden;
+        }
+        li a {
+            float: left;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+        li a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        li a.active {
+            background-color: #7EAACD;
+            color: white;
+        }
+        * {box-sizing:border-box}
+        .slideshow-container {
+            max-width: 1000px;
+            max-height: 500px;
+            position: relative;
+            margin: auto;
+        }
+        .mySlides {display: none;}
+        .text {
+            color: #f2f2f2;
+            font-size: 15px;
+            padding: 8px 12px;
+            position: absolute;
+            bottom: 8px;
+            width: 100%;
+            text-align: center;
+        }
+        .dot {
+            cursor: pointer;
+            height: 15px;
+            width: 15px;
+            margin: 0 2px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+            transition: background-color 0.6s ease;
+        }
+        .active, .dot:hover {background-color: #717171;}
+        .fade {
+            -webkit-animation-name: fade;
+            -webkit-animation-duration: 1.5s;
+            animation-name: fade;
+            animation-duration: 1.5s;
+        }
+        @-webkit-keyframes fade {
+            from {opacity: .4}
+            to {opacity: 1}
+        }
+        @keyframes fade {
+            from {opacity: .4}
+            to {opacity: 1}
+        }
+    </style>
+    <script type = "text/javascript">
+        $(function() {
+            var slides = document.getElementsByClassName("mySlides");
+            slides[0].style.display = "block";
+            var slideIndex = 1;
+            showSlides();
+
+            function showSlides() {
+                var i;
+                var slides = document.getElementsByClassName("mySlides");
+                var dots = document.getElementsByClassName("dot");
+                for (i = 0; i < slides.length; i++) {
+                    slides[i].style.display = "none";
+                }
+                slideIndex++;
+                if (slideIndex > slides.length) {slideIndex = 1}
+                for (i = 0; i < dots.length; i++) {
+                    dots[i].className = dots[i].className.replace(" active", "");
+                }
+                slides[slideIndex-1].style.display = "block";
+                dots[slideIndex-1].className += " active";
+                setTimeout(showSlides, 5000); // Change image every 5 seconds
+            }
+        });
+    </script>
 </head>
 <body>
-<h1>Test</h1>
+<div class="topnav">
+    <ul>
+        <li><a class="active" href = "#">Home</a></li>
+        <li><a href = "#">Buy tickets</a></li>
+        <li><a href = "#">Popular destinations</a></li>
+        <li><a href = "#">Discounts</a></li>
+        <li style="float: right"><a href = "#">Log In</a></li>
+    </ul>
+</div>
+<h1>Welcome to NU Railway Service!</h1>
+<div class="slideshow-container">
 
+    <div class="mySlides fade">
+        <img src="img1.jpg" style="width:100%; height:500px">
+        <div class="text">Caption One</div>
+    </div>
+
+    <div class="mySlides fade">
+        <img src="img2.jpeg" style="width:100%; height:500px">
+        <div class="text">Caption Two</div>
+    </div>
+
+    <div class="mySlides fade">
+        <img src="img3.jpeg" style="width:100%; height:500px">
+        <div class="text">Caption Three</div>
+    </div>
+</div>
+<br>
+
+<!-- The dots/circles -->
+<div style="text-align:center">
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+</div>
 </body>
 </html>
