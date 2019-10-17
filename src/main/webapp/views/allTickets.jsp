@@ -1,8 +1,8 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Tickets</title>
+    <title>Title</title>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
             integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
             crossorigin="anonymous"></script>
@@ -11,29 +11,40 @@
         var tickets = {
             items : [],
         };
+
         var limit = 50;
+
 
         function displayTicketList() {
             $("#ticket-list").html("");
             tickets.items.forEach(function (e) {
                 $("#ticket-list").append("<li>"
-                    + e.id + ' '
-                    + e.price + ' '
-                    + e.userId + ' '
-                    + e.tripId + ' '
-                    + e.price + ' '
+                    + "Ticket ID: " + e.id + ' '
+                    + "Price: " + e.price + ' '
+                    + "User ID: " + e.userId + ' '
+                    + "Trip ID: " + e.tripId + ' '
+                    + '<a href="?id=' + e.id + '">link</a>'
                     + "</li>");
             });
-
         }
+
         function getTicketList(page) {
             $.ajax({
                 url : 'api/tickets?limit='+limit+'10&offset=' + 0,
                 dataType : 'json',
-                success : function(r) {
-                    tickets.items = r;
-                    console.log(tickets);
+                success : function(result) {
+                    tickets.items = result;
                     displayTicketList();
+                },
+                error: function (jqXHR, status, error) {
+                    if (jqXHR.status == 500) {
+                        alert("Internal server error");
+                    } else if (jqXHR.status == 404) {
+                        alert("Query error");
+                    } else {
+                        alert("Unknown error");
+                    }
+                    displayTicketList([]);
                 }
             });
         }
@@ -47,8 +58,6 @@
 </head>
 <body>
     <h1>Tickets</h1>
-    <ul id="ticket-list"></ul>
-
-
+    <ul id="ticket-list">Loading...</ul>
 </body>
 </html>

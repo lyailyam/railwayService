@@ -9,6 +9,7 @@ import kz.edu.nu.cs.se.models.Ticket;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -51,11 +52,12 @@ public class TicketService {
             }
 
             return Response.ok(gson.toJson(ticketList)).build();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
+            return Response.status(404).build();
+        } catch (Exception e) {
+            return Response.status(500).build();
         }
-        // TODO: Return a proper return with proper error status and message
-        return Response.ok("test").build();
     }
 
     @POST
@@ -101,11 +103,12 @@ public class TicketService {
             ticket.setStatus(rs.getString("status"));
 
             return Response.ok(gson.toJson(ticket)).build();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
+            return Response.status(404).build();
+        } catch (Exception e) {
+            return Response.status(500).build();
         }
-        // TODO: Return a proper return with proper error status and message
-        return Response.ok("test").build();
     }
 
     @DELETE
