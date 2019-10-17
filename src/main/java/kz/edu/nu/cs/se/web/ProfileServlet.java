@@ -19,7 +19,7 @@ import java.util.Base64;
  * Handles requests for the profile page. If no authenticated principal for the request is found, redirects the user
  * to login.
  */
-@WebServlet(urlPatterns = {"/profile"})
+@WebServlet(urlPatterns = "/profile")
 public class ProfileServlet extends HttpServlet {
 
     private static final String JSON_PROCESSING_ERROR_MESSAGE = "Error converting JWT claims to JSON";

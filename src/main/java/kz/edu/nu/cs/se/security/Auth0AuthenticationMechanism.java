@@ -6,13 +6,11 @@ import com.auth0.Tokens;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.security.enterprise.AuthenticationException;
 import javax.security.enterprise.AuthenticationStatus;
 import javax.security.enterprise.authentication.mechanism.http.AutoApplySession;
 import javax.security.enterprise.authentication.mechanism.http.HttpAuthenticationMechanism;
 import javax.security.enterprise.authentication.mechanism.http.HttpMessageContext;
 import javax.security.enterprise.identitystore.CredentialValidationResult;
-import javax.security.enterprise.identitystore.IdentityStoreHandler;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -24,25 +22,25 @@ import javax.servlet.http.HttpServletResponse;
 public class Auth0AuthenticationMechanism implements HttpAuthenticationMechanism {
 
     private final AuthenticationController authenticationController;
-    private final IdentityStoreHandler identityStoreHandler;
+    private final Auth0JwtIdentityStore auth0JwtIdentityStore;
 
     @Inject
-    Auth0AuthenticationMechanism(AuthenticationController authenticationController, IdentityStoreHandler identityStoreHandler) {
+    Auth0AuthenticationMechanism(AuthenticationController authenticationController, Auth0JwtIdentityStore auth0JwtIdentityStore) {
         this.authenticationController = authenticationController;
-        this.identityStoreHandler = identityStoreHandler;
+        this.auth0JwtIdentityStore = auth0JwtIdentityStore;
     }
 
     @Override
     public AuthenticationStatus validateRequest(HttpServletRequest httpServletRequest,
                                                 HttpServletResponse httpServletResponse,
-                                                HttpMessageContext httpMessageContext) throws AuthenticationException {
+                                                HttpMessageContext httpMessageContext) {
 
         if (isCallbackRequest(httpServletRequest)) {
 
             try {
                 Tokens tokens = authenticationController.handle(httpServletRequest);
                 Auth0JwtCredential auth0JwtCredential = new Auth0JwtCredential(tokens.getIdToken());
-                CredentialValidationResult result = identityStoreHandler.validate(auth0JwtCredential);
+                CredentialValidationResult result = auth0JwtIdentityStore.validate(auth0JwtCredential);
                 return httpMessageContext.notifyContainerAboutLogin(result);
             } catch (IdentityVerificationException e) {
                 return httpMessageContext.responseUnauthorized();
