@@ -15,7 +15,7 @@ public class DBConnector {
         try {
             Context initCtx = new InitialContext();
             Context envCtx = (Context) initCtx.lookup("java:comp/env");
-            DataSource ds = (DataSource) envCtx.lookup("jdbc/TestDB");
+            DataSource ds = (DataSource) envCtx.lookup("jdbc/ds-week8");
             conn = ds.getConnection();
         } catch (Exception e) {
             e.printStackTrace();

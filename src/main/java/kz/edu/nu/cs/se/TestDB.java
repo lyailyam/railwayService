@@ -21,7 +21,7 @@ public class TestDB {
         try {
             Context initCtx = new InitialContext();
             Context envCtx = (Context) initCtx.lookup("java:comp/env");
-            DataSource ds = (DataSource) envCtx.lookup("jdbc/TestDB");
+            DataSource ds = (DataSource) envCtx.lookup("jdbc/ds-week8");
             conn = ds.getConnection();
         } catch (Exception e) {
             e.printStackTrace();
@@ -42,7 +42,7 @@ public class TestDB {
             ResultSet rs = stmt.executeQuery(sql);
             rs.next();
 
-            String msg = rs.getString("firstname") + ' ' + rs.getString("email");
+            String msg = rs.getString("firstname") + " " + rs.getString("email");
 
             rs.close();
             stmt.close();
