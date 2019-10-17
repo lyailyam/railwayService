@@ -2,10 +2,80 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Test</title>
+    <title>Tickets</title>
+    
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+
+function updateTicketList(tickets) {
+    $("#ticket-list").html("")
+    tickets.forEach(function (e) {
+        $("#ticket-list").append("<li> <a href = \"api/tickets/2/" + e.id + "\"> ticket id: " + e.id + "</a></li>");
+    });
+}
+
+function getTicketList() {
+    $.ajax({
+        url : 'api/tickets/2?state=all',
+        dataType : 'json',
+        success : function(r) {
+            updateTicketList(r);
+        }
+    });
+}
+
+function getFutureTicketList(state) {
+    $.ajax({
+        url : 'api/tickets/2?state=' + state,
+        dataType : 'json',
+        success : function(r) {
+            updateTicketList(r);
+        }
+    });
+}
+
+function getPastTicketList() {
+    $.ajax({
+        url : 'api/tickets/2?state=past',
+        dataType : 'json',
+        success : function(r) {
+            updateTicketList(r);
+        }
+    });
+}
+
+
+$(document).ready(function () {
+	getTicketList();
+	
+	$("#only-future").on('click', function () {
+        getFutureTicketList('future');
+    });
+	
+	$("#only-past").on('click', function () {
+        getPastTicketList();
+    });
+	
+	
+});
+
+
+</script>
 </head>
 <body>
-<h1>Test</h1>
+<h1>Tickets List</h1>
+
+<p> second user is just for example </p>
+
+
+<ol id="ticket-list"></ol>
+
+<button id="only-future" type="button" >Future Trips</button>
+<button id="only-past" type="button" >Past Trips</button>
+
+<p>
+<a href="api/tickets/2?state=all">Link to List Items API</a>
+</p>
 
 </body>
 </html>
