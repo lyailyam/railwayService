@@ -15,7 +15,6 @@
             crossorigin="anonymous"></script>
     <script type="text/javascript">
 
-        var
 
         function displayTicket(ticket) {
             $("#ticket").html("");
@@ -30,12 +29,11 @@
                 + "</h2>");
         }
 
-        function getTicket() {
+        function getTicket(id) {
             $.ajax({
-                url : '../api/tickets/' + ${id},
+                url : '../api/tickets/' + id,
                 dataType : 'json',
                 success : function(result) {
-                    console.log(result);
                     displayTicket(result);
                 },
                 error: function (jqXHR, status, error) {
@@ -52,7 +50,8 @@
         }
 
         $(document).ready(function () {
-            getTicket(<%= request.getParameter("ticket_id") %>);
+            getTicket(request.getParameter("ticket_id"));
+            displayTicket();
 
         });
     </script>

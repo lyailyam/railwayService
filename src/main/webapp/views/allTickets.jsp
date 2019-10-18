@@ -20,13 +20,15 @@
             $("#ticket-list").html("");
             tickets.forEach(function (e) {
                 $("#ticket-list").append("<li>"
-                    + "Ticket ID: " + e.id + " "
-                    + "Departure from " + e.st1_name + " "
-                    + "Departure time&date: " + e.dep_time + " "
-                    + "Arrival to " + e.st2_name + " "
-                    + "Arrival time&date: " + e.arr_time + " "
-                    + "Ticket Status: " + e.ticket_status + " "
-                    + "<a href = \"/oneTicket.jsp?ticket_id=" + e.id + "\">link</a></li>");
+                    + "Ticket ID: " + e.id + ", "
+                    + "Departure from " + e.st1_name + ", "
+                    + "Departure time&date: " + e.dep_time + ", "
+                    + "Arrival to " + e.st2_name + ", "
+                    + "Arrival time&date: " + e.arr_time + ", "
+                    + "Ticket Status: " + e.ticket_status + ", "
+                    + "<a href = \"../api/tickets/" + e.id + "\">link</a></li>");
+                    //+ "<a href = \"/oneTicket.jsp?ticket_id=" + e.id + "\">link</a></li>");
+                    //dont know yet how to pass ticket id to oneTicket.jsp
             });
         }
 
