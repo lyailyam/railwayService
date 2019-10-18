@@ -26,7 +26,7 @@ public class LoginServlet extends HttpServlet {
 
     private String buildAuthUrl(HttpServletRequest request) {
         String redirectUrl = String.format(
-                "%s://%s:%s/callback",
+                "%s://%s:%s/railway_service_war/callback",
                 request.getScheme(),
                 request.getServerName(),
                 request.getServerPort()

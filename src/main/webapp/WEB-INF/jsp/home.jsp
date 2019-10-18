@@ -13,9 +13,8 @@
         <div class="container">
             <div class="mt-5">
                 <div class="text-center hero my-5">
-                    <h1 class="mb-4">Railway Service</h1>
                     <p class="lead">
-                        This is a Railway Service web application that is being implemented as a CSCI 361 - Software Engineering course project. 
+                        This is a Railway Service web application that is being implemented as a CSCI 361 - Software Engineering course project.
                     </p>
                 </div>
             </div>
