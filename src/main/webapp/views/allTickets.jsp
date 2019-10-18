@@ -26,15 +26,13 @@
                     + "Arrival to " + e.st2_name + ", "
                     + "Arrival time&date: " + e.arr_time + ", "
                     + "Ticket Status: " + e.ticket_status + ", "
-                    + "<a href = \"../api/tickets/" + e.id + "\">link</a></li>");
-                    //+ "<a href = \"/oneTicket.jsp?ticket_id=" + e.id + "\">link</a></li>");
-                    //dont know yet how to pass ticket id to oneTicket.jsp
+                    + "<a href = \"?id=" + e.id + "\">link</a></li>");
             });
         }
 
         function getTicketList(page) {
             $.ajax({
-                url : '../api/tickets?user_id=5&limit='+limit+'&offset=' + page,
+                url : 'api/tickets?user_id=5&limit='+limit+'&offset=' + page,
                 dataType : 'json',
                 success : function(result) {
                     displayTicketList(result);

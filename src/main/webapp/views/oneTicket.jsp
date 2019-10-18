@@ -31,7 +31,7 @@
 
         function getTicket(id) {
             $.ajax({
-                url : '../api/tickets/' + id,
+                url : 'api/tickets/' + ${id},
                 dataType : 'json',
                 success : function(result) {
                     displayTicket(result);
@@ -50,7 +50,7 @@
         }
 
         $(document).ready(function () {
-            getTicket(request.getParameter("ticket_id"));
+            getTicket();
             displayTicket();
 
         });
@@ -59,6 +59,6 @@
 <body>
     <h1>Tickets</h1>
     <div id="ticket">Loading...</div>
-    <a href="../api/tickets">Back to all tickets</a>
+    <a href="api/tickets">Back to all tickets</a>
 </body>
 </html>
