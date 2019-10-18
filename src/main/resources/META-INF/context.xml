@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context>
-    <Resource name = "jdbc/TestDB"
+    <Resource name = "jdbc/railwayStat"
       auth = "Container"
       type = "javax.sql.DataSource"
       maxActive = "100"
       maxIdle = "30"
       maxWait = "10000"
-      username = "talgat"
+      username = "madina"
       password = "123456789"
       driverClassName = "com.mysql.cj.jdbc.Driver"
-      url = "jdbc:mysql://34.66.215.70:3306/railways-service"/>
+      url = "jdbc:mysql://34.66.215.70:3306/railways-test"/>
 </Context>

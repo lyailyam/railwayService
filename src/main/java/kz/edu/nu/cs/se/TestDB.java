@@ -21,7 +21,7 @@ public class TestDB {
         try {
             Context initCtx = new InitialContext();
             Context envCtx = (Context) initCtx.lookup("java:comp/env");
-            DataSource ds = (DataSource) envCtx.lookup("jdbc/TestDB");
+            DataSource ds = (DataSource) envCtx.lookup("jdbc/railwayStat");
             conn = ds.getConnection();
         } catch (Exception e) {
             e.printStackTrace();
