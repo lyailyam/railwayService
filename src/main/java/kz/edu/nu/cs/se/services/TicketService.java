@@ -18,7 +18,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class TicketService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getTickets(@QueryParam("user_id") Integer userId,
+    public Response getTickets(@DefaultValue("5") @QueryParam("user_id") Integer userId,
                                    @DefaultValue("5") @QueryParam("limit") Integer limit,
                                    @DefaultValue("0") @QueryParam("offset") Integer offset) {
 

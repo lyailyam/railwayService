@@ -19,9 +19,12 @@
             $("#ticket").html("");
             $("#ticket").append("<h2>"
                 + "Ticket ID: " + ticket.id + '<br>'
+                + "Departure from " + ticket.st1_name + '<br>'
+                + "Departure time&date: " + ticket.dep_time + '<br>'
+                + "Arrival to " + ticket.st2_name + '<br>'
+                + "Arrival time&date: " + ticket.arr_time + '<br>'
+                + "Ticket Status: " + ticket.ticket_status
                 + "Price: " + ticket.price + '<br>'
-                + "User ID: " + ticket.userId + '<br>'
-                + "Trip ID: " + ticket.tripId + '<br>'
                 + "</h2>");
         }
 
@@ -55,6 +58,6 @@
 <body>
     <h1>Tickets</h1>
     <div id="ticket">Loading...</div>
-    <a href="?">Back to all tickets</a>
+    <a href="api/tickets">Back to all tickets</a>
 </body>
 </html>
