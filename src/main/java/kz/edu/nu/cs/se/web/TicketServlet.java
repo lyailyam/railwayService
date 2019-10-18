@@ -19,7 +19,7 @@ public class TicketServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String id = request.getParameter("id");
         if (id == null) {
-            request.getRequestDispatcher("views/allTickets.jsp").forward(request, response);
+            request.getRequestDispatcher("ticketFront/ticketsTable.jsp").forward(request, response);
         } else {
             request.setAttribute("id", id);
             request.getRequestDispatcher("views/oneTicket.jsp").forward(request, response);

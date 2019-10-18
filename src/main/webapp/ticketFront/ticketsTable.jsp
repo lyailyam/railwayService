@@ -32,7 +32,7 @@
             $('#upcoming-trips').DataTable({
                 "processing" : true,
                 "ajax" : {
-                    "url" : "api/tickets",
+                    "url" : 'api/tickets?user_id=5&limit=1000&offset=0',
                     dataSrc : ''
                 },
                 "columns" : [{ data: null, render: function ( data) {
