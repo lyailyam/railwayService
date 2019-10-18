@@ -21,6 +21,8 @@
             tickets.forEach(function (e) {
                 $("#ticket-list").append("<li>"
                     + "Ticket ID: " + e.id + ", "
+                    + "First Name: " + e.firstname + ", "
+                    + "Surname: " + e.surname + ", "
                     + "Departure from " + e.st1_name + ", "
                     + "Departure time&date: " + e.dep_time + ", "
                     + "Arrival to " + e.st2_name + ", "

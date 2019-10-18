@@ -20,6 +20,8 @@
             $("#ticket").html("");
             $("#ticket").append("<h2>"
                 + "Ticket ID: " + ticket.id + '<br>'
+                + "First Name: " + ticket.firstname + "<br>"
+                + "Surname: " + ticket.surname + "<br>"
                 + "Departure from " + ticket.st1_name + '<br>'
                 + "Departure time&date: " + ticket.dep_time + '<br>'
                 + "Arrival to " + ticket.st2_name + '<br>'

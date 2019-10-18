@@ -24,19 +24,21 @@ public class TicketService {
 
         String sql;
         if (userId != null) {
-            sql = "SELECT ticket.id, ticket.price, ticket.status, trip.departure_time, trip.arrival_time, trip.status, st1.name, st2.name "
+            sql = "SELECT ticket.id, user.firstname, user.surname, ticket.price, ticket.status, trip.departure_time, trip.arrival_time, trip.status, st1.name, st2.name "
                     + " FROM ticket INNER JOIN trip ON trip.id = ticket.trip_id "
                     + "INNER JOIN station st1 on st1.id = trip.first_station_id "
                     + "INNER JOIN station st2 ON st2.id = trip.last_station_id "
                     + "INNER JOIN train ON train.id = trip.train_id "
+                    + "INNER JOIN user ON user.id = ticket.user_id "
                     + "WHERE ticket.user_id = " + userId + " ORDER BY trip.departure_time "
                     + "LIMIT " + limit + " OFFSET " + offset;
         } else {
-            sql = "SELECT ticket.id, ticket.price, ticket.status, trip.departure_time, trip.arrival_time, trip.status, st1.name, st2.name "
+            sql = "SELECT ticket.id, user.firstname, user.surname, ticket.price, ticket.status, trip.departure_time, trip.arrival_time, trip.status, st1.name, st2.name "
                     + " FROM ticket INNER JOIN trip ON trip.id = ticket.trip_id "
                     + "INNER JOIN station st1 on st1.id = trip.first_station_id "
                     + "INNER JOIN station st2 ON st2.id = trip.last_station_id "
                     + "INNER JOIN train ON train.id = trip.train_id "
+                    + "INNER JOIN user ON user.id = ticket.user_id "
                     + "ORDER BY trip.departure_time "
                     + "LIMIT " + limit + " OFFSET " + offset;
         }
@@ -52,6 +54,9 @@ public class TicketService {
 
             while (rs.next()) {
                 TicketInfo t = new TicketInfo();
+
+                t.setFirstname(rs.getString("user.firstname"));
+                t.setSurname(rs.getString("user.surname"));
 
                 t.setId(rs.getInt("ticket.id"));
                 t.setPrice(rs.getDouble("ticket.price"));
@@ -99,11 +104,12 @@ public class TicketService {
     @Path("/{ticket_id: [0-9]+}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTicket(@PathParam("ticket_id") Integer ticketId) {
-        String sql = "SELECT ticket.price, ticket.status, trip.departure_time, trip.arrival_time, trip.status, st1.name, st2.name "
+        String sql = "SELECT ticket.price, user.firstname, user.surname, ticket.status, trip.departure_time, trip.arrival_time, trip.status, st1.name, st2.name "
                 + "FROM ticket INNER JOIN trip ON trip.id = ticket.trip_id "
                 + "INNER JOIN station st1 on st1.id = trip.first_station_id "
                 + "INNER JOIN station st2 ON st2.id = trip.last_station_id "
                 + "INNER JOIN train ON train.id = trip.train_id "
+                + "INNER JOIN user ON user.id = ticket.user_id "
                 + "WHERE ticket.id = " + ticketId;
 
         Gson gson = new Gson();
@@ -117,6 +123,9 @@ public class TicketService {
 
             // TODO: Consider using constructor?
             TicketInfo t = new TicketInfo();
+
+            t.setFirstname(rs.getString("user.firstname"));
+            t.setSurname(rs.getString("user.surname"));
 
             t.setId(ticketId);
             t.setPrice(rs.getDouble("ticket.price"));
