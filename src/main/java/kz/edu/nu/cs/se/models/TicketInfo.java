@@ -4,9 +4,11 @@ public class TicketInfo {
 
     private int id;
     private double price;
+    private String firstname;
+    private String surname;
     private String ticket_status;
     private String dep_time;
-    private  String arr_time;
+    private String arr_time;
     private String trip_status;
     private String st1_name;
     private String st2_name;
@@ -87,5 +89,21 @@ public class TicketInfo {
 
     public void setSt2_name(String st2_name) {
         this.st2_name = st2_name;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 }
