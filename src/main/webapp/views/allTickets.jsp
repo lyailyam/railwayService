@@ -2,39 +2,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Title</title>
+    <title>Tickets</title>
+    <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
+          rel = "stylesheet">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
             integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
             crossorigin="anonymous"></script>
+    <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
 
     <script type="text/javascript">
-        var tickets = {
-            items : [],
-        };
+
 
         var limit = 50;
 
-
-        function displayTicketList() {
+        function displayTicketList(tickets) {
             $("#ticket-list").html("");
-            tickets.items.forEach(function (e) {
+            tickets.forEach(function (e) {
                 $("#ticket-list").append("<li>"
-                    + "Ticket ID: " + e.id + ' '
-                    + "Price: " + e.price + ' '
-                    + "User ID: " + e.userId + ' '
-                    + "Trip ID: " + e.tripId + ' '
-                    + '<a href="?id=' + e.id + '">link</a>'
-                    + "</li>");
+                    + "Ticket ID: " + e.id + ", "
+                    + "Departure from " + e.st1_name + ", "
+                    + "Departure time&date: " + e.dep_time + ", "
+                    + "Arrival to " + e.st2_name + ", "
+                    + "Arrival time&date: " + e.arr_time + ", "
+                    + "Ticket Status: " + e.ticket_status + ", "
+                    + "<a href = \"?id=" + e.id + "\">link</a></li>");
             });
         }
 
         function getTicketList(page) {
             $.ajax({
-                url : 'api/tickets?limit='+limit+'10&offset=' + 0,
+                url : 'api/tickets?user_id=5&limit='+limit+'&offset=' + page,
                 dataType : 'json',
                 success : function(result) {
-                    tickets.items = result;
-                    displayTicketList();
+                    displayTicketList(result);
                 },
                 error: function (jqXHR, status, error) {
                     if (jqXHR.status == 500) {
@@ -51,6 +52,7 @@
 
 
         $(document).ready(function () {
+
             getTicketList(0);
 
         });
@@ -58,6 +60,8 @@
 </head>
 <body>
     <h1>Tickets</h1>
-    <ul id="ticket-list">Loading...</ul>
+
+    <p>User with id 5 just for demo</p>
+    <ol id="ticket-list">Loading...</ol>
 </body>
 </html>

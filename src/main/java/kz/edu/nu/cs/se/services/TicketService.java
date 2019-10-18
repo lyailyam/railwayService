@@ -5,7 +5,7 @@ import javax.ws.rs.core.Response;
 
 import com.google.gson.Gson;
 import kz.edu.nu.cs.se.DBConnector;
-import kz.edu.nu.cs.se.models.Ticket;
+import kz.edu.nu.cs.se.models.*;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -24,9 +24,21 @@ public class TicketService {
 
         String sql;
         if (userId != null) {
-            sql = "SELECT * FROM `railways-service`.`ticket` WHERE user_id = " + userId + " LIMIT " + limit + " OFFSET " + offset;
+            sql = "SELECT ticket.id, ticket.price, ticket.status, trip.departure_time, trip.arrival_time, trip.status, st1.name, st2.name "
+                    + " FROM ticket INNER JOIN trip ON trip.id = ticket.trip_id "
+                    + "INNER JOIN station st1 on st1.id = trip.first_station_id "
+                    + "INNER JOIN station st2 ON st2.id = trip.last_station_id "
+                    + "INNER JOIN train ON train.id = trip.train_id "
+                    + "WHERE ticket.user_id = " + userId + " ORDER BY trip.departure_time "
+                    + "LIMIT " + limit + " OFFSET " + offset;
         } else {
-            sql = "SELECT * FROM `railways-service`.`ticket` LIMIT " + limit + " OFFSET " + offset;
+            sql = "SELECT ticket.id, ticket.price, ticket.status, trip.departure_time, trip.arrival_time, trip.status, st1.name, st2.name "
+                    + " FROM ticket INNER JOIN trip ON trip.id = ticket.trip_id "
+                    + "INNER JOIN station st1 on st1.id = trip.first_station_id "
+                    + "INNER JOIN station st2 ON st2.id = trip.last_station_id "
+                    + "INNER JOIN train ON train.id = trip.train_id "
+                    + "ORDER BY trip.departure_time "
+                    + "LIMIT " + limit + " OFFSET " + offset;
         }
 
         Gson gson = new Gson();
@@ -36,17 +48,22 @@ public class TicketService {
             ResultSet rs = stmt.executeQuery(sql)) {
             // TODO : Check if id exists at the first place
 
-            List<Ticket> ticketList = new CopyOnWriteArrayList<Ticket>();
+            List<TicketInfo> ticketList = new CopyOnWriteArrayList<TicketInfo>();
 
             while (rs.next()) {
-                Ticket t = new Ticket();
+                TicketInfo t = new TicketInfo();
 
-                t.setId(rs.getInt("id"));
-                t.setUserId(rs.getInt("user_id"));
-                t.setTripId(rs.getInt("trip_id"));
-                t.setSeatId(rs.getInt("seat_id"));
-                t.setPrice(rs.getDouble("price"));
-                t.setStatus(rs.getString("status"));
+                t.setId(rs.getInt("ticket.id"));
+                t.setPrice(rs.getDouble("ticket.price"));
+                t.setTicket_status(rs.getString("ticket.status"));
+
+                t.setDep_time(rs.getString("trip.departure_time"));
+                t.setArr_time(rs.getString("trip.arrival_time"));
+                t.setTrip_status(rs.getString("trip.status"));
+
+                t.setSt1_name(rs.getString("st1.name"));
+                t.setSt2_name(rs.getString("st2.name"));
+
 
                 ticketList.add(t);
             }
@@ -82,7 +99,12 @@ public class TicketService {
     @Path("/{ticket_id: [0-9]+}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTicket(@PathParam("ticket_id") Integer ticketId) {
-        String sql = "SELECT * FROM `railways-service`.`ticket` WHERE id = " + ticketId;
+        String sql = "SELECT ticket.price, ticket.status, trip.departure_time, trip.arrival_time, trip.status, st1.name, st2.name "
+                + "FROM ticket INNER JOIN trip ON trip.id = ticket.trip_id "
+                + "INNER JOIN station st1 on st1.id = trip.first_station_id "
+                + "INNER JOIN station st2 ON st2.id = trip.last_station_id "
+                + "INNER JOIN train ON train.id = trip.train_id "
+                + "WHERE ticket.id = " + ticketId;
 
         Gson gson = new Gson();
 
@@ -94,15 +116,21 @@ public class TicketService {
             rs.next();
 
             // TODO: Consider using constructor?
-            Ticket ticket = new Ticket();
-            ticket.setId(rs.getInt("id"));
-            ticket.setUserId(rs.getInt("user_id"));
-            ticket.setTripId(rs.getInt("trip_id"));
-            ticket.setSeatId(rs.getInt("seat_id"));
-            ticket.setPrice(rs.getDouble("price"));
-            ticket.setStatus(rs.getString("status"));
+            TicketInfo t = new TicketInfo();
 
-            return Response.ok(gson.toJson(ticket)).build();
+            t.setId(ticketId);
+            t.setPrice(rs.getDouble("ticket.price"));
+            t.setTicket_status(rs.getString("ticket.status"));
+
+            t.setDep_time(rs.getString("trip.departure_time"));
+            t.setArr_time(rs.getString("trip.arrival_time"));
+            t.setTrip_status(rs.getString("trip.status"));
+
+            t.setSt1_name(rs.getString("st1.name"));
+            t.setSt2_name(rs.getString("st2.name"));
+
+
+            return Response.ok(gson.toJson(t)).build();
         } catch (SQLException e) {
             e.printStackTrace();
             return Response.status(404).build();

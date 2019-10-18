@@ -15,22 +15,25 @@
             crossorigin="anonymous"></script>
     <script type="text/javascript">
 
+
         function displayTicket(ticket) {
             $("#ticket").html("");
             $("#ticket").append("<h2>"
                 + "Ticket ID: " + ticket.id + '<br>'
+                + "Departure from " + ticket.st1_name + '<br>'
+                + "Departure time&date: " + ticket.dep_time + '<br>'
+                + "Arrival to " + ticket.st2_name + '<br>'
+                + "Arrival time&date: " + ticket.arr_time + '<br>'
+                + "Ticket Status: " + ticket.ticket_status
                 + "Price: " + ticket.price + '<br>'
-                + "User ID: " + ticket.userId + '<br>'
-                + "Trip ID: " + ticket.tripId + '<br>'
                 + "</h2>");
         }
 
-        function getTicket() {
+        function getTicket(id) {
             $.ajax({
                 url : 'api/tickets/' + ${id},
                 dataType : 'json',
                 success : function(result) {
-                    console.log(result);
                     displayTicket(result);
                 },
                 error: function (jqXHR, status, error) {
@@ -48,6 +51,7 @@
 
         $(document).ready(function () {
             getTicket();
+            displayTicket();
 
         });
     </script>
