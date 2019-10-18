@@ -59,6 +59,6 @@
 <body>
     <h1>Tickets</h1>
     <div id="ticket">Loading...</div>
-    <a href="api/tickets">Back to all tickets</a>
+    <a href="?">Back to all tickets</a>
 </body>
 </html>
