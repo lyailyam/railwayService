@@ -15,6 +15,8 @@
             crossorigin="anonymous"></script>
     <script type="text/javascript">
 
+        var
+
         function displayTicket(ticket) {
             $("#ticket").html("");
             $("#ticket").append("<h2>"
@@ -30,7 +32,7 @@
 
         function getTicket() {
             $.ajax({
-                url : 'api/tickets/' + ${id},
+                url : '../api/tickets/' + ${id},
                 dataType : 'json',
                 success : function(result) {
                     console.log(result);
@@ -50,7 +52,7 @@
         }
 
         $(document).ready(function () {
-            getTicket();
+            getTicket(<%= request.getParameter("ticket_id") %>);
 
         });
     </script>
@@ -58,6 +60,6 @@
 <body>
     <h1>Tickets</h1>
     <div id="ticket">Loading...</div>
-    <a href="api/tickets">Back to all tickets</a>
+    <a href="../api/tickets">Back to all tickets</a>
 </body>
 </html>

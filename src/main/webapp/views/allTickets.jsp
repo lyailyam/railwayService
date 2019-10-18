@@ -25,9 +25,8 @@
                     + "Departure time&date: " + e.dep_time + " "
                     + "Arrival to " + e.st2_name + " "
                     + "Arrival time&date: " + e.arr_time + " "
-                    + "Ticket Status: " + e.ticket_status);
-                    //+ " "
-                    //+ "<a href = \"api/tickets/" + e.id + "\">link</a></li>");
+                    + "Ticket Status: " + e.ticket_status + " "
+                    + "<a href = \"/oneTicket.jsp?ticket_id=" + e.id + "\">link</a></li>");
             });
         }
 
@@ -61,6 +60,8 @@
 </head>
 <body>
     <h1>Tickets</h1>
+
+    <p>User with id 5 just for demo</p>
     <ol id="ticket-list">Loading...</ol>
 </body>
 </html>
