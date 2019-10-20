@@ -47,7 +47,7 @@ public class Auth0AuthenticationMechanism implements HttpAuthenticationMechanism
     }
 
     private boolean isCallbackRequest(HttpServletRequest request) {
-        return request.getRequestURI().equals("/railway_service_war/callback") && request.getParameter("code") != null;
+        return request.getRequestURI().equals(request.getContextPath() + "/callback") && request.getParameter("code") != null;
     }
 
 }

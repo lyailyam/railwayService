@@ -26,10 +26,11 @@ public class LoginServlet extends HttpServlet {
 
     private String buildAuthUrl(HttpServletRequest request) {
         String redirectUrl = String.format(
-                "%s://%s:%s/railway_service_war/callback",
+                "%s://%s:%s%s/callback",
                 request.getScheme(),
                 request.getServerName(),
-                request.getServerPort()
+                request.getServerPort(),
+                request.getContextPath()
         );
 
         return authenticationController.buildAuthorizeUrl(request, redirectUrl)
