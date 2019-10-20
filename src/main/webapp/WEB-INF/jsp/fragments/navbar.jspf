@@ -5,14 +5,14 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a href="/railway_service_war" class="nav-link">Home</a>
+                        <a href="${pageContext.request.contextPath}" class="nav-link">Home</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav d-none d-md-block">
                     <c:choose>
                         <c:when test="${empty profile}">
                             <li class="nav-item">
-                                <form action="/railway_service_war/login" method="GET">
+                                <form action="${pageContext.request.contextPath}/login" method="GET">
                                     <input type="submit" id="qsLoginBtn" class="btn btn-primary btn-margin" value="Login"/>
                                 </form>
                             </li>
@@ -24,10 +24,10 @@
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-left">
                                     <div class="dropdown-header">${profile.get('name').asString()}</div>
-                                    <a href="/railway_service_war/profile" class="dropdown-item dropdown-profile">
+                                    <a href="${pageContext.request.contextPath}/profile" class="dropdown-item dropdown-profile">
                                         <i class="fas fa-user mr-3"></i> Profile
                                     </a>
-                                    <a id="qsLogoutBtn" href="/railway_service_war/logout" class="dropdown-item">
+                                    <a id="qsLogoutBtn" href="${pageContext.request.contextPath}/logout" class="dropdown-item">
                                         <i class="fas fa-power-off mr-3"></i> Log out
                                     </a>
                                 </div>
@@ -39,7 +39,7 @@
                 <c:choose>
                     <c:when test="${empty profile}">
                         <ul class="navbar-nav d-md-none">
-                            <form action="/railway_service_war/login" method="GET">
+                            <form action="${pageContext.request.contextPath}/login" method="GET">
                                 <input type="submit" class="btn btn-primary btn-block" value="Login"/>
                             </form>
                         </ul>
@@ -54,11 +54,11 @@
                             </li>
                             <li>
                                 <i class="fas fa-user mr-3"></i>
-                                <a href="/railway_service_war/profile"> Profile</a>
+                                <a href="${pageContext.request.contextPath}/profile"> Profile</a>
                             </li>
                             <li>
                                 <i class="fas fa-power-off mr-3"></i>
-                                <a href="/railway_service_war/logout"> Log out</a>
+                                <a href="${pageContext.request.contextPath}/logout"> Log out</a>
                             </li>
                         </ul>
                     </c:otherwise>

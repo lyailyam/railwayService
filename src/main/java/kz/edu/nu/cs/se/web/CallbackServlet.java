@@ -16,7 +16,7 @@ public class CallbackServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         String referer = (String) request.getSession().getAttribute("Referer");
-        String redirectTo = referer != null ? referer : "/railway_service_war";
+        String redirectTo = referer != null ? referer : request.getContextPath();
 
         response.sendRedirect(redirectTo);
     }
