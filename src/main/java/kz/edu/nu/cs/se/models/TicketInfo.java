@@ -2,37 +2,54 @@ package kz.edu.nu.cs.se.models;
 
 public class TicketInfo {
 
-    private int id;
+    private int ticketId;
     private double price;
-    private String firstname;
-    private String surname;
-    private String ticket_status;
-    private String dep_time;
-    private String arr_time;
-    private String trip_status;
-    private String st1_name;
-    private String st2_name;
+    private int userId;
+    private String userFirstName;
+    private String userLastName;
+    private String ticketStatus;
+    private String depDate;
+    private String depTime;
+    private String arrDate;
+    private String arrTime;
+    private String tripStatus;
+    private String firstStatName;
+    private String lastStatName;
+    private int trainId;
+    private int railcarId;
+    private String seatNum;
+    private String seatLocation;
 
     public TicketInfo() {}
 
-    public TicketInfo(int id, double price, String ticket_status, String dep_time, String arr_time,
-                      String trip_status, String st1_name, String st2_name) {
-        this.id = id;
+    public TicketInfo(int ticketId, double price, int userId, String userFirstName, String userLastName, String ticketStatus,
+                      String depDate, String depTime, String arrDate, String arrTime, String tripStatus,
+                      String firstStatName, String lastStatName, int trainId, int railcarId, String seatNum, String seatLocation) {
+        this.ticketId = ticketId;
         this.price = price;
-        this.ticket_status = ticket_status;
-        this.dep_time = dep_time;
-        this.arr_time = arr_time;
-        this.trip_status = trip_status;
-        this.st1_name = st1_name;
-        this.st2_name = st2_name;
+        this.userId = userId;
+        this.userFirstName = userFirstName;
+        this.userLastName = userLastName;
+        this.ticketStatus = ticketStatus;
+        this.depDate = depDate;
+        this.depTime = depTime;
+        this.arrDate = arrDate;
+        this.arrTime = arrTime;
+        this.tripStatus = tripStatus;
+        this.firstStatName = firstStatName;
+        this.lastStatName = lastStatName;
+        this.trainId = trainId;
+        this.railcarId = railcarId;
+        this.seatNum = seatNum;
+        this.seatLocation = seatLocation;
     }
 
-    public int getId() {
-        return id;
+    public int getTicketId() {
+        return ticketId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setTicketId(int ticketId) {
+        this.ticketId = ticketId;
     }
 
     public double getPrice() {
@@ -43,67 +60,123 @@ public class TicketInfo {
         this.price = price;
     }
 
-    public String getTicket_status() {
-        return ticket_status;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setTicket_status(String ticket_status) {
-        this.ticket_status = ticket_status;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
-    public String getDep_time() {
-        return dep_time;
+    public String getUserFirstName() {
+        return userFirstName;
     }
 
-    public void setDep_time(String dep_time) {
-        this.dep_time = dep_time;
+    public void setUserFirstName(String userFirstName) {
+        this.userFirstName = userFirstName;
     }
 
-    public String getArr_time() {
-        return arr_time;
+    public String getUserLastName() {
+        return userLastName;
     }
 
-    public void setArr_time(String arr_time) {
-        this.arr_time = arr_time;
+    public void setUserLastName(String userLastName) {
+        this.userLastName = userLastName;
     }
 
-    public String getTrip_status() {
-        return trip_status;
+    public String getTicketStatus() {
+        return ticketStatus;
     }
 
-    public void setTrip_status(String trip_status) {
-        this.trip_status = trip_status;
+    public void setTicketStatus(String ticketStatus) {
+        this.ticketStatus = ticketStatus;
     }
 
-    public String getSt1_name() {
-        return st1_name;
+    public String getDepDate() {
+        return depDate;
     }
 
-    public void setSt1_name(String st1_name) {
-        this.st1_name = st1_name;
+    public void setDepDate(String depDate) {
+        this.depDate = depDate;
     }
 
-    public String getSt2_name() {
-        return st2_name;
+    public String getDepTime() {
+        return depTime;
     }
 
-    public void setSt2_name(String st2_name) {
-        this.st2_name = st2_name;
+    public void setDepTime(String depTime) {
+        this.depTime = depTime;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public String getArrDate() {
+        return arrDate;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setArrDate(String arrDate) {
+        this.arrDate = arrDate;
     }
 
-    public String getSurname() {
-        return surname;
+    public String getArrTime() {
+        return arrTime;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setArrTime(String arrTime) {
+        this.arrTime = arrTime;
+    }
+
+    public String getTripStatus() {
+        return tripStatus;
+    }
+
+    public void setTripStatus(String tripStatus) {
+        this.tripStatus = tripStatus;
+    }
+
+    public String getFirstStatName() {
+        return firstStatName;
+    }
+
+    public void setFirstStatName(String firstStatName) {
+        this.firstStatName = firstStatName;
+    }
+
+    public String getLastStatName() {
+        return lastStatName;
+    }
+
+    public void setLastStatName(String lastStatName) {
+        this.lastStatName = lastStatName;
+    }
+
+    public int getTrainId() {
+        return trainId;
+    }
+
+    public void setTrainId(int trainId) {
+        this.trainId = trainId;
+    }
+
+    public int getRailcarId() {
+        return railcarId;
+    }
+
+    public void setRailcarId(int railcarId) {
+        this.railcarId = railcarId;
+    }
+
+    public String getSeatNum() {
+        return seatNum;
+    }
+
+    public void setSeatNum(String seatNum) {
+        this.seatNum = seatNum;
+    }
+
+    public String getSeatLocation() {
+        return seatLocation;
+    }
+
+    public void setSeatLocation(String seatLocation) {
+        this.seatLocation = seatLocation;
     }
 }
