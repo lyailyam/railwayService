@@ -12,7 +12,7 @@ public class TicketEntity {
     private int tripId;
     private int userId;
     private String userEmail;
-    private Object status;
+    private String status;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -76,11 +76,11 @@ public class TicketEntity {
 
     @Basic
     @Column(name = "status", nullable = true)
-    public Object getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Object status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

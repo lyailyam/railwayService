@@ -8,7 +8,7 @@ public class SeatEntity {
     private int id;
     private int railcarId;
     private String number;
-    private Object location;
+    private String location;
     private byte isOccupied;
 
     @Id
@@ -43,11 +43,11 @@ public class SeatEntity {
 
     @Basic
     @Column(name = "location", nullable = false)
-    public Object getLocation() {
+    public String getLocation() {
         return location;
     }
 
-    public void setLocation(Object location) {
+    public void setLocation(String location) {
         this.location = location;
     }
 
