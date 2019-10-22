@@ -32,21 +32,59 @@
     <script charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
     <script type="text/javascript">
 
+
         function format ( d ) {
             // `d` is the original data object for the row
             return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
                 '<tr>'+
+                '<td>Ticket ID:</td>'+
+                '<td>'+d.ticketId+'</td>'+
+                '</tr>'+
+                '<tr>'+
                 '<td>Passenger name:</td>'+
-                '<td>'+d.firstname+' '+d.surname+'</td>'+
+                '<td>'+d.userFirstName+' '+d.userLastName+'</td>'+
+                '</tr>'+
+                '<tr>'+
+                '<td>Route:</td>'+
+                '<td>'+d.firstStatName+' - '+d.lastStatName+'</td>'+
+                '</tr>'+
+                '<tr>'+
+                '<td>Departure date and time:</td>'+
+                '<td>'+d.depDate+' - '+d.depTime+'</td>'+
+                '</tr>'+
+                '<tr>'+
+                '<td>Arrival date and time:</td>'+
+                '<td>'+d.arrDate+' - '+d.arrTime+'</td>'+
+                '</tr>'+
+                '<tr>'+
+                '<td>Trip status:</td>'+
+                '<td>'+d.tripStatus+'</td>'+
+                '</tr>'+
+                '<tr>'+
+                '<td>Train #:</td>'+
+                '<td>'+d.trainId+'</td>'+
+                '</tr>'+
+                '<tr>'+
+                '<td>Train #:</td>'+
+                '<td>'+d.trainId+'</td>'+
+                '</tr>'+
+                '<tr>'+
+                '<td>Car #:</td>'+
+                '<td>'+d.railcarId+'</td>'+
+                '</tr>'+
+                '<tr>'+
+                '<td>Seat #:</td>'+
+                '<td>'+d.seatNum+' ('+d.seatLocation+')</td>'+
+                '</tr>'+
+                '<tr>'+
+                '<td>Price:</td>'+
+                '<td>'+d.price+'$</td>'+
                 '</tr>'+
                 '<tr>'+
                 '<td>Status:</td>'+
-                '<td>'+d.ticket_status+'</td>'+
+                '<td>'+d.ticketStatus+'</td>'+
                 '</tr>'+
                 '<tr>'+
-                '<td>Extra info:</td>'+
-                '<td>And any further details here (images etc)...</td>'+
-                '</tr>'+
                 '</table>';
         }
         $(document).ready(function() {
@@ -63,15 +101,15 @@
                     "defaultContent": ""
                 },
                 { data: null, render: function ( data) {
-                    return data.firstname+' '+data.surname;
+                    return data.userFirstName+' '+data.userLastName;
                 } }, { data: null, render: function ( data) {
-                    return data.st1_name+' - '+data.st2_name;
+                    return data.firstStatName+' - '+data.lastStatName;
+                } }, { data: null, render: function ( data) {
+                    return data.depDate+' - '+data.depTime;
+                } }, { data: null, render: function ( data) {
+                    return data.arrDate+' - '+data.arrTime;
                 } }, {
-                "data" : "dep_time"
-                }, {
-                    "data" : "arr_time"
-                }, {
-                    "data" : "ticket_status"
+                    "data" : "tripStatus"
                 }],
 
                 "order": [[1, 'asc']]
@@ -111,7 +149,7 @@
                     <th>From-To</th>
                     <th>Departure time</th>
                     <th>Arrival time</th>
-                    <th>Status</th>
+                    <th>Trip Status</th>
                 </tr>
             </thead>
         </table>
