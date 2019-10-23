@@ -1,7 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <!DOCTYPE html>
-<html>
+<html lang="en" class="h-100">
 <head>
     <title>My trips</title>
     <meta charset="UTF-8">
@@ -135,11 +136,11 @@
 
 </head>
 
-<%@include file="../WEB-INF/jsp/fragments/header.jspf"%>
+<%@include file="fragments/header.jspf"%>
 
 <body>
 <div class="h-100 d-flex flex-column">
-    <%@include file="../WEB-INF/jsp/fragments/navbar.jspf"%>
+    <%@include file="fragments/navbar.jspf"%>
     <div class="wrap-table100">
         <table id="upcoming-trips" class="display" style="width:100%">
             <thead>
