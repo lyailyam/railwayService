@@ -29,7 +29,7 @@ public class TicketServlet extends HttpServlet {
 
         String id = request.getParameter("id");
         if (id == null) {
-            request.getRequestDispatcher("views/ticketsTable.jsp").forward(request, response);
+            request.getRequestDispatcher("WEB-INF/jsp/ticketsTable.jsp").forward(request, response);
         } else {
             request.setAttribute("id", id);
             request.getRequestDispatcher("views/oneTicket.jsp").forward(request, response);
