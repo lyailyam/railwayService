@@ -11,7 +11,7 @@ public class ConfiguredSessionFactory {
     static {
         try {
             ourSessionFactory = new Configuration().
-                    configure().
+                    configure("hibernate.cfg.xml").
                     buildSessionFactory();
         } catch (Throwable ex) {
             throw new ExceptionInInitializerError(ex);
