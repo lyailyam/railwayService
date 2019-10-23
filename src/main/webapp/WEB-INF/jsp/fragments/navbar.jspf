@@ -27,6 +27,9 @@
                                     <a href="${pageContext.request.contextPath}/profile" class="dropdown-item dropdown-profile">
                                         <i class="fas fa-user mr-3"></i> Profile
                                     </a>
+                                    <a href="${pageContext.request.contextPath}/tickets" class="dropdown-item dropdown-profile">
+                                        <i class="fas fa-ticket-alt mr-3"></i>My tickets
+                                    </a>
                                     <a id="qsLogoutBtn" href="${pageContext.request.contextPath}/logout" class="dropdown-item">
                                         <i class="fas fa-power-off mr-3"></i> Log out
                                     </a>
