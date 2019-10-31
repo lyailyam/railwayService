@@ -74,7 +74,7 @@
             '</tr>'+
             '<tr>'+
             '<td>Passenger name:</td>'+
-            '<td>'+d.userFirstName+' '+d.userLastName+'</td>'+
+            '<td>'+d.travelerName+' '+d.travelerSurname+'</td>'+
             '</tr>'+
             '<tr>'+
             '<td>Route:</td>'+
@@ -82,15 +82,15 @@
             '</tr>'+
             '<tr>'+
             '<td>Departure date and time:</td>'+
-            '<td>'+d.depDate+' - '+d.depTime+'</td>'+
+            '<td>'+d.firstStatDate+' - '+d.firstStatDepSchedTime+'</td>'+
             '</tr>'+
             '<tr>'+
             '<td>Arrival date and time:</td>'+
-            '<td>'+d.arrDate+' - '+d.arrTime+'</td>'+
+            '<td>'+d.lastStatDate+' - '+d.lastStatArrSchedTime+'</td>'+
             '</tr>'+
             '<tr>'+
             '<td>Trip status:</td>'+
-            '<td>'+d.tripStatus+'</td>'+
+            '<td>'+d.getTripStatus()+'</td>'+
             '</tr>'+
             '<tr>'+
             '<td>Train #:</td>'+
@@ -102,7 +102,7 @@
             '</tr>'+
             '<tr>'+
             '<td>Car #:</td>'+
-            '<td>'+d.railcarId+'</td>'+
+            '<td>'+d.railcarNum+'</td>'+
             '</tr>'+
             '<tr>'+
             '<td>Seat #:</td>'+
@@ -133,13 +133,13 @@
                     "defaultContent": ""
                 },
                 { data: null, render: function ( data) {
-                        return data.userFirstName+' '+data.userLastName;
+                        return data.travelerName+' '+data.travelerSurname;
                     } }, { data: null, render: function ( data) {
                         return data.firstStatName+' - '+data.lastStatName;
                     } }, { data: null, render: function ( data) {
-                        return data.depDate+' - '+data.depTime;
+                        return data.firstStatDate+' - '+data.firstStatDepSchedTime;
                     } }, { data: null, render: function ( data) {
-                        return data.arrDate+' - '+data.arrTime;
+                        return data.lastStatDate+' - '+data.lastStatArrSchedTime;
                     } }, {
                     "data" : "tripStatus"
                 }],
