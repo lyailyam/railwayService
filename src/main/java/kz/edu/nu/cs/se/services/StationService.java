@@ -106,4 +106,28 @@ public class StationService {
 
         return Response.ok().entity(result).build();
     }
+
+    @Path("/{station_id: [0-9]+}")
+    @DELETE
+    public Response deleteStation(@PathParam("station_id") Integer stationId) {
+        Session session = ConfiguredSessionFactory.getSession();
+
+        try {
+            session.beginTransaction();
+
+            Query query = session.createQuery("delete from StationEntity where id = :id");
+            query.setParameter("id", stationId);
+            query.executeUpdate();
+
+            session.getTransaction().commit();
+        } catch (HibernateException e) {
+            session.getTransaction().rollback();
+            e.printStackTrace();
+            return Response.status(400).build();
+        } finally {
+            session.close();
+        }
+
+       return Response.ok().build();
+    }
 }
