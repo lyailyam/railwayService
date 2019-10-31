@@ -7,8 +7,9 @@ import javax.persistence.*;
 public class StationEntity {
     private int id;
     private String name;
-    private String longitude;
-    private String latitude;
+    private String city;
+    private Double longitude;
+    private Double latitude;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -31,22 +32,32 @@ public class StationEntity {
     }
 
     @Basic
-    @Column(name = "longitude", nullable = true, length = 45)
-    public String getLongitude() {
+    @Column(name = "city", nullable = false, length = 255)
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    @Basic
+    @Column(name = "longitude", nullable = true, precision = 0)
+    public Double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(String longitude) {
+    public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
 
     @Basic
-    @Column(name = "latitude", nullable = true, length = 45)
-    public String getLatitude() {
+    @Column(name = "latitude", nullable = true, precision = 0)
+    public Double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
 
@@ -59,6 +70,7 @@ public class StationEntity {
 
         if (id != that.id) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (city != null ? !city.equals(that.city) : that.city != null) return false;
         if (longitude != null ? !longitude.equals(that.longitude) : that.longitude != null) return false;
         if (latitude != null ? !latitude.equals(that.latitude) : that.latitude != null) return false;
 
@@ -69,6 +81,7 @@ public class StationEntity {
     public int hashCode() {
         int result = id;
         result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (city != null ? city.hashCode() : 0);
         result = 31 * result + (longitude != null ? longitude.hashCode() : 0);
         result = 31 * result + (latitude != null ? latitude.hashCode() : 0);
         return result;
