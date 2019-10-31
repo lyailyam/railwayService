@@ -4,23 +4,24 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "railcar", schema = "railwayway", catalog = "")
+@IdClass(RailcarEntityPK.class)
 public class RailcarEntity {
-    private int id;
+    private int num;
     private int trainId;
     private Integer capacity;
     private String type;
 
     @Id
-    @Column(name = "id", nullable = false)
-    public int getId() {
-        return id;
+    @Column(name = "num", nullable = false)
+    public int getNum() {
+        return num;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setNum(int num) {
+        this.num = num;
     }
 
-    @Basic
+    @Id
     @Column(name = "train_id", nullable = false)
     public int getTrainId() {
         return trainId;
@@ -57,7 +58,7 @@ public class RailcarEntity {
 
         RailcarEntity that = (RailcarEntity) o;
 
-        if (id != that.id) return false;
+        if (num != that.num) return false;
         if (trainId != that.trainId) return false;
         if (capacity != null ? !capacity.equals(that.capacity) : that.capacity != null) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
@@ -67,7 +68,7 @@ public class RailcarEntity {
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = num;
         result = 31 * result + trainId;
         result = 31 * result + (capacity != null ? capacity.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
