@@ -16,7 +16,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 
 // TODO: No longer works with updates db
-@Path("/tickets")
+@Path("/tickets_")
 public class TicketService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
