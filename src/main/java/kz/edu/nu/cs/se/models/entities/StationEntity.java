@@ -3,7 +3,7 @@ package kz.edu.nu.cs.se.models.entities;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "station", schema = "railways-test", catalog = "")
+@Table(name = "station", schema = "railwayway", catalog = "")
 public class StationEntity {
     private int id;
     private String name;
@@ -21,7 +21,7 @@ public class StationEntity {
     }
 
     @Basic
-    @Column(name = "name", nullable = false, length = 45)
+    @Column(name = "name", nullable = false, length = 255)
     public String getName() {
         return name;
     }

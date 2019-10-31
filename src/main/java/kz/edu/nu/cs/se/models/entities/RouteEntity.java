@@ -6,18 +6,18 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "route", schema = "railways-test", catalog = "")
+@Table(name = "route", schema = "railwayway", catalog = "")
 public class RouteEntity {
-    private int id;
+    private int routeId;
 
     @Id
-    @Column(name = "id", nullable = false)
-    public int getId() {
-        return id;
+    @Column(name = "route_id", nullable = false)
+    public int getRouteId() {
+        return routeId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setRouteId(int routeId) {
+        this.routeId = routeId;
     }
 
     @Override
@@ -27,13 +27,13 @@ public class RouteEntity {
 
         RouteEntity that = (RouteEntity) o;
 
-        if (id != that.id) return false;
+        if (routeId != that.routeId) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return id;
+        return routeId;
     }
 }
