@@ -1,18 +1,16 @@
 package kz.edu.nu.cs.se.models.entities;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Id;
+import java.io.Serializable;
 
-@Entity
-@Table(name = "seat", schema = "railwayway", catalog = "")
-@IdClass(SeatEntityPK.class)
-public class SeatEntity {
+public class SeatEntityPK implements Serializable {
     private int num;
     private int railcarNum;
     private int trainId;
-    private String location;
 
-    @Id
     @Column(name = "num", nullable = false)
+    @Id
     public int getNum() {
         return num;
     }
@@ -21,8 +19,8 @@ public class SeatEntity {
         this.num = num;
     }
 
-    @Id
     @Column(name = "railcar_num", nullable = false)
+    @Id
     public int getRailcarNum() {
         return railcarNum;
     }
@@ -31,8 +29,8 @@ public class SeatEntity {
         this.railcarNum = railcarNum;
     }
 
-    @Id
     @Column(name = "train_id", nullable = false)
+    @Id
     public int getTrainId() {
         return trainId;
     }
@@ -41,27 +39,16 @@ public class SeatEntity {
         this.trainId = trainId;
     }
 
-    @Basic
-    @Column(name = "location", nullable = true)
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        SeatEntity that = (SeatEntity) o;
+        SeatEntityPK that = (SeatEntityPK) o;
 
         if (num != that.num) return false;
         if (railcarNum != that.railcarNum) return false;
         if (trainId != that.trainId) return false;
-        if (location != null ? !location.equals(that.location) : that.location != null) return false;
 
         return true;
     }
@@ -71,7 +58,6 @@ public class SeatEntity {
         int result = num;
         result = 31 * result + railcarNum;
         result = 31 * result + trainId;
-        result = 31 * result + (location != null ? location.hashCode() : 0);
         return result;
     }
 }
