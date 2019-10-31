@@ -3,20 +3,19 @@ package kz.edu.nu.cs.se.models.entities;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import java.io.Serializable;
-import java.sql.Date;
 
 public class LegInstanceEntityPK implements Serializable {
-    private Date date;
+    private String date;
     private int routeId;
     private int legNum;
 
     @Column(name = "date", nullable = false)
     @Id
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
