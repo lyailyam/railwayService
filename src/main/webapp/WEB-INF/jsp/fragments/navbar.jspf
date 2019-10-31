@@ -15,6 +15,20 @@
                                             .getJSONObject(\"app_metadata\")
                                             .getJSONObject(\"authorization\")
                                             .getJSONArray(\"roles\").get(0).equals(\"passenger\")}">
+                                    <li>
+                                        <a href="${pageContext.request.contextPath}/schedule" class="nav-link">Search tickets</a>
+                                    </li>
+                                </c:when>
+                            </c:choose>
+                        </c:when>
+                    </c:choose>
+                    <c:choose>
+                        <c:when test="${not empty profile}">
+                            <c:choose>
+                                <c:when test="${appMetadata
+                                            .getJSONObject(\"app_metadata\")
+                                            .getJSONObject(\"authorization\")
+                                            .getJSONArray(\"roles\").get(0).equals(\"passenger\")}">
                                     <li class="nav-item">
                                        <p><i>Passenger</i></p>
                                     </li>
