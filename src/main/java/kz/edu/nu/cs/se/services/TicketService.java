@@ -193,4 +193,3 @@ public class TicketService {
         return Response.ok("test").build();
     }
 }
-
