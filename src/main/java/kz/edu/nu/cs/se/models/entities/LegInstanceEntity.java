@@ -8,21 +8,21 @@ import java.sql.Time;
 @Table(name = "leg_instance", schema = "railwayway", catalog = "")
 @IdClass(LegInstanceEntityPK.class)
 public class LegInstanceEntity {
-    private Date date;
+    private String date;
     private int routeId;
     private int legNum;
-    private Time departActualTime;
-    private Time arrivalActualTime;
+    private String departActualTime;
+    private String arrivalActualTime;
     private Integer availableSeats;
     private int trainId;
 
     @Id
     @Column(name = "date", nullable = false)
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
@@ -48,21 +48,21 @@ public class LegInstanceEntity {
 
     @Basic
     @Column(name = "depart_actual_time", nullable = true)
-    public Time getDepartActualTime() {
+    public String getDepartActualTime() {
         return departActualTime;
     }
 
-    public void setDepartActualTime(Time departActualTime) {
+    public void setDepartActualTime(String departActualTime) {
         this.departActualTime = departActualTime;
     }
 
     @Basic
     @Column(name = "arrival_actual_time", nullable = true)
-    public Time getArrivalActualTime() {
+    public String getArrivalActualTime() {
         return arrivalActualTime;
     }
 
-    public void setArrivalActualTime(Time arrivalActualTime) {
+    public void setArrivalActualTime(String arrivalActualTime) {
         this.arrivalActualTime = arrivalActualTime;
     }
 
