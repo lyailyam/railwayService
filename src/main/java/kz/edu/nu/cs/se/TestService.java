@@ -26,4 +26,3 @@ public class TestService {
         return Response.ok(gson.toJson(new String("test"))).build();
     }
 }
-

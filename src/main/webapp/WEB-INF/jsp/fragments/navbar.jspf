@@ -7,6 +7,14 @@
                     <li class="nav-item">
                         <a href="${pageContext.request.contextPath}" class="nav-link">Home</a>
                     </li>
+                    <c:choose>
+                        <c:when test="${empty profile}"></c:when>
+                        <c:otherwise>
+                            <li>
+                                <a href="${pageContext.request.contextPath}/schedule" class="nav-link">Search tickets</a>
+                            </li>
+                        </c:otherwise>
+                    </c:choose>
                 </ul>
                 <ul class="navbar-nav d-none d-md-block">
                     <c:choose>
