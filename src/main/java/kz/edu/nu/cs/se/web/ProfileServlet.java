@@ -41,7 +41,7 @@ public class ProfileServlet extends HttpServlet {
             request.setAttribute("profileJson", profileJson);
             request.getRequestDispatcher("/WEB-INF/jsp/profile.jsp").forward(request, response);
         } else {
-            request.getSession().setAttribute("Referer", request.getRequestURI());
+            request.getSession().setAttribute("Referer", request.getServletPath());
             request.getRequestDispatcher("/login").forward(request, response);
         }
     }

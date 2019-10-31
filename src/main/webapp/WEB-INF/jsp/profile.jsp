@@ -18,6 +18,8 @@
                         </div>
                         <div class="col-md text-center text-md-left">
                             <h2>${profile.get('name').asString()}</h2>
+                            <h2>${userId}</h2>
+                            <h2>${request.getAttribute("userId")}</h2>
                             <p class="lead text-muted">${profile.get('email').asString()}</p>
                         </div>
                     </div>

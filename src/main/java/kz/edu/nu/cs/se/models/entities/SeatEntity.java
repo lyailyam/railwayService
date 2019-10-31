@@ -3,13 +3,12 @@ package kz.edu.nu.cs.se.models.entities;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "seat", schema = "railways-test", catalog = "")
+@Table(name = "seat", schema = "railwayway", catalog = "")
 public class SeatEntity {
     private int id;
     private int railcarId;
     private String number;
     private String location;
-    private byte isOccupied;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -51,16 +50,6 @@ public class SeatEntity {
         this.location = location;
     }
 
-    @Basic
-    @Column(name = "is_occupied", nullable = false)
-    public byte getIsOccupied() {
-        return isOccupied;
-    }
-
-    public void setIsOccupied(byte isOccupied) {
-        this.isOccupied = isOccupied;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -70,7 +59,6 @@ public class SeatEntity {
 
         if (id != that.id) return false;
         if (railcarId != that.railcarId) return false;
-        if (isOccupied != that.isOccupied) return false;
         if (number != null ? !number.equals(that.number) : that.number != null) return false;
         if (location != null ? !location.equals(that.location) : that.location != null) return false;
 
@@ -83,7 +71,6 @@ public class SeatEntity {
         result = 31 * result + railcarId;
         result = 31 * result + (number != null ? number.hashCode() : 0);
         result = 31 * result + (location != null ? location.hashCode() : 0);
-        result = 31 * result + (int) isOccupied;
         return result;
     }
 }
