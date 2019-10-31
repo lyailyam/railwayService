@@ -14,7 +14,7 @@ import java.util.List;
 public class UserService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getTickets() {
+    public Response getUsers() {
         List result = null;
 
         Session session = ConfiguredSessionFactory.getSession();
