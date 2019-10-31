@@ -6,6 +6,7 @@ import javax.ws.rs.core.Response;
 import com.google.gson.Gson;
 import kz.edu.nu.cs.se.DBConnector;
 import kz.edu.nu.cs.se.models.*;
+import kz.edu.nu.cs.se.models.TicketInfo;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
