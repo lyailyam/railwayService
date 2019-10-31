@@ -53,4 +53,26 @@ public class StationService {
         }
         return Response.ok().build();
     }
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response putStation(StationEntity station) {
+        Session session = ConfiguredSessionFactory.getSession();
+
+        try {
+            session.beginTransaction();
+
+            session.saveOrUpdate(station);
+
+            session.getTransaction().commit();
+        } catch (HibernateException e)
+        {
+            session.getTransaction().rollback();
+            e.printStackTrace();
+            return Response.status(400).build();
+        } finally {
+            session.close();
+        }
+        return Response.ok().build();
+    }
 }
