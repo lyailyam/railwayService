@@ -4,11 +4,10 @@ import javax.persistence.*;
 import java.sql.Time;
 
 @Entity
-@Table(name = "schedule", schema = "railways-test", catalog = "")
-@IdClass(ScheduleEntityPK.class)
+@Table(name = "schedule", schema = "railwayway", catalog = "")
 public class ScheduleEntity {
     private int employeeId;
-    private int workingDay;
+    private Integer workingDay;
     private Time startTime;
     private Time endTime;
 
@@ -22,13 +21,13 @@ public class ScheduleEntity {
         this.employeeId = employeeId;
     }
 
-    @Id
-    @Column(name = "working_day", nullable = false)
-    public int getWorkingDay() {
+    @Basic
+    @Column(name = "working_day", nullable = true)
+    public Integer getWorkingDay() {
         return workingDay;
     }
 
-    public void setWorkingDay(int workingDay) {
+    public void setWorkingDay(Integer workingDay) {
         this.workingDay = workingDay;
     }
 
@@ -60,7 +59,7 @@ public class ScheduleEntity {
         ScheduleEntity that = (ScheduleEntity) o;
 
         if (employeeId != that.employeeId) return false;
-        if (workingDay != that.workingDay) return false;
+        if (workingDay != null ? !workingDay.equals(that.workingDay) : that.workingDay != null) return false;
         if (startTime != null ? !startTime.equals(that.startTime) : that.startTime != null) return false;
         if (endTime != null ? !endTime.equals(that.endTime) : that.endTime != null) return false;
 
@@ -70,7 +69,7 @@ public class ScheduleEntity {
     @Override
     public int hashCode() {
         int result = employeeId;
-        result = 31 * result + workingDay;
+        result = 31 * result + (workingDay != null ? workingDay.hashCode() : 0);
         result = 31 * result + (startTime != null ? startTime.hashCode() : 0);
         result = 31 * result + (endTime != null ? endTime.hashCode() : 0);
         return result;

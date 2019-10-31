@@ -4,9 +4,9 @@ import javax.persistence.Column;
 import javax.persistence.Id;
 import java.io.Serializable;
 
-public class RouteStationListEntityPK implements Serializable {
+public class RouteLegEntityPK implements Serializable {
     private int routeId;
-    private int stationId;
+    private int legNum;
 
     @Column(name = "route_id", nullable = false)
     @Id
@@ -18,14 +18,14 @@ public class RouteStationListEntityPK implements Serializable {
         this.routeId = routeId;
     }
 
-    @Column(name = "station_id", nullable = false)
+    @Column(name = "leg_num", nullable = false)
     @Id
-    public int getStationId() {
-        return stationId;
+    public int getLegNum() {
+        return legNum;
     }
 
-    public void setStationId(int stationId) {
-        this.stationId = stationId;
+    public void setLegNum(int legNum) {
+        this.legNum = legNum;
     }
 
     @Override
@@ -33,10 +33,10 @@ public class RouteStationListEntityPK implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        RouteStationListEntityPK that = (RouteStationListEntityPK) o;
+        RouteLegEntityPK that = (RouteLegEntityPK) o;
 
         if (routeId != that.routeId) return false;
-        if (stationId != that.stationId) return false;
+        if (legNum != that.legNum) return false;
 
         return true;
     }
@@ -44,7 +44,7 @@ public class RouteStationListEntityPK implements Serializable {
     @Override
     public int hashCode() {
         int result = routeId;
-        result = 31 * result + stationId;
+        result = 31 * result + legNum;
         return result;
     }
 }

@@ -14,6 +14,8 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+
+// TODO: No longer works with updates db
 @Path("/tickets")
 public class TicketService {
     @GET

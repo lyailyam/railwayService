@@ -3,8 +3,7 @@ package kz.edu.nu.cs.se.models.entities;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "user", schema = "railways-test", catalog = "")
-@IdClass(UserEntityPK.class)
+@Table(name = "user", schema = "railwayway", catalog = "")
 public class UserEntity {
     private int id;
     private String email;
@@ -23,7 +22,7 @@ public class UserEntity {
         this.id = id;
     }
 
-    @Id
+    @Basic
     @Column(name = "email", nullable = false, length = 255)
     public String getEmail() {
         return email;
@@ -34,7 +33,7 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "firstname", nullable = true, length = 255)
+    @Column(name = "firstname", nullable = false, length = 255)
     public String getFirstname() {
         return firstname;
     }
@@ -44,7 +43,7 @@ public class UserEntity {
     }
 
     @Basic
-    @Column(name = "surname", nullable = true, length = 255)
+    @Column(name = "surname", nullable = false, length = 255)
     public String getSurname() {
         return surname;
     }

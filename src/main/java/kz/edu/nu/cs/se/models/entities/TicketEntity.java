@@ -3,15 +3,12 @@ package kz.edu.nu.cs.se.models.entities;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "ticket", schema = "railways-test", catalog = "")
-@IdClass(TicketEntityPK.class)
+@Table(name = "ticket", schema = "railwayway", catalog = "")
 public class TicketEntity {
     private int id;
     private Double price;
     private int seatId;
-    private int tripId;
     private int userId;
-    private String userEmail;
     private String status;
 
     @Id
@@ -34,7 +31,7 @@ public class TicketEntity {
         this.price = price;
     }
 
-    @Id
+    @Basic
     @Column(name = "seat_id", nullable = false)
     public int getSeatId() {
         return seatId;
@@ -44,17 +41,7 @@ public class TicketEntity {
         this.seatId = seatId;
     }
 
-    @Id
-    @Column(name = "trip_id", nullable = false)
-    public int getTripId() {
-        return tripId;
-    }
-
-    public void setTripId(int tripId) {
-        this.tripId = tripId;
-    }
-
-    @Id
+    @Basic
     @Column(name = "user_id", nullable = false)
     public int getUserId() {
         return userId;
@@ -62,16 +49,6 @@ public class TicketEntity {
 
     public void setUserId(int userId) {
         this.userId = userId;
-    }
-
-    @Id
-    @Column(name = "user_email", nullable = false, length = 255)
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
     }
 
     @Basic
@@ -93,10 +70,8 @@ public class TicketEntity {
 
         if (id != that.id) return false;
         if (seatId != that.seatId) return false;
-        if (tripId != that.tripId) return false;
         if (userId != that.userId) return false;
         if (price != null ? !price.equals(that.price) : that.price != null) return false;
-        if (userEmail != null ? !userEmail.equals(that.userEmail) : that.userEmail != null) return false;
         if (status != null ? !status.equals(that.status) : that.status != null) return false;
 
         return true;
@@ -107,9 +82,7 @@ public class TicketEntity {
         int result = id;
         result = 31 * result + (price != null ? price.hashCode() : 0);
         result = 31 * result + seatId;
-        result = 31 * result + tripId;
         result = 31 * result + userId;
-        result = 31 * result + (userEmail != null ? userEmail.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
         return result;
     }
