@@ -11,8 +11,8 @@ public class RouteLegEntity {
     private int legNum;
     private int departStationId;
     private int arrivalStationId;
-    private Time departScheduledTime;
-    private Time arrivalScheduledTime;
+    private String departScheduledTime;
+    private String arrivalScheduledTime;
 
     @Id
     @Column(name = "route_id", nullable = false)
@@ -56,21 +56,21 @@ public class RouteLegEntity {
 
     @Basic
     @Column(name = "depart_scheduled_time", nullable = false)
-    public Time getDepartScheduledTime() {
+    public String getDepartScheduledTime() {
         return departScheduledTime;
     }
 
-    public void setDepartScheduledTime(Time departScheduledTime) {
+    public void setDepartScheduledTime(String departScheduledTime) {
         this.departScheduledTime = departScheduledTime;
     }
 
     @Basic
     @Column(name = "arrival_scheduled_time", nullable = false)
-    public Time getArrivalScheduledTime() {
+    public String getArrivalScheduledTime() {
         return arrivalScheduledTime;
     }
 
-    public void setArrivalScheduledTime(Time arrivalScheduledTime) {
+    public void setArrivalScheduledTime(String arrivalScheduledTime) {
         this.arrivalScheduledTime = arrivalScheduledTime;
     }
 

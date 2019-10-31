@@ -13,7 +13,6 @@
     <mapping class="kz.edu.nu.cs.se.models.entities.LegInstanceEntity"/>
     <mapping class="kz.edu.nu.cs.se.models.entities.RailcarEntity"/>
     <mapping class="kz.edu.nu.cs.se.models.entities.RoleEntity"/>
-    <mapping class="kz.edu.nu.cs.se.models.entities.RouteEntity"/>
     <mapping class="kz.edu.nu.cs.se.models.entities.RouteLegEntity"/>
     <mapping class="kz.edu.nu.cs.se.models.entities.ScheduleEntity"/>
     <mapping class="kz.edu.nu.cs.se.models.entities.SeatEntity"/>
