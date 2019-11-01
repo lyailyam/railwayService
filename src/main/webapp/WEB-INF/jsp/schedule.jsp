@@ -71,6 +71,38 @@
                 </div>
             </div>
         </div>
+        <div id="myModal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Buy a ticket</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-i">
+                            <div class="form-group">
+                                <label class="control-label">First Name</label>
+                                <input class="form-control" id="name" placeholder="Enter first name of the person" type="text"/>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Last Name</label>
+                                <input class="form-control" id="surname" placeholder="Enter last name of the person" type="text"/>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">National ID</label>
+                                <input class="form-control" id="nationalID" placeholder="Enter national ID of the person" type="text"/>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary">Buy</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 <%@include file="fragments/footer.jspf"%>
@@ -133,8 +165,9 @@
         });
 
         $('#trip-options tbody').on( 'click', 'button', function () {
+            $('#myModal').modal('show');
             var data = table.row( $(this).parents('tr') ).data();
-            alert( "The ticket for train " + data.firstStatName + "-" + data.lastStatName + " is bought" );
+            alert( "The ticket for train " + data[0] + "-" + data[1] + " is bought" );
         } );
     });
 
