@@ -113,7 +113,7 @@ public class CallbackServlet extends HttpServlet {
                         .header("authorization", "Bearer "
                                 + auth0ManagementAPIToken)
                         .asString();
-                request.setAttribute("appMetadata", new JSONObject(appMetadataResponse.getBody()));
+                request.getSession().setAttribute("appMetadata", new JSONObject(appMetadataResponse.getBody()));
 
                 JSONObject obj =  new JSONObject(appMetadataResponse.getBody());
                 System.out.println("role="
