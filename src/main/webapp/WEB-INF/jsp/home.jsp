@@ -21,8 +21,8 @@
                             <div class="mt-5">
                                 <div class="text-center hero my-5">
                                     <p class="lead">
-                                        This is the Profile Panel. From this panel you should be able to access
-                                        all the admin priveleges of the Railway Service.
+                                        This is the Passenger Panel. From this panel you should be able to access
+                                        all the admin privileges of the Railway Service.
                                     </p>
                                 </div>
                             </div>
@@ -48,7 +48,7 @@
                                         cancel, and create tickets upon user requests.
                                     </p>
                                     <form action="${pageContext.request.contextPath}/admintickets" method="GET">
-                                        <input type="submit" id="qsLoginBtn" class="btn btn-primary btn-margin" value="Manage Tickets"/>
+                                        <input type="submit" class="btn btn-primary btn-block" value="Manage Tickets"/>
                                     </form>
                                 </div>
                             </div>

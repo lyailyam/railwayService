@@ -18,10 +18,10 @@ public class TicketService_ {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTickets(@QueryParam("userId") Integer userId,
-                                @QueryParam("status") String status,
-                                @QueryParam("name") String name,
-                                @QueryParam("surname") String surname,
-                                @QueryParam("nationalId") String nationalId){
+                               @QueryParam("status") String status,
+                               @QueryParam("name") String name,
+                               @QueryParam("surname") String surname,
+                               @QueryParam("nationalId") String nationalId){
         List result = null;
 
         Session session = ConfiguredSessionFactory.getSession();
@@ -120,7 +120,7 @@ public class TicketService_ {
 
     @Path("/{ticket_id: [0-9]+}")
     @DELETE
-    public Response deleteTicket(@PathParam("ticketId") Integer ticketId) {
+    public Response deleteTicket(@PathParam("ticket_id") Integer ticketId) {
         Session session = ConfiguredSessionFactory.getSession();
 
         try {
