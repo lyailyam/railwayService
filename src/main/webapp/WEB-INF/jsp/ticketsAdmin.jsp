@@ -152,8 +152,8 @@
                +'"userId": ' + $("#user_id").val()
                +', "name": "' + $("#user_name").val()
                +'", "surname": "' + $("#user_surname").val()
-               +'", "nationalId": ' + $("#national_id").val()
-               +', "railcarNum": ' + $("#railcar_num").val()
+               +'", "nationalId": "' + $("#national_id").val()
+               +'", "railcarNum": ' + $("#railcar_num").val()
                +', "trainId": ' + $("#train_id").val()
                +', "seatNum": ' + $("#seat_num").val()
            + '}';
@@ -179,11 +179,14 @@
             type: 'POST',
             url: 'api/tickets',
             data: data,
+            contentType: 'application/json',
             success: function() {
                 alert("Success");
+                $('#createTicketsModal').modal('hide');
             }
         });
     }
+
 
     function getIndividualTicket(ticketId) {
         $.ajax({
