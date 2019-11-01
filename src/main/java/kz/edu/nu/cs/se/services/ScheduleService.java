@@ -27,13 +27,12 @@ public class ScheduleService {
     public Response getTickets(@QueryParam("from") String departCity,
                                @QueryParam("to") String arrivalCity,
                                @QueryParam("date") String departDate) {
-        System.out.println(departCity);
-        System.out.println(arrivalCity);
         String sql;
         sql = "SELECT first_station_city, first_station_name, last_station_city, last_station_name, date(first_stat_date)," +
                 "time(first_stat_dep_sched_time), date(last_stat_date), time(last_stat_arr_sched_time)" +
                 "FROM route_legs_stations WHERE first_station_city = '" + departCity + "'" +
-                "AND last_station_city = '" + arrivalCity + "'";
+                "AND last_station_city = '" + arrivalCity + "'" +
+                "AND first_stat_date = '" + departDate + "'";
         Gson gson = new Gson();
 
         try(Connection conn = DBConnector.getDatabaseConnection();
