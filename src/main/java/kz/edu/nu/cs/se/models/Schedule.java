@@ -10,11 +10,13 @@ public class Schedule {
     private String arrSchedTime;
     private String depDate;
     private String arrDate;
+    private int firstStatLegNum;
+    private int lastStatLegNum;
 
     public Schedule() {}
 
     public Schedule(int routeId, String depStationName, String depStationCity, String arrStationName, String arrStationCity, String depSchedTime,
-                    String arrSchedtime, String depDate, String arrDate) {
+                    String arrSchedtime, String depDate, String arrDate, int firstStatLegNum, int lastStatLegNum) {
         this.routeId = routeId;
         this.depStationName = depStationName;
         this.depStationCity = depStationCity;
@@ -24,6 +26,8 @@ public class Schedule {
         this.arrSchedTime = arrSchedtime;
         this.depDate = depDate;
         this.arrDate = arrDate;
+        this.firstStatLegNum = firstStatLegNum;
+        this.lastStatLegNum = lastStatLegNum;
     }
 
     public int getRouteId() {
@@ -100,5 +104,25 @@ public class Schedule {
 
     public String toString() {
         return depStationName + " - " + arrStationName;
+    }
+
+    public String getArrSchedTime() {
+        return arrSchedTime;
+    }
+
+    public int getFirstStatLegNum() {
+        return firstStatLegNum;
+    }
+
+    public void setFirstStatLegNum(int firstStatLegNum) {
+        this.firstStatLegNum = firstStatLegNum;
+    }
+
+    public int getLastStatLegNum() {
+        return lastStatLegNum;
+    }
+
+    public void setLastStatLegNum(int lastStatLegNum) {
+        this.lastStatLegNum = lastStatLegNum;
     }
 }
