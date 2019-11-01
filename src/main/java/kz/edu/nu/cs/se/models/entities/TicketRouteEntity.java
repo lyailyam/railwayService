@@ -1,7 +1,6 @@
 package kz.edu.nu.cs.se.models.entities;
 
 import javax.persistence.*;
-import java.sql.Date;
 
 @Entity
 @Table(name = "ticket_route", schema = "railwayway", catalog = "")
@@ -9,7 +8,7 @@ import java.sql.Date;
 public class TicketRouteEntity {
     private int routeId;
     private int legNum;
-    private Date date;
+    private String date;
     private int ticketId;
 
     @Id
@@ -34,11 +33,11 @@ public class TicketRouteEntity {
 
     @Id
     @Column(name = "date", nullable = false)
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

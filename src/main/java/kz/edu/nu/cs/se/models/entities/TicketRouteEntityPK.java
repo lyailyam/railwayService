@@ -3,12 +3,11 @@ package kz.edu.nu.cs.se.models.entities;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import java.io.Serializable;
-import java.sql.Date;
 
 public class TicketRouteEntityPK implements Serializable {
     private int routeId;
     private int legNum;
-    private Date date;
+    private String date;
     private int ticketId;
 
     @Column(name = "route_id", nullable = false)
@@ -33,11 +32,11 @@ public class TicketRouteEntityPK implements Serializable {
 
     @Column(name = "date", nullable = false)
     @Id
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
