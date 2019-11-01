@@ -94,10 +94,16 @@
                                 <label class="control-label">National ID</label>
                                 <input class="form-control" id="nationalID" placeholder="Enter national ID of the person" type="text"/>
                             </div>
+                            <div class="form-group">
+                                <label class="control-label">Seat</label>
+                                <select name="seat-num" id="seat-num">
+
+                                </select>
+                            </div>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary">Buy</button>
+                        <button type="button" class="btn btn-primary" id="buy-ticket">Buy</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     </div>
                 </div>
@@ -166,9 +172,36 @@
 
         $('#trip-options tbody').on( 'click', 'button', function () {
             $('#myModal').modal('show');
-            var data = table.row( $(this).parents('tr') ).data();
-            alert( "The ticket for train " + data[0] + "-" + data[1] + " is bought" );
+            var tr = $(this).closest('tr');
+            var row = table.row( tr );
+            console.log(row);
+
+            // var data = table.row( $(this).parents('tr') ).data();
+            // alert( "The ticket for train " + data[0] + "-" + data[1] + " is bought" );
         } );
+        // $('#buy-ticket').click(function (e) {
+        //     e.preventDefault();
+        //     $.ajax({
+        //         type: "POST",
+        //         url: "/tickets",
+        //         data: {
+        //             seat_num: ,
+        //             railcar_num: ,
+        //             user_id: userId,
+        //             train_id: ,
+        //             status: 'bought',
+        //             price: 100
+        //         },
+        //         success: function(result) {
+        //             alert('ok');
+        //         },
+        //         error: function(result) {
+        //             alert('error');
+        //         }
+        //     });
+        // });
+
+
     });
 
 </script>
