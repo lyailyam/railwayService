@@ -135,16 +135,16 @@
             },
 
             "columns" : [
-                { "data" : "firstStatName" },
-                { "data" : "lastStatName" },
+                { "data" : "depStationName" },
+                { "data" : "arrStationName" },
                 {
-                    data: null, render: function ( data) {
-                        return data.depDate+' - '+data.depTime;
+                    data: null, render: function ( data ) {
+                        return data.depDate+' - '+data.depSchedTime;
                     }
                 },
                 {
                     data: null, render: function ( data) {
-                        return data.arrDate+' - '+data.arrTime;
+                        return data.arrDate+' - '+data.arrSchedTime;
                     }
                 },
                 {
