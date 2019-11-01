@@ -15,7 +15,6 @@ public class TicketEntity {
     private String name;
     private String surname;
     private String nationalId;
-    private int seatId;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -117,16 +116,6 @@ public class TicketEntity {
         this.nationalId = nationalId;
     }
 
-    @Basic
-    @Column(name = "seat_id", nullable = false)
-    public int getSeatId() {
-        return seatId;
-    }
-
-    public void setSeatId(int seatId) {
-        this.seatId = seatId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -139,7 +128,6 @@ public class TicketEntity {
         if (railcarNum != that.railcarNum) return false;
         if (userId != that.userId) return false;
         if (trainId != that.trainId) return false;
-        if (seatId != that.seatId) return false;
         if (status != null ? !status.equals(that.status) : that.status != null) return false;
         if (price != null ? !price.equals(that.price) : that.price != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
@@ -161,7 +149,6 @@ public class TicketEntity {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (surname != null ? surname.hashCode() : 0);
         result = 31 * result + (nationalId != null ? nationalId.hashCode() : 0);
-        result = 31 * result + seatId;
         return result;
     }
 }
