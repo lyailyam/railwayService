@@ -26,28 +26,56 @@ public class TicketService {
 
         String sql;
         if (userId != null) {
-            sql = "SELECT ticket_id, price, ticket_status, traveler_name, traveler_surname, " +
-                    "traveler_nation_id, buyer_id, buyer_name, buyer_surname, buyer_nation_id, " +
-                    "first_stat_dep_sched_time, first_stat_arr_sched_time, last_stat_dep_sched_time, last_stat_arr_sched_time, " +
-                    "first_stat_date, first_stat_dep_actual_time, first_stat_arr_actual_time, " +
-                    "first_stat_leg_avail_seats, last_stat_date, last_stat_dep_actual_time, last_stat_arr_actual_time, " +
-                    "last_stat_leg_avail_seats, train_id, first_station_id, first_station_city, first_station_name, " +
-                    "first_station_longitude, first_station_latitude, last_station_id, last_station_city, last_station_name, " +
-                    "last_station_longitude, last_station_latitude, railcar_num, railcar_capacity, railcar_type, " +
-                    "seat_num, seat_location "
-                    + "FROM ticket_seat_leg "
+            sql = "select ticket.id as ticket_id, ticket.price, ticket.status as ticket_status, " +
+            "ticket.name as traveler_name, ticket.surname as traveler_surname, " +
+            "ticket.national_id as traveler_nation_id, user.id as buyer_id, " +
+                    "user.firstname as buyer_name, user.surname as buyer_surname, " +
+            "user.national_id as buyer_nation_id, user.activated as buyer_activate_status, user.email as buyer_email, " +
+                    " route_legs_stations.route_id, route_legs_stations.first_stat_leg_num, route_legs_stations.first_stat_dep_sched_time, " +
+            "route_legs_stations.first_stat_arr_sched_time, route_legs_stations.last_stat_leg_num, " +
+                    "route_legs_stations.last_stat_dep_sched_time, route_legs_stations.last_stat_arr_sched_time, " +
+                    "route_legs_stations.first_stat_date, route_legs_stations.first_stat_dep_actual_time, " +
+                    "route_legs_stations.first_stat_arr_actual_time, route_legs_stations.first_stat_leg_avail_seats, " +
+                    "route_legs_stations.train_id, " +
+                    "route_legs_stations.last_stat_date, route_legs_stations.last_stat_dep_actual_time, " +
+                    "route_legs_stations.last_stat_arr_actual_time, route_legs_stations.last_stat_leg_avail_seats, " +
+                    "route_legs_stations.first_station_id, route_legs_stations.first_station_name, route_legs_stations.first_station_city, " +
+                    "route_legs_stations.first_station_longitude, route_legs_stations.first_station_latitude, " +
+                    "route_legs_stations.last_station_id, route_legs_stations.last_station_name, route_legs_stations.last_station_city," +
+                    "route_legs_stations.last_station_longitude, route_legs_stations.arrive_station_latitude, " +
+                    "railcar.num as railcar_num, railcar.capacity as railcar_capacity, railcar.type as railcar_type, " +
+            "seat.num as seat_num, seat.location as seat_location " +
+            "from ticket inner join user on ticket.user_id = user.id " +
+            "inner join seat on seat.num = ticket.seat_num " +
+            "inner join railcar on railcar.num = seat.railcar_num " +
+            "inner join train on train.id = railcar.train_id " +
+            "inner join route_legs_stations on route_legs_stations.train_id = train.id "
                     + "WHERE buyer_id = " + userId + " ORDER BY first_stat_dep_sched_time ";
         } else {
-            sql = "SELECT ticket_id, price, ticket_status, traveler_name, traveler_surname, " +
-                    "traveler_nation_id, buyer_id, buyer_name, buyer_surname, buyer_nation_id, " +
-                    "first_stat_dep_sched_time, first_stat_arr_sched_time, last_stat_dep_sched_time, last_stat_arr_sched_time, " +
-                    "first_stat_date, first_stat_dep_actual_time, first_stat_arr_actual_time, " +
-                    "first_stat_leg_avail_seats, last_stat_date, last_stat_dep_actual_time, last_stat_arr_actual_time, " +
-                    "last_stat_leg_avail_seats, train_id, first_station_id, first_station_city, first_station_name, " +
-                    "first_station_longitude, first_station_latitude, last_station_id, last_station_city, last_station_name, " +
-                    "last_station_longitude, last_station_latitude, railcar_num, railcar_capacity, railcar_type, " +
-                    "seat_num, seat_location "
-                    + "FROM ticket_seat_leg "
+            sql = "select ticket.id as ticket_id, ticket.price, ticket.status as ticket_status, " +
+                    "ticket.name as traveler_name, ticket.surname as traveler_surname, " +
+                    "ticket.national_id as traveler_nation_id, user.id as buyer_id, " +
+                    "user.firstname as buyer_name, user.surname as buyer_surname, " +
+                    "user.national_id as buyer_nation_id, user.activated as buyer_activate_status, user.email as buyer_email, " +
+                    " route_legs_stations.route_id, route_legs_stations.first_stat_leg_num, route_legs_stations.first_stat_dep_sched_time, " +
+                    "route_legs_stations.first_stat_arr_sched_time, route_legs_stations.last_stat_leg_num, " +
+                    "route_legs_stations.last_stat_dep_sched_time, route_legs_stations.last_stat_arr_sched_time, " +
+                    "route_legs_stations.first_stat_date, route_legs_stations.first_stat_dep_actual_time, " +
+                    "route_legs_stations.first_stat_arr_actual_time, route_legs_stations.first_stat_leg_avail_seats, " +
+                    "route_legs_stations.train_id, " +
+                    "route_legs_stations.last_stat_date, route_legs_stations.last_stat_dep_actual_time, " +
+                    "route_legs_stations.last_stat_arr_actual_time, route_legs_stations.last_stat_leg_avail_seats, " +
+                    "route_legs_stations.first_station_id, route_legs_stations.first_station_name, route_legs_stations.first_station_city, " +
+                    "route_legs_stations.first_station_longitude, route_legs_stations.first_station_latitude, " +
+                    "route_legs_stations.last_station_id, route_legs_stations.last_station_name, route_legs_stations.last_station_city," +
+                    "route_legs_stations.last_station_longitude, route_legs_stations.arrive_station_latitude, " +
+                    "railcar.num as railcar_num, railcar.capacity as railcar_capacity, railcar.type as railcar_type, " +
+                    "seat.num as seat_num, seat.location as seat_location " +
+                    "from ticket inner join user on ticket.user_id = user.id " +
+                    "inner join seat on seat.num = ticket.seat_num " +
+                    "inner join railcar on railcar.num = seat.railcar_num " +
+                    "inner join train on train.id = railcar.train_id " +
+                    "inner join route_legs_stations on route_legs_stations.train_id = train.id "
                     + "ORDER BY first_stat_dep_sched_time ";
         }
 
@@ -103,7 +131,7 @@ public class TicketService {
                 t.setLastStatName(rs.getString("last_station_name"));
                 t.setLastStatCity(rs.getString("last_station_city"));
                 t.setLastStatLongitude(rs.getDouble("last_station_longitude"));
-                t.setLastStatLatitude(rs.getDouble("last_station_latitude"));
+                t.setLastStatLatitude(rs.getDouble("arrive_station_latitude"));
 
                 t.setRailcarNum(rs.getInt("railcar_num"));
                 t.setRailcarCapacity(rs.getInt("railcar_capacity"));
