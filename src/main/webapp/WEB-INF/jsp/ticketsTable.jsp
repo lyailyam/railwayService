@@ -122,7 +122,7 @@
     $(document).ready(function() {
         var table = $('#upcoming-trips').DataTable({
             "ajax" : {
-                "url" : 'api/tickets?user_id=5&limit=1000&offset=0',
+                "url" : 'api/tickets_?user_id=1',
                 dataSrc : ''
             },
             "columns" : [
