@@ -16,22 +16,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/monokai-sublime.min.css"/>
-    <style>
-
-        td.details-control {
-            background-image: url("https://www.pngtube.com/myfile/detail/400-4005556_buy-tickets-ticket-icon-circle.png") ;
-            background-position: center;
-            background-size: 28px 28px;
-            background-repeat: no-repeat;
-            cursor: pointer;
-        }
-        tr.shown td.details-control {
-            background-image: url("https://www.pngtube.com/myfile/detail/400-4005556_buy-tickets-ticket-icon-circle.png");
-            background-size: 28px 28px;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-    </style>
 </head>
 
 
@@ -69,6 +53,21 @@
                             <button class="btn btn-primary" name="submit" type="submit">Search</button>
                         </div>
                     </form>
+                    <div id="result" style="display: none">
+                    <h3>Search results</h3>
+                    <table id="trip-options" class="display" style="width:100%">
+                        <thead>
+                        <tr>
+                            <th>Departure Station</th>
+                            <th>Arrival Station</th>
+                            <th>Departure time</th>
+                            <th>Arrival time</th>
+                            <th></th>
+                            <th></th>
+                            </tr>
+                        </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -85,15 +84,7 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
 
 <script type="text/javascript">
-    function format ( d ) {
-        // `d` is the original data object for the row
-        return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
-            '<tr>'+
-            '<td>Ticket ID:</td>'+
-            '<td>'+d.ticketId+'</td>'+
-            '</tr>'+
-            '</table>';
-    }
+
     $(document).ready(function(){
         var date_input=$('input[name="date"]'); //our date input has the name "date"
         var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
@@ -109,22 +100,8 @@
 
     $(".form-i").submit(function(e) {
         e.preventDefault();
-        $("#appendToMe").append(
-            '<div>' +
-                '<h3>Search results</h3>'+
-                '<table id="trip-options" class="display" style="width:100%">' +
-                    '<thead>' +
-                        '<tr>' +
-                            '<th>Departure Station</th>' +
-                            '<th>Arrival Station</th>' +
-                            '<th>Departure time</th>' +
-                            '<th>Arrival time</th>' +
-                            '<th></th>' +
-                        '</tr>' +
-                    '</thead>' +
-                '</table>' +
-            '</div>');
 
+        document.getElementById("result").style.display = 'block'
         var from = document.getElementById("fromCity").value;
         var to = document.getElementById("toCity").value;
         var date = document.getElementById("date").value;
@@ -138,7 +115,7 @@
                 { "data" : "depStationName" },
                 { "data" : "arrStationName" },
                 {
-                    data: null, render: function ( data ) {
+                    data: null, render: function ( data) {
                         return data.depDate+' - '+data.depSchedTime;
                     }
                 },
@@ -148,26 +125,16 @@
                     }
                 },
                 {
-                    "class":          "details-control",
-                    "orderable":      false,
-                    "data":           null,
-                    "defaultContent": ""
+                    "targets": -1,
+                    "data": null,
+                    "defaultContent": "<button>Buy</button>"
                 }]
         });
 
-        $('#trip-options tbody').on('click', 'td.details-control', function () {
-            var tr = $(this).closest('tr');
-            var row = table.row( tr );
-
-            if ( row.child.isShown() ) {
-                row.child.hide();
-                tr.removeClass('shown');
-            }
-            else {
-                row.child( format(row.data()) ).show();
-                tr.addClass('shown');
-            }
-        });
+        $('#trip-options tbody').on( 'click', 'button', function () {
+            var data = table.row( $(this).parents('tr') ).data();
+            alert( "The ticket for train " + data.firstStatName + "-" + data.lastStatName + " is bought" );
+        } );
     });
 
 </script>
