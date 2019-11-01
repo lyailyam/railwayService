@@ -45,6 +45,7 @@ public class ScheduleService {
             while (rs.next()) {
                 Schedule s = new Schedule();
 
+                s.setRouteId(rs.getInt("route_id"));
                 s.setDepStationCity(rs.getString("first_station_city"));
                 s.setDepStationName(rs.getString("first_station_name"));
                 s.setArrStationCity(rs.getString("last_station_city"));

@@ -1,6 +1,7 @@
 package kz.edu.nu.cs.se.models;
 
 public class Schedule {
+    private int routeId;
     private String depStationName;
     private String depStationCity;
     private String arrStationName;
@@ -12,8 +13,9 @@ public class Schedule {
 
     public Schedule() {}
 
-    public Schedule(String depStationName, String depStationCity, String arrStationName, String arrStationCity, String depSchedTime,
+    public Schedule(int routeId, String depStationName, String depStationCity, String arrStationName, String arrStationCity, String depSchedTime,
                     String arrSchedtime, String depDate, String arrDate) {
+        this.routeId = routeId;
         this.depStationName = depStationName;
         this.depStationCity = depStationCity;
         this.arrStationName = arrStationName;
@@ -22,6 +24,14 @@ public class Schedule {
         this.arrSchedTime = arrSchedtime;
         this.depDate = depDate;
         this.arrDate = arrDate;
+    }
+
+    public int getRouteId() {
+        return routeId;
+    }
+
+    public void setRouteId(int routeId) {
+        this.routeId = routeId;
     }
 
     public String getDepStationName() {

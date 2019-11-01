@@ -151,6 +151,7 @@
             },
 
             "columns" : [
+                { "data" : "routeId"},
                 { "data" : "depStationName" },
                 { "data" : "arrStationName" },
                 {
@@ -176,8 +177,8 @@
             var row = table.row( tr );
             console.log(row);
 
-            // var data = table.row( $(this).parents('tr') ).data();
-            // alert( "The ticket for train " + data[0] + "-" + data[1] + " is bought" );
+            var data = table.row( $(this).parents('tr') ).data();
+            alert( "The ticket for train " + data['depStationName'] + "-" + data['routeId'] + " is bought" );
         } );
         // $('#buy-ticket').click(function (e) {
         //     e.preventDefault();
