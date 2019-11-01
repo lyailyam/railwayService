@@ -1,7 +1,7 @@
 package kz.edu.nu.cs.se.services;
 
 import kz.edu.nu.cs.se.ConfiguredSessionFactory;
-import kz.edu.nu.cs.se.models.Ticket;
+import kz.edu.nu.cs.se.models.TicketServiceInfo;
 import kz.edu.nu.cs.se.models.entities.StationEntity;
 import kz.edu.nu.cs.se.models.entities.TicketEntity;
 import org.hibernate.HibernateException;

@@ -6,7 +6,6 @@ import javax.ws.rs.core.Response;
 import com.google.gson.Gson;
 import kz.edu.nu.cs.se.DBConnector;
 import kz.edu.nu.cs.se.models.*;
-import kz.edu.nu.cs.se.models.TicketInfo;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -16,38 +15,40 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 
-// TODO: No longer works with updates db
 @Path("/tickets_")
 public class TicketService {
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getTickets(@QueryParam("user_id") Integer userId,
-                               @DefaultValue("5") @QueryParam("limit") Integer limit,
-                               @DefaultValue("0") @QueryParam("offset") Integer offset) {
+    public Response getTickets(@QueryParam("user_id") Integer userId) {
+                               //@DefaultValue("5") @QueryParam("limit") Integer limit,
+                               //@DefaultValue("0") @QueryParam("offset") Integer offset) {
 
         String sql;
         if (userId != null) {
-            sql = "SELECT ticket.id, ticket.price, user.id, user.firstname, user.surname, ticket.status, "
-                    + "date(trip.departure_time), time(trip.departure_time), date(trip.arrival_time), time(trip.arrival_time), "
-                    + "trip.status, st1.name, st2.name, railcar.train_id, railcar.id, seat.number, seat.location "
-                    + "FROM ticket INNER JOIN trip ON trip.id = ticket.trip_id "
-                    + "INNER JOIN station st1 on st1.id = trip.first_station_id "
-                    + "INNER JOIN station st2 ON st2.id = trip.last_station_id "
-                    + "INNER JOIN seat ON seat.id = ticket.seat_id "
-                    + "INNER JOIN railcar ON railcar.id = seat.railcar_id "
-                    + "INNER JOIN user ON user.id = ticket.user_id "
-                    + "WHERE ticket.user_id = " + userId + " ORDER BY trip.departure_time ";
+            sql = "SELECT ticket_id, price, ticket_status, traveler_name, traveler_surname, " +
+                    "traveler_nation_id, buyer_id, buyer_name, buyer_surname, buyer_nation_id, " +
+                    "first_stat_dep_sched_time, first_stat_arr_sched_time, last_stat_dep_sched_time, last_stat_arr_sched_time, " +
+                    "first_stat_date, first_stat_dep_actual_time, first_stat_arr_actual_time, " +
+                    "first_stat_leg_avail_seats, last_stat_date, last_stat_dep_actual_time, last_stat_arr_actual_time, " +
+                    "last_stat_leg_avail_seats, train_id, first_station_id, first_station_city, first_station_name, " +
+                    "first_station_longitude, first_station_latitude, last_station_id, last_station_city, last_station_name, " +
+                    "last_station_longitude, last_station_latitude, railcar_num, railcar_capacity, railcar_type, " +
+                    "seat_num, seat_location "
+                    + "FROM ticket_seat_leg "
+                    + "WHERE buyer_id = " + userId + " ORDER BY first_stat_dep_sched_time ";
         } else {
-            sql = "SELECT ticket.id, ticket.price, user.id, user.firstname, user.surname, ticket.status, "
-                    + "date(trip.departure_time), time(trip.departure_time), date(trip.arrival_time), time(trip.arrival_time), "
-                    + "trip.status, st1.name, st2.name, railcar.train_id, railcar.id, seat.number, seat.location "
-                    + "FROM ticket INNER JOIN trip ON trip.id = ticket.trip_id "
-                    + "INNER JOIN station st1 on st1.id = trip.first_station_id "
-                    + "INNER JOIN station st2 ON st2.id = trip.last_station_id "
-                    + "INNER JOIN seat ON seat.id = ticket.seat_id "
-                    + "INNER JOIN railcar ON railcar.id = seat.railcar_id "
-                    + "INNER JOIN user ON user.id = ticket.user_id "
-                    + "ORDER BY trip.departure_time ";
+            sql = "SELECT ticket_id, price, ticket_status, traveler_name, traveler_surname, " +
+                    "traveler_nation_id, buyer_id, buyer_name, buyer_surname, buyer_nation_id, " +
+                    "first_stat_dep_sched_time, first_stat_arr_sched_time, last_stat_dep_sched_time, last_stat_arr_sched_time, " +
+                    "first_stat_date, first_stat_dep_actual_time, first_stat_arr_actual_time, " +
+                    "first_stat_leg_avail_seats, last_stat_date, last_stat_dep_actual_time, last_stat_arr_actual_time, " +
+                    "last_stat_leg_avail_seats, train_id, first_station_id, first_station_city, first_station_name, " +
+                    "first_station_longitude, first_station_latitude, last_station_id, last_station_city, last_station_name, " +
+                    "last_station_longitude, last_station_latitude, railcar_num, railcar_capacity, railcar_type, " +
+                    "seat_num, seat_location "
+                    + "FROM ticket_seat_leg "
+                    + "ORDER BY first_stat_dep_sched_time ";
         }
 
         Gson gson = new Gson();
@@ -57,33 +58,59 @@ public class TicketService {
             ResultSet rs = stmt.executeQuery(sql)) {
             // TODO : Check if id exists at the first place
 
-            List<TicketInfo> ticketList = new CopyOnWriteArrayList<TicketInfo>();
+            List<TicketServiceInfo> ticketList = new CopyOnWriteArrayList<TicketServiceInfo>();
 
             while (rs.next()) {
-                TicketInfo t = new TicketInfo();
+                TicketServiceInfo t = new TicketServiceInfo();
 
-                t.setTicketId(rs.getInt("ticket.id"));
-                t.setPrice(rs.getDouble("ticket.price"));
-                t.setTicketStatus(rs.getString("ticket.status"));
+                t.setTicketId(rs.getInt("ticket_id"));
+                t.setPrice(rs.getDouble("price"));
+                t.setTicketStatus(rs.getString("ticket_status"));
 
-                t.setUserId(rs.getInt("user.id"));
-                t.setUserFirstName(rs.getString("user.firstname"));
-                t.setUserLastName(rs.getString("user.surname"));
+                t.setTravelerName(rs.getString("traveler_name"));
+                t.setTravelerSurname(rs.getString("traveler_surname"));
+                t.setTravelerNationId(rs.getString("traveler_nation_id"));
 
-                t.setDepDate(rs.getString("date(trip.departure_time)"));
-                t.setDepTime(rs.getString("time(trip.departure_time)"));
-                t.setArrDate(rs.getString("date(trip.arrival_time)"));
-                t.setArrTime(rs.getString("time(trip.arrival_time)"));
+                t.setBuyerId(rs.getInt("buyer_id"));
+                t.setBuyerName(rs.getString("buyer_name"));
+                t.setBuyerSurname(rs.getString("buyer_surname"));
+                t.setBuyerNationId(rs.getString("buyer_nation_id"));
 
-                t.setTripStatus(rs.getString("trip.status"));
+                t.setFirstStatDepSchedTime(rs.getString("first_stat_dep_sched_time"));
+                t.setFirstStatArrSchedTime(rs.getString("first_stat_arr_sched_time"));
+                t.setLastStatDepSchedTime(rs.getString("last_stat_dep_sched_time"));
+                t.setLastStatArrSchedTime(rs.getString("last_stat_arr_sched_time"));
 
-                t.setFirstStatName(rs.getString("st1.name"));
-                t.setLastStatName(rs.getString("st2.name"));
+                t.setFirstStatDate(rs.getString("first_stat_date"));
+                t.setFirstStatDepActualTime(rs.getString("first_stat_dep_actual_time"));
+                t.setFirstStatArrActualTime(rs.getString("first_stat_arr_actual_time"));
+                t.setFirstStatLegAvailSeats(rs.getInt("first_stat_leg_avail_seats"));
 
-                t.setTrainId(rs.getInt("railcar.train_id"));
-                t.setRailcarId(rs.getInt("railcar.id"));
-                t.setSeatNum(rs.getString("seat.number"));
-                t.setSeatLocation(rs.getString("seat.location"));
+                t.setLastStatDate(rs.getString("last_stat_date"));
+                t.setLastStatDepActualTime(rs.getString("last_stat_dep_actual_time"));
+                t.setLastStatArrActualTime(rs.getString("last_stat_arr_actual_time"));
+                t.setLastStatLegAvailSeats(rs.getInt("last_stat_leg_avail_seats"));
+
+                t.setTrainId(rs.getInt("train_id"));
+
+                t.setFirstStatId(rs.getInt("first_station_id"));
+                t.setFirstStatName(rs.getString("first_station_name"));
+                t.setFirstStatCity(rs.getString("first_station_city"));
+                t.setFirstStatLongitude(rs.getDouble("first_station_longitude"));
+                t.setFirstStatLatitude(rs.getDouble("first_station_latitude"));
+
+                t.setLastStatId(rs.getInt("last_station_id"));
+                t.setLastStatName(rs.getString("last_station_name"));
+                t.setLastStatCity(rs.getString("last_station_city"));
+                t.setLastStatLongitude(rs.getDouble("last_station_longitude"));
+                t.setLastStatLatitude(rs.getDouble("last_station_latitude"));
+
+                t.setRailcarNum(rs.getInt("railcar_num"));
+                t.setRailcarCapacity(rs.getInt("railcar_capacity"));
+                t.setRailcarType(rs.getString("railcar_type"));
+
+                t.setSeatNum(rs.getInt("seat_num"));
+                t.setSeatLocation(rs.getString("seat_location"));
 
                 ticketList.add(t);
             }
@@ -119,16 +146,17 @@ public class TicketService {
     @Path("/{ticket_id: [0-9]+}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTicket(@PathParam("ticket_id") Integer ticketId) {
-        String sql = "SELECT ticket.id, ticket.price, user.id, user.firstname, user.surname, ticket.status, "
-                + "date(trip.departure_time), time(trip.departure_time), date(trip.arrival_time), time(trip.arrival_time), "
-                + "trip.status, st1.name, st2.name, railcar.train_id, railcar.id, seat.number, seat.location "
-                + "FROM ticket INNER JOIN trip ON trip.id = ticket.trip_id "
-                + "INNER JOIN station st1 on st1.id = trip.first_station_id "
-                + "INNER JOIN station st2 ON st2.id = trip.last_station_id "
-                + "INNER JOIN seat ON seat.id = ticket.seat_id "
-                + "INNER JOIN railcar ON railcar.id = seat.railcar_id "
-                + "INNER JOIN user ON user.id = ticket.user_id "
-                + "WHERE ticket.id = " + ticketId;
+        String sql = "SELECT ticket_id, price, ticket_status, traveler_name, traveler_surname, " +
+                "traveler_nation_id, buyer_id, buyer_name, buyer_surname, buyer_nation_id, " +
+                "first_stat_dep_sched_time, first_stat_arr_sched_time, last_stat_dep_sched_time, last_stat_arr_sched_time, " +
+                "first_stat_date, first_stat_dep_actual_time, first_stat_arr_actual_time, " +
+                "first_stat_leg_avail_seats, last_stat_date, last_stat_dep_actual_time, last_stat_arr_actual_time, " +
+                "last_stat_leg_avail_seats, train_id, first_station_id, first_station_city, first_station_name, " +
+                "first_station_longitude, first_station_latitude, last_station_id, last_station_city, last_station_name, " +
+                "last_station_longitude, last_station_latitude, railcar_num, railcar_capacity, railcar_type, " +
+                "seat_num, seat_location "
+                + "FROM ticket_seat_leg "
+                + "WHERE ticket_id = " + ticketId;
 
         Gson gson = new Gson();
 
@@ -140,31 +168,56 @@ public class TicketService {
             rs.next();
 
             // TODO: Consider using constructor?
-            TicketInfo t = new TicketInfo();
+            TicketServiceInfo t = new TicketServiceInfo();
 
-            t.setTicketId(rs.getInt("ticket.id"));
-            t.setPrice(rs.getDouble("ticket.price"));
-            t.setTicketStatus(rs.getString("ticket.status"));
+            t.setTicketId(rs.getInt("ticket_id"));
+            t.setPrice(rs.getDouble("price"));
+            t.setTicketStatus(rs.getString("ticket_status"));
 
-            t.setUserId(rs.getInt("user.id"));
-            t.setUserFirstName(rs.getString("user.firstname"));
-            t.setUserLastName(rs.getString("user.surname"));
+            t.setTravelerName(rs.getString("traveler_name"));
+            t.setTravelerSurname(rs.getString("traveler_surname"));
+            t.setTravelerNationId(rs.getString("traveler_nation_id"));
 
-            t.setDepDate(rs.getString("date(trip.departure_time)"));
-            t.setDepTime(rs.getString("time(trip.departure_time)"));
-            t.setArrDate(rs.getString("date(trip.arrival_time)"));
-            t.setArrTime(rs.getString("time(trip.arrival_time)"));
+            t.setBuyerId(rs.getInt("buyer_id"));
+            t.setBuyerName(rs.getString("buyer_name"));
+            t.setBuyerSurname(rs.getString("buyer_surname"));
+            t.setBuyerNationId(rs.getString("buyer_nation_id"));
 
-            t.setTripStatus(rs.getString("trip.status"));
+            t.setFirstStatDepSchedTime(rs.getString("first_stat_dep_sched_time"));
+            t.setFirstStatArrSchedTime(rs.getString("first_stat_arr_sched_time"));
+            t.setLastStatDepSchedTime(rs.getString("last_stat_dep_sched_time"));
+            t.setLastStatArrSchedTime(rs.getString("last_stat_arr_sched_time"));
 
-            t.setFirstStatName(rs.getString("st1.name"));
-            t.setLastStatName(rs.getString("st2.name"));
+            t.setFirstStatDate(rs.getString("first_stat_date"));
+            t.setFirstStatDepActualTime(rs.getString("first_stat_dep_actual_time"));
+            t.setFirstStatArrActualTime(rs.getString("first_stat_arr_actual_time"));
+            t.setFirstStatLegAvailSeats(rs.getInt("first_stat_leg_avail_seats"));
 
-            t.setTrainId(rs.getInt("railcar.train_id"));
-            t.setRailcarId(rs.getInt("railcar.id"));
-            t.setSeatNum(rs.getString("seat.number"));
-            t.setSeatLocation(rs.getString("seat.location"));
+            t.setLastStatDate(rs.getString("last_stat_date"));
+            t.setLastStatDepActualTime(rs.getString("last_stat_dep_actual_time"));
+            t.setLastStatArrActualTime(rs.getString("last_stat_arr_actual_time"));
+            t.setLastStatLegAvailSeats(rs.getInt("last_stat_leg_avail_seats"));
 
+            t.setTrainId(rs.getInt("train_id"));
+
+            t.setFirstStatId(rs.getInt("first_station_id"));
+            t.setFirstStatName(rs.getString("first_station_name"));
+            t.setFirstStatCity(rs.getString("first_station_city"));
+            t.setFirstStatLongitude(rs.getDouble("first_station_longitude"));
+            t.setFirstStatLatitude(rs.getDouble("first_station_latitude"));
+
+            t.setLastStatId(rs.getInt("last_station_id"));
+            t.setLastStatName(rs.getString("last_station_name"));
+            t.setLastStatCity(rs.getString("last_station_city"));
+            t.setLastStatLongitude(rs.getDouble("last_station_longitude"));
+            t.setLastStatLatitude(rs.getDouble("last_station_latitude"));
+
+            t.setRailcarNum(rs.getInt("railcar_num"));
+            t.setRailcarCapacity(rs.getInt("railcar_capacity"));
+            t.setRailcarType(rs.getString("railcar_type"));
+
+            t.setSeatNum(rs.getInt("seat_num"));
+            t.setSeatLocation(rs.getString("seat_location"));
 
 
             return Response.ok(gson.toJson(t)).build();
