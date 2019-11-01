@@ -106,6 +106,7 @@
         var to = document.getElementById("toCity").value;
         var date = document.getElementById("date").value;
         var table = $('#trip-options').DataTable({
+            "destroy" : true,
             "ajax" : {
                 "url" : 'api/schedule?from='+from+'&to='+to+'&date='+date,
                 dataSrc : ''
