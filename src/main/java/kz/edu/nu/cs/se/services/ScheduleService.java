@@ -28,7 +28,7 @@ public class ScheduleService {
                                @QueryParam("to") String arrivalCity,
                                @QueryParam("date") String departDate) {
         String sql;
-        sql = "SELECT first_station_city, first_station_name, last_station_city, last_station_name, date(first_stat_date)," +
+        sql = "SELECT route_id, first_stat_leg_num, last_stat_leg_num, first_station_city, first_station_name, last_station_city, last_station_name, date(first_stat_date)," +
                 "time(first_stat_dep_sched_time), date(last_stat_date), time(last_stat_arr_sched_time)" +
                 "FROM route_legs_stations WHERE first_station_city = '" + departCity + "'" +
                 "AND last_station_city = '" + arrivalCity + "'" +
@@ -45,6 +45,7 @@ public class ScheduleService {
             while (rs.next()) {
                 Schedule s = new Schedule();
 
+                s.setRouteId(rs.getInt("route_id"));
                 s.setDepStationCity(rs.getString("first_station_city"));
                 s.setDepStationName(rs.getString("first_station_name"));
                 s.setArrStationCity(rs.getString("last_station_city"));
@@ -53,6 +54,8 @@ public class ScheduleService {
                 s.setArrSchedTime(rs.getString("time(last_stat_arr_sched_time)"));
                 s.setDepDate(rs.getString("date(first_stat_date)"));
                 s.setArrDate(rs.getString("date(last_stat_date)"));
+                s.setFirstStatLegNum(rs.getInt("first_stat_leg_num"));
+                s.setLastStatLegNum(rs.getInt("last_stat_leg_num"));
 
                 scheduleList.add(s);
             }

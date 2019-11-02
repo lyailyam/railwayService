@@ -58,6 +58,9 @@
                     <table id="trip-options" class="display" style="width:100%">
                         <thead>
                         <tr>
+                            <th>Route id</th>
+                            <th>First Station leg number</th>
+                            <th>Last Station leg number</th>
                             <th>Departure Station</th>
                             <th>Arrival Station</th>
                             <th>Departure time</th>
@@ -67,6 +70,44 @@
                             </tr>
                         </thead>
                         </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="myModal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Buy a ticket for ${data['depStationName']} - ${data['arrStationName']}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-i">
+                            <div class="form-group">
+                                <label class="control-label">First Name</label>
+                                <input class="form-control" id="name" placeholder="Enter first name of the person" type="text"/>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Last Name</label>
+                                <input class="form-control" id="surname" placeholder="Enter last name of the person" type="text"/>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">National ID</label>
+                                <input class="form-control" id="nationalID" placeholder="Enter national ID of the person" type="text"/>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Seat</label>
+                                <select name="seat-num" id="seat-num">
+
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="buy-ticket">Buy</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     </div>
                 </div>
             </div>
@@ -113,6 +154,9 @@
             },
 
             "columns" : [
+                { "data" : "routeId"},
+                { "data" : "firstStatLegNum"},
+                { "data" : "lastStatLegNum"},
                 { "data" : "depStationName" },
                 { "data" : "arrStationName" },
                 {
@@ -131,11 +175,61 @@
                     "defaultContent": "<button>Buy</button>"
                 }]
         });
+        $(function() {
+            $('#myModal').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var depStat = button.data('firstStatName'), // Extract info from data-* attributes
+                    arrStat = button.data('lastStatName')
+                var modal = $(this)
+                $('#myModal').data(depStat, arrStat);
+            });
+        });
 
         $('#trip-options tbody').on( 'click', 'button', function () {
+
+            var tr = $(this).closest('tr');
+            var row = table.row( tr );
+
             var data = table.row( $(this).parents('tr') ).data();
-            alert( "The ticket for train " + data.firstStatName + "-" + data.lastStatName + " is bought" );
+            console.log("data: ", data);
+            $('.modal-header #myModal').val(data);
+            $('#myModal').modal('show');
+            $.ajax({
+                type: "GET",
+                url: "/api/leg_instances/"+data['routeId']+"/"+data['firstStatLegNum']+"/"+data['depDate'],
+                success: function(result) {
+                    console.log(result);
+                    alert('ok');
+                },
+                error: function(result) {
+                    alert('error');
+                }
+            });
+            // alert( "The ticket for train " + data['depStationName'] + "-" + data['routeId'] + " is bought" );
         } );
+        // $('#buy-ticket').click(function (e) {
+        //     e.preventDefault();
+        //     $.ajax({
+        //         type: "POST",
+        //         url: "/tickets",
+        //         data: {
+        //             seat_num: ,
+        //             railcar_num: ,
+        //             user_id: userId,
+        //             train_id: ,
+        //             status: 'bought',
+        //             price: 100
+        //         },
+        //         success: function(result) {
+        //             alert('ok');
+        //         },
+        //         error: function(result) {
+        //             alert('error');
+        //         }
+        //     });
+        // });
+
+
     });
 
 </script>

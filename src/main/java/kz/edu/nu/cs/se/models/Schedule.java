@@ -1,6 +1,7 @@
 package kz.edu.nu.cs.se.models;
 
 public class Schedule {
+    private int routeId;
     private String depStationName;
     private String depStationCity;
     private String arrStationName;
@@ -9,11 +10,14 @@ public class Schedule {
     private String arrSchedTime;
     private String depDate;
     private String arrDate;
+    private int firstStatLegNum;
+    private int lastStatLegNum;
 
     public Schedule() {}
 
-    public Schedule(String depStationName, String depStationCity, String arrStationName, String arrStationCity, String depSchedTime,
-                    String arrSchedtime, String depDate, String arrDate) {
+    public Schedule(int routeId, String depStationName, String depStationCity, String arrStationName, String arrStationCity, String depSchedTime,
+                    String arrSchedtime, String depDate, String arrDate, int firstStatLegNum, int lastStatLegNum) {
+        this.routeId = routeId;
         this.depStationName = depStationName;
         this.depStationCity = depStationCity;
         this.arrStationName = arrStationName;
@@ -22,6 +26,16 @@ public class Schedule {
         this.arrSchedTime = arrSchedtime;
         this.depDate = depDate;
         this.arrDate = arrDate;
+        this.firstStatLegNum = firstStatLegNum;
+        this.lastStatLegNum = lastStatLegNum;
+    }
+
+    public int getRouteId() {
+        return routeId;
+    }
+
+    public void setRouteId(int routeId) {
+        this.routeId = routeId;
     }
 
     public String getDepStationName() {
@@ -90,5 +104,25 @@ public class Schedule {
 
     public String toString() {
         return depStationName + " - " + arrStationName;
+    }
+
+    public String getArrSchedTime() {
+        return arrSchedTime;
+    }
+
+    public int getFirstStatLegNum() {
+        return firstStatLegNum;
+    }
+
+    public void setFirstStatLegNum(int firstStatLegNum) {
+        this.firstStatLegNum = firstStatLegNum;
+    }
+
+    public int getLastStatLegNum() {
+        return lastStatLegNum;
+    }
+
+    public void setLastStatLegNum(int lastStatLegNum) {
+        this.lastStatLegNum = lastStatLegNum;
     }
 }
