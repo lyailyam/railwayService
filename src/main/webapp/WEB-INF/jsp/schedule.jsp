@@ -78,13 +78,21 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Buy a ticket for ${data['depStationName']} - ${data['arrStationName']}</h5>
+                        <h5 class="modal-title">Buy a ticket</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
                         <form class="form-i">
+                            <div class="form-group">
+                                <label class="control-label">Departure Station</label>
+                                <input class="form-control" id="depStat" type="text" value="" disabled/>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Arrival Station</label>
+                                <input class="form-control" id="arrStat" type="text" value="" disabled/>
+                            </div>
                             <div class="form-group">
                                 <label class="control-label">First Name</label>
                                 <input class="form-control" id="name" placeholder="Enter first name of the person" type="text"/>
@@ -99,7 +107,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="control-label">Seat</label>
-                                <select name="seat-num" id="seat-num">
+                                <select class="form-control" name="seat-num" id="seat-num">
 
                                 </select>
                             </div>
@@ -172,64 +180,39 @@
                 {
                     "targets": -1,
                     "data": null,
-                    "defaultContent": "<button>Buy</button>"
+                    "defaultContent": "<button class='buy' data-toggle='modal'>Buy</button>"
                 }]
         });
-        $(function() {
-            $('#myModal').on('show.bs.modal', function(event) {
-                var button = $(event.relatedTarget) // Button that triggered the modal
-                var depStat = button.data('firstStatName'), // Extract info from data-* attributes
-                    arrStat = button.data('lastStatName')
-                var modal = $(this)
-                $('#myModal').data(depStat, arrStat);
-            });
-        });
+
 
         $('#trip-options tbody').on( 'click', 'button', function () {
 
-            var tr = $(this).closest('tr');
-            var row = table.row( tr );
-
             var data = table.row( $(this).parents('tr') ).data();
-            console.log("data: ", data);
-            $('.modal-header #myModal').val(data);
+            console.log("data['depStationName']: ", data['depStationName']);
             $('#myModal').modal('show');
+            $('.modal-body #depStat').val(data['depStationName']);
+            $('.modal-body #arrStat').val(data['arrStationName']);
             $.ajax({
                 type: "GET",
-                url: "/api/leg_instances/"+data['routeId']+"/"+data['firstStatLegNum']+"/"+data['depDate'],
+                url: "${pageContext.request.contextPath}/api/leg_instances/"+data['routeId']+"/"+data['firstStatLegNum']+"/"+data['depDate'],
                 success: function(result) {
-                    console.log(result);
-                    alert('ok');
+                    $.ajax({
+                        type: "GET",
+                        url: "${pageContext.request.contextPath}/api/seats/?trainId="+result['trainId'],
+                        success: function(seats) {
+                            var select = document.getElementById('seat-num');
+                            for(var i in seats) {
+                                $(select).append('<option value=' + seats[i]['num'] + '>' + seats[i]['num'] + '</option>');
+                            }
+                            $(select).val(seats[0]['num']);
+                        }
+                    });
                 },
-                error: function(result) {
-                    alert('error');
+                error: function(error) {
+                    console.log(error);
                 }
             });
-            // alert( "The ticket for train " + data['depStationName'] + "-" + data['routeId'] + " is bought" );
-        } );
-        // $('#buy-ticket').click(function (e) {
-        //     e.preventDefault();
-        //     $.ajax({
-        //         type: "POST",
-        //         url: "/tickets",
-        //         data: {
-        //             seat_num: ,
-        //             railcar_num: ,
-        //             user_id: userId,
-        //             train_id: ,
-        //             status: 'bought',
-        //             price: 100
-        //         },
-        //         success: function(result) {
-        //             alert('ok');
-        //         },
-        //         error: function(result) {
-        //             alert('error');
-        //         }
-        //     });
-        // });
-
-
+        });
     });
 
 </script>
