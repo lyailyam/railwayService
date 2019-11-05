@@ -84,6 +84,12 @@
                         </button>
                     </div>
                     <div class="modal-body">
+                        <div id="alert-success" class="alert alert-success" role="alert" style="display: none">
+                            You have successfully bought a ticket.
+                        </div>
+                        <div id="alert-error" class="alert alert-danger" role="alert" style="display: none">
+                            Error occurred while buying a ticket.
+                        </div>
                         <form class="form-i">
                             <div class="form-group">
                                 <label class="control-label">Departure Station</label>
@@ -103,13 +109,11 @@
                             </div>
                             <div class="form-group">
                                 <label class="control-label">National ID</label>
-                                <input class="form-control" id="nationalID" placeholder="Enter national ID of the person" type="text"/>
+                                <input class="form-control" id="national-id" placeholder="Enter national ID of the person" type="text"/>
                             </div>
                             <div class="form-group">
                                 <label class="control-label">Seat</label>
-                                <select class="form-control" name="seat-num" id="seat-num">
-
-                                </select>
+                                <select class="form-control" name="seat-num" id="select-seat-num"></select>
                             </div>
                         </form>
                     </div>
@@ -200,11 +204,42 @@
                         type: "GET",
                         url: "${pageContext.request.contextPath}/api/seats/?trainId="+result['trainId'],
                         success: function(seats) {
-                            var select = document.getElementById('seat-num');
+                            var select = document.getElementById('select-seat-num');
                             for(var i in seats) {
-                                $(select).append('<option value=' + seats[i]['num'] + '>' + seats[i]['num'] + '</option>');
+                                $(select).append('<option value=' + i + '>' + seats[i]['num'] + '</option>');
                             }
-                            $(select).val(seats[0]['num']);
+                            $(select).val(0);
+                            $('#buy-ticket').on('click', function () {
+                                var seatNum = $("#select-seat-num :selected").text();
+                                var seatVal = $("#select-seat-num :selected").val();
+                                var json = {
+                                    "name": $("#name").val(),
+                                    "nationalId": $("#national-id").val(),
+                                    "price": 100,
+                                    "railcarNum": seats[seatVal]['railcarNum'],
+                                    "seatNum": parseInt(seatNum),
+                                    "status": "bought",
+                                    "surname": $("#surname").val(),
+                                    "trainId": seats[seatVal]['trainId'],
+                                    "userId": ${userId},
+                                };
+                                json = JSON.stringify(json);
+                                console.log(json)
+                                $.ajax({
+                                    type: "POST",
+                                    url: "${pageContext.request.contextPath}/api/tickets/",
+                                    data: json,
+                                    contentType: "application/json",
+                                    success: function (result) {
+                                        console.log(result);
+                                        $("#alert-success").show();
+                                    },
+                                    error: function (error) {
+                                        console.log(JSON.stringify(error));
+                                        $("#alert-error").show();
+                                    }
+                                });
+                            });
                         }
                     });
                 },
