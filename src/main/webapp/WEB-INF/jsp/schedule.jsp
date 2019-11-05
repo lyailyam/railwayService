@@ -119,7 +119,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" id="buy-ticket">Buy</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-secondary" id="cancel-buy-ticket" data-dismiss="modal">Cancel</button>
                     </div>
                 </div>
             </div>
@@ -197,14 +197,16 @@
             $('.modal-body #depStat').val(data['depStationName']);
             $('.modal-body #arrStat').val(data['arrStationName']);
             $.ajax({
-                type: "GET",
-                url: "${pageContext.request.contextPath}/api/leg_instances/"+data['routeId']+"/"+data['firstStatLegNum']+"/"+data['depDate'],
+                type: 'GET',
+                url: 'api/leg_instances/'+data['routeId']+'/'+data['firstStatLegNum']+'/'+data['depDate'],
                 success: function(result) {
                     $.ajax({
-                        type: "GET",
-                        url: "${pageContext.request.contextPath}/api/seats/?trainId="+result['trainId'],
+                        type: 'GET',
+                        url: '${pageContext.request.contextPath}/api/seats/?trainId='+result['trainId'],
                         success: function(seats) {
+                            console.log(seats);
                             var select = document.getElementById('select-seat-num');
+                            $(select).empty();
                             for(var i in seats) {
                                 $(select).append('<option value=' + i + '>' + seats[i]['num'] + '</option>');
                             }
@@ -212,35 +214,49 @@
                             $('#buy-ticket').on('click', function () {
                                 var seatNum = $("#select-seat-num :selected").text();
                                 var seatVal = $("#select-seat-num :selected").val();
-                                var json = {
-                                    "name": $("#name").val(),
-                                    "nationalId": $("#national-id").val(),
-                                    "price": 100,
-                                    "railcarNum": seats[seatVal]['railcarNum'],
-                                    "seatNum": parseInt(seatNum),
-                                    "status": "bought",
-                                    "surname": $("#surname").val(),
-                                    "trainId": seats[seatVal]['trainId'],
-                                    "userId": ${userId},
-                                };
-                                json = JSON.stringify(json);
+                                var json = '{'
+                                    +'"name": "' + $("#name").val() + '"'
+                                    +', "nationalId": ' + $("#national-id").val()
+                                    +', "railcarNum": ' + seats[seatVal]['railcarNum']
+                                    +', "seatNum": ' + parseInt(seatNum)
+                                    +', "surname": "' + $("#surname").val() + '"'
+                                    +', "status": "bought"'
+                                    +', "trainId": ' + seats[seatVal]['trainId']
+                                    +', "userId": ${userId}'
+                                +'}';
                                 console.log(json)
                                 $.ajax({
-                                    type: "POST",
-                                    url: "${pageContext.request.contextPath}/api/tickets/",
+                                    type: 'POST',
+                                    url: 'api/tickets/',
                                     data: json,
-                                    contentType: "application/json",
+                                    contentType: 'application/json',
                                     success: function (result) {
                                         console.log(result);
                                         $("#alert-success").show();
+                                        setTimeout(function() {
+                                            $("#alert-success").remove();
+                                            $("#name").val("");
+                                            $("#surname").val("");
+                                            $("#national-id").val("");
+                                            $("#myModal").modal('hide');
+                                        }, 5000);
                                     },
                                     error: function (error) {
-                                        console.log(JSON.stringify(error));
+                                        console.log(error);
                                         $("#alert-error").show();
+                                        setTimeout(function() {
+                                            $("#alert-error").remove();
+                                        }, 5000);
                                     }
                                 });
                             });
-                        }
+                            $("#cancel-buy-ticket").on('click', function () {
+                                $("#name").val("");
+                                $("#surname").val("");
+                                $("#national-id").val("");
+                                $("#myModal").modal('hide');
+                            });
+                        },
                     });
                 },
                 error: function(error) {
