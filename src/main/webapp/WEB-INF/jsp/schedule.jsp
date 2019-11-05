@@ -84,6 +84,12 @@
                         </button>
                     </div>
                     <div class="modal-body">
+                        <div id="alert-success" class="alert alert-success" role="alert" style="display: none">
+                            You have successfully bought a ticket.
+                        </div>
+                        <div id="alert-error" class="alert alert-danger" role="alert" style="display: none">
+                            Error occurred while buying a ticket.
+                        </div>
                         <form class="form-i">
                             <div class="form-group">
                                 <label class="control-label">Departure Station</label>
@@ -103,19 +109,17 @@
                             </div>
                             <div class="form-group">
                                 <label class="control-label">National ID</label>
-                                <input class="form-control" id="nationalID" placeholder="Enter national ID of the person" type="text"/>
+                                <input class="form-control" id="national-id" placeholder="Enter national ID of the person" type="text"/>
                             </div>
                             <div class="form-group">
                                 <label class="control-label">Seat</label>
-                                <select class="form-control" name="seat-num" id="seat-num">
-
-                                </select>
+                                <select class="form-control" name="seat-num" id="select-seat-num"></select>
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" id="buy-ticket">Buy</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-secondary" id="cancel-buy-ticket" data-dismiss="modal">Cancel</button>
                     </div>
                 </div>
             </div>
@@ -193,19 +197,66 @@
             $('.modal-body #depStat').val(data['depStationName']);
             $('.modal-body #arrStat').val(data['arrStationName']);
             $.ajax({
-                type: "GET",
-                url: "${pageContext.request.contextPath}/api/leg_instances/"+data['routeId']+"/"+data['firstStatLegNum']+"/"+data['depDate'],
+                type: 'GET',
+                url: 'api/leg_instances/'+data['routeId']+'/'+data['firstStatLegNum']+'/'+data['depDate'],
                 success: function(result) {
                     $.ajax({
-                        type: "GET",
-                        url: "${pageContext.request.contextPath}/api/seats/?trainId="+result['trainId'],
+                        type: 'GET',
+                        url: '${pageContext.request.contextPath}/api/seats/?trainId='+result['trainId'],
                         success: function(seats) {
-                            var select = document.getElementById('seat-num');
+                            console.log(seats);
+                            var select = document.getElementById('select-seat-num');
+                            $(select).empty();
                             for(var i in seats) {
-                                $(select).append('<option value=' + seats[i]['num'] + '>' + seats[i]['num'] + '</option>');
+                                $(select).append('<option value=' + i + '>' + seats[i]['num'] + '</option>');
                             }
-                            $(select).val(seats[0]['num']);
-                        }
+                            $(select).val(0);
+                            $('#buy-ticket').on('click', function () {
+                                var seatNum = $("#select-seat-num :selected").text();
+                                var seatVal = $("#select-seat-num :selected").val();
+                                var json = '{'
+                                    +'"name": "' + $("#name").val() + '"'
+                                    +', "nationalId": ' + $("#national-id").val()
+                                    +', "railcarNum": ' + seats[seatVal]['railcarNum']
+                                    +', "seatNum": ' + parseInt(seatNum)
+                                    +', "surname": "' + $("#surname").val() + '"'
+                                    +', "status": "bought"'
+                                    +', "trainId": ' + seats[seatVal]['trainId']
+                                    +', "userId": ${userId}'
+                                +'}';
+                                console.log(json)
+                                $.ajax({
+                                    type: 'POST',
+                                    url: 'api/tickets/',
+                                    data: json,
+                                    contentType: 'application/json',
+                                    success: function (result) {
+                                        console.log(result);
+                                        $("#alert-success").show();
+                                        setTimeout(function() {
+                                            $("#alert-success").remove();
+                                            $("#name").val("");
+                                            $("#surname").val("");
+                                            $("#national-id").val("");
+                                            $("#myModal").modal('hide');
+                                        }, 5000);
+                                    },
+                                    error: function (error) {
+                                        console.log(error);
+                                        $("#alert-error").show();
+                                        setTimeout(function() {
+                                            $("#alert-error").remove();
+                                        }, 5000);
+                                    }
+                                });
+                            });
+                            $("#cancel-buy-ticket").on('click', function () {
+                                $("#name").val("");
+                                $("#surname").val("");
+                                $("#national-id").val("");
+                                $("#myModal").modal('hide');
+                            });
+                        },
                     });
                 },
                 error: function(error) {
