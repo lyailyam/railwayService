@@ -22,7 +22,7 @@ public class TicketService_ {
                                @QueryParam("name") String name,
                                @QueryParam("surname") String surname,
                                @QueryParam("nationalId") String nationalId){
-        List result = null;
+        List result;
 
         Session session = ConfiguredSessionFactory.getSession();
         session.beginTransaction();
@@ -95,7 +95,7 @@ public class TicketService_ {
     @Path("/{ticket_id: [0-9]+}")
     @GET
     public Response getTicket(@PathParam("ticket_id") Integer ticketId) {
-        TicketEntity result = null;
+        TicketEntity result;
 
         Session session = ConfiguredSessionFactory.getSession();
         try {
