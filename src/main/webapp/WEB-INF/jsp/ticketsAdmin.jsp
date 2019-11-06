@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
 <!DOCTYPE html>
 <html lang="en" class="h-100">
 
@@ -14,11 +13,6 @@
     <link rel="stylesheet" href="https://cdn.auth0.com/js/auth0-samples-theme/1.0/css/auth0-theme.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/monokai-sublime.min.css"/>
-    <style>
-        .button {
-            background-color: #D32A08;
-        }
-    </style>
 </head>
 
 <body class="h-100">
@@ -51,7 +45,7 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <form>
+                                    <form id="create-ticket-form">
                                         User ID:<br>
                                         <input type="text" name="userId" id="user_id">
                                         <br>
@@ -73,15 +67,16 @@
                                         SeatNum:<br>
                                         <input type="text" name="seatNum" id="seat_num">
                                         <br><br>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary" id="createTicketBtn">Create</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </div>
                                     </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary" id="createTicketBtn">Create</button>
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <%-- END Create tickets modal --%>
 
                     <%-- Cancel/change tickets modal --%>
                     <div class="modal" id="cancelTicketsModal" tabindex="-1" role="dialog">
@@ -96,20 +91,21 @@
                                 <div class="modal-body">
                                     <form id="get-ticket-form">
                                         Ticket id:<br>
-                                        <input type="number" name="ticket_id" id="ticket_id_input">
+                                        <input type="number" name="ticketId" id="ticket_id">
                                         <br><br>
-                                        <div class="modal-footer">
-                                            <button type="submit" class="btn btn-primary" id="cancelTicketBtn">Submit</button>
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        </div>
                                     </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" id="cancelTicketBtn">Submit</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <%-- END Cancel/change tickets modal --%>
 
                     <%-- Ticket modal --%>
-                    <div class="modal hide" id="ticketModal" tabindex="-1" role="dialog">
+                    <div class="modal" id="ticketModal" tabindex="-1" role="dialog">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -125,6 +121,8 @@
                             </div>
                         </div>
                     </div>
+                    <%-- END Ticket modal --%>
+
                 </div>
             </div>
         </div>
@@ -137,43 +135,79 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
+<script charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-        // Cancel or change tickets
-        $('#get-ticket-form').on('submit', function(e) {
-            e.preventDefault();
-            var ticketId = $("#ticket_id_input").val();
-            getIndividualTicket(ticketId);
-        });
-
-        // Create Tickets
+        // Create tickets modal -> Create ticket
         $('#createTicketBtn').click( function() {
-            console.log("createTicketBtn clicked");
             var jsonData = '{'
-               +'"userId": ' + $("#user_id").val()
-               +', "name": "' + $("#user_name").val()
-               +'", "surname": "' + $("#user_surname").val()
-               +'", "nationalId": "' + $("#national_id").val()
-               +'", "railcarNum": ' + $("#railcar_num").val()
-               +', "trainId": ' + $("#train_id").val()
-               +', "seatNum": ' + $("#seat_num").val()
-           + '}';
-
-            console.log("json data = " + jsonData);
-
+                +'"userId": ' + $("#user_id").val()
+                +', "name": "' + $("#user_name").val()
+                +'", "surname": "' + $("#user_surname").val()
+                +'", "nationalId": ' + $("#national_id").val()
+                +', "railcarNum": ' + $("#railcar_num").val()
+                +', "trainId": ' + $("#train_id").val()
+                +', "seatNum": ' + $("#seat_num").val()
+                + '}';
             createTicket(jsonData);
         });
 
-        // Cancel ticket: action buttons
+        // Cancel/change tickets modal -> Retrieve individual ticket to change or delete it
+        $('#cancelTicketBtn').click(function() {
+            var ticketId = $("#ticket_id").val();
+            getIndividualTicket(ticketId);
+        });
+
+        // TicketModal -> Delete ticket
         $('#deleteTicketBtn').click( function() {
-            var ticketId = $("#ticket_id_input").val();
+            var ticketId = $("#ticket_id").val();
             deleteTicket(ticketId);
         });
-        $('#applyChangesBtn').click( function() {
-            var ticketId = $("#ticket_id_input").val();
-            applyChangesTicket(ticketId);
+
+        // TicketModal -> Change ticket
+        $('#applyChangesBtn').click(function() {
+            var ticketId = $("#ticket_id").val();
+            var jsonData = '{'
+                +'"userId": ' + $("#m_user_id").val()
+                +', "id": ' + $("#m_ticket_id").val()
+                +', "name": "' + $("#m_user_name").val()
+                +'", "surname": "' + $("#m_user_surname").val()
+                +'", "nationalId": ' + $("#m_national_id").val()
+                +', "railcarNum": ' + $("#m_railcarNum").val()
+                +', "trainId": ' + $("#m_train_id").val()
+                +', "seatNum": ' + $("#m_seat_num").val()
+                + '}';
+            modifyTicket(ticketId, jsonData);
         });
+
+        // Remove backdrops when modals are closed
+        $('#ticketModal').on('hidden.bs.modal', function(){
+            $('.modal-backdrop').remove();
+        })
+        $('#cancelTicketsModal').on('hidden.bs.modal', function(){
+            $('.modal-backdrop').remove();
+        })
+        $('#createTicketsModal').on('hidden.bs.modal', function(){
+            $('.modal-backdrop').remove();
+        })
     });
+
+    function getIndividualTicket(ticketId) {
+        $.ajax({
+            url: 'api/tickets/' + ticketId,
+            type: 'GET',
+            success: function(result) {
+                $('#cancelTicketsModal').hide();
+                populateTicketModal(result);
+                $("#ticketModal").modal('show');
+            },
+            error: function (jqXHR, status, error) {
+                console.log(jqXHR);
+                alert("Could not get the ticket with id=" + ticketId + ". Status: " + jqXHR.status);
+            }
+        });
+    }
 
     function createTicket(data) {
         $.ajax({
@@ -182,21 +216,13 @@
             data: data,
             contentType: 'application/json',
             success: function() {
-                alert("Success");
-                $('#createTicketsModal').modal('hide');
-            }
-        });
-    }
-
-
-    function getIndividualTicket(ticketId) {
-        $.ajax({
-            url: 'api/tickets/' + ticketId,
-            type: 'GET',
-            success: function(res) {
-                $('#cancelTicketsModal').modal('hide');
-                populateModal(res);
-                $("#ticketModal").modal('show');
+                alert("Ticket successfully created!");
+                $('#createTicketsModal').hide();
+                $('.modal-backdrop').remove();
+            },
+            error: function (jqXHR, status, error) {
+                console.log(jqXHR);
+                alert("Could not create a ticket. Status: " + jqXHR.status);
             }
         });
     }
@@ -206,43 +232,65 @@
             url: 'api/tickets/' + ticketId,
             type: 'DELETE',
             success: function() {
-                $("#ticketModal").modal('hide');
-                alert("Ticket successfully deleted");
+                alert("Ticket with id=" + ticketId + " successfully deleted.");
+                $("#ticketModal").hide();
+                $('.modal-backdrop').remove();
+            },
+            error: function (jqXHR, status, error) {
+                console.log(jqXHR);
+                alert("Could not delete the ticket with id=" + ticketId + ". Status: " + jqXHR.status);
             }
         });
     }
 
-    function applyChangesTicket(ticketId) {
-        console.log("Apply changes");
+    function modifyTicket(ticketId, jsonData) {
+        $.ajax({
+            type: 'PUT',
+            url: 'api/tickets',
+            data: jsonData,
+            contentType: 'application/json',
+            success: function() {
+                alert("Ticket with id=" + ticketId + " successfully modified.");
+                $('#ticketModal').hide();
+                $('.modal-backdrop').remove();
+            },
+            error: function (jqXHR, status, error) {
+                console.log(jqXHR);
+                alert("Could not modify a ticket with id=" + ticketId + ". Status: " + jqXHR.status);
+            }
+        });
     }
 
-    function populateModal(res) {
+    function populateTicketModal(res) {
         console.log(res);
         $('#ticketModal').find('.modal-body').html(
             "<form>\n" +
             "Ticket ID:<br>\n" +
-            "<input type=\"text\" name=\"ticketId\" value=" + res.id + ">\n" +
+            "<input type=\"text\" name=\"ticketId\" id=\"m_ticket_id\" value=" + res.id + ">\n" +
             "<br>\n" +
             "Status:<br>\n" +
-            "<input type=\"text\" name=\"status\" value=" + res.status + ">\n" +
+            "<input type=\"text\" name=\"status\" id=\"m_ticket_status\" value=" + res.status + ">\n" +
             "<br>\n" +
             "User ID:<br>\n" +
-            "<input type=\"text\" name=\"userId\" value=" + res.userId + ">\n" +
+            "<input type=\"text\" name=\"userId\" id=\"m_user_id\" value=" + res.userId + ">\n" +
             "<br>\n" +
             "Name:<br>\n" +
-            "<input type=\"text\" name=\"name\" value=" + res.name + ">\n" +
+            "<input type=\"text\" name=\"name\" id=\"m_user_name\" value=" + res.name + ">\n" +
             "<br>\n" +
             "Surname:<br>\n" +
-            "<input type=\"text\" name=\"surname\" value=" + res.surname + ">\n" +
+            "<input type=\"text\" name=\"surname\" id=\"m_user_surname\" value=" + res.surname + ">\n" +
             "<br>\n" +
             "National ID:<br>\n" +
-            "<input type=\"number\" name=\"nationalId\" value=" + res.nationalId + ">\n" +
+            "<input type=\"text\" name=\"nationalId\" id=\"m_national_id\" value=" + res.nationalId + ">\n" +
+            "<br>\n" +
+            "Railcar Num:<br>\n" +
+            "<input type=\"number\" name=\"railcarNum\" id=\"m_railcarNum\" value=" + res.railcarNum + ">\n" +
             "<br>\n" +
             "Train ID:<br>\n" +
-            "<input type=\"number\" name=\"trainId\" value=" + res.trainId + ">\n" +
+            "<input type=\"number\" name=\"trainId\" id=\"m_train_id\" value=" + res.trainId + ">\n" +
             "<br>\n" +
             "Seat Num:<br>\n" +
-            "<input type=\"number\" name=\"seatNum\" value==" + res.seatNum + ">\n" +
+            "<input type=\"number\" name=\"seatNum\" id=\"m_seat_num\" value=" + res.seatNum + ">\n" +
             "<br><br>\n" +
             "</form>"
         );
