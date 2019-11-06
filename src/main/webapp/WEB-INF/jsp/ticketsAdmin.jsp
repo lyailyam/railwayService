@@ -94,15 +94,15 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="/tickets" method="get">
+                                    <form id="get-ticket-form">
                                         Ticket id:<br>
                                         <input type="number" name="ticket_id" id="ticket_id_input">
                                         <br><br>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary" id="cancelTicketBtn">Submit</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </div>
                                     </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary" id="cancelTicketBtn">Submit</button>
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                 </div>
                             </div>
                         </div>
@@ -140,7 +140,8 @@
 <script type="text/javascript">
     $(document).ready(function() {
         // Cancel or change tickets
-        $('#cancelTicketBtn').click( function() {
+        $('#get-ticket-form').on('submit', function(e) {
+            e.preventDefault();
             var ticketId = $("#ticket_id_input").val();
             getIndividualTicket(ticketId);
         });
