@@ -246,7 +246,7 @@
             "<input type=\"number\" name=\"trainId\" value=" + res.trainId + ">\n" +
             "<br>\n" +
             "Seat Num:<br>\n" +
-            "<input type=\"number\" name=\"seatNum\" value==" + res.seatNum + ">\n" +
+            "<input type=\"number\" name=\"seatNum\" value=" + res.seatNum + ">\n" +
             "<br><br>\n" +
             "</form>"
         );
