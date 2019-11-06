@@ -186,7 +186,6 @@
                 $('#createTicketsModal').modal('hide');
             },
             error: function (jqXHR, status, error) {
-                console.log(jqXHR);
                 alert("Could not create a ticket. Status: " + jqXHR.status);
             }
         });
@@ -203,7 +202,6 @@
                 $("#ticketModal").modal('show');
             },
             error: function (jqXHR, status, error) {
-                console.log(jqXHR);
                 alert("Could not get the ticket. Status: " + jqXHR.status);
             }
         });
@@ -218,7 +216,6 @@
                 alert("Ticket successfully deleted");
             },
             error: function (jqXHR, status, error) {
-                console.log(jqXHR);
                 alert("Could not delete the ticket. Status: " + jqXHR.status);
             }
         });
