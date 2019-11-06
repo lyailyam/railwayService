@@ -50,7 +50,7 @@
                     <th>From-To</th>
                     <th>Departure time</th>
                     <th>Arrival time</th>
-                    <th>Trip Status</th>
+                    <th>Ticket Status</th>
                 </tr>
             </thead>
         </table>
@@ -73,25 +73,6 @@
             '<td>'+d.ticketId+'</td>'+
             '</tr>'+
             '<tr>'+
-            '<td>Passenger name:</td>'+
-            '<td>'+d.userFirstName+' '+d.userLastName+'</td>'+
-            '</tr>'+
-            '<tr>'+
-            '<td>Route:</td>'+
-            '<td>'+d.firstStatName+' - '+d.lastStatName+'</td>'+
-            '</tr>'+
-            '<tr>'+
-            '<td>Departure date and time:</td>'+
-            '<td>'+d.depDate+' - '+d.depTime+'</td>'+
-            '</tr>'+
-            '<tr>'+
-            '<td>Arrival date and time:</td>'+
-            '<td>'+d.arrDate+' - '+d.arrTime+'</td>'+
-            '</tr>'+
-            '<tr>'+
-            '<td>Trip status:</td>'+
-            '<td>'+d.tripStatus+'</td>'+
-            '</tr>'+
             '<tr>'+
             '<td>Train #:</td>'+
             '<td>'+d.trainId+'</td>'+
@@ -102,7 +83,7 @@
             '</tr>'+
             '<tr>'+
             '<td>Car #:</td>'+
-            '<td>'+d.railcarId+'</td>'+
+            '<td>'+d.railcarNum+'</td>'+
             '</tr>'+
             '<tr>'+
             '<td>Seat #:</td>'+
@@ -112,17 +93,12 @@
             '<td>Price:</td>'+
             '<td>'+d.price+'$</td>'+
             '</tr>'+
-            '<tr>'+
-            '<td>Status:</td>'+
-            '<td>'+d.ticketStatus+'</td>'+
-            '</tr>'+
-            '<tr>'+
             '</table>';
     }
     $(document).ready(function() {
         var table = $('#upcoming-trips').DataTable({
             "ajax" : {
-                "url" : 'api/tickets?user_id=5&limit=1000&offset=0',
+                "url" : 'api/ticketsInfo?userId='+${userId},
                 dataSrc : ''
             },
             "columns" : [
@@ -133,16 +109,21 @@
                     "defaultContent": ""
                 },
                 { data: null, render: function ( data) {
-                        return data.userFirstName+' '+data.userLastName;
-                    } }, { data: null, render: function ( data) {
+                        return data.buyerName+' '+data.buyerSurname;
+                    } },
+                { data: null, render: function ( data) {
                         return data.firstStatName+' - '+data.lastStatName;
-                    } }, { data: null, render: function ( data) {
-                        return data.depDate+' - '+data.depTime;
-                    } }, { data: null, render: function ( data) {
-                        return data.arrDate+' - '+data.arrTime;
-                    } }, {
-                    "data" : "tripStatus"
-                }],
+                    } },
+                { data: null, render: function ( data) {
+                        return data.firstStatDate+' - '+data.firstStatDepSchedTime;
+                    } },
+                { data: null, render: function ( data) {
+                        return data.lastStatDate+' - '+data.lastStatArrSchedTime;
+                    } },
+                {
+                    "data" : "ticketStatus"
+                }
+                ],
 
             "order": [[1, 'asc']]
         });
