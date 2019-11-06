@@ -184,6 +184,10 @@
             success: function() {
                 alert("Success");
                 $('#createTicketsModal').modal('hide');
+            },
+            error: function (jqXHR, status, error) {
+                console.log(jqXHR);
+                alert("Could not create a ticket. Status: " + jqXHR.status);
             }
         });
     }
@@ -197,6 +201,10 @@
                 $('#cancelTicketsModal').modal('hide');
                 populateModal(res);
                 $("#ticketModal").modal('show');
+            },
+            error: function (jqXHR, status, error) {
+                console.log(jqXHR);
+                alert("Could not get the ticket. Status: " + jqXHR.status);
             }
         });
     }
@@ -208,6 +216,10 @@
             success: function() {
                 $("#ticketModal").modal('hide');
                 alert("Ticket successfully deleted");
+            },
+            error: function (jqXHR, status, error) {
+                console.log(jqXHR);
+                alert("Could not delete the ticket. Status: " + jqXHR.status);
             }
         });
     }
