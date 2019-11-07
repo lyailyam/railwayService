@@ -6,8 +6,8 @@
       maxActive = "100"
       maxIdle = "30"
       maxWait = "10000"
-      username = "madina"
-      password = "123456789"
+      username = "root"
+      password = "seProject2019!"
       driverClassName = "com.mysql.cj.jdbc.Driver"
-      url = "jdbc:mysql://34.66.215.70:3306/railwayway"/>
+      url = "jdbc:mysql://35.188.31.126/railwaysdb"/>
 </Context>
