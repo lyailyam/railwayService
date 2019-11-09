@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.sql.Time;
 
 @Entity
-@Table(name = "schedule", schema = "railwayway", catalog = "")
+@Table(name = "schedule", schema = "railwaysdb", catalog = "")
 public class ScheduleEntity {
     private int employeeId;
     private Integer workingDay;
