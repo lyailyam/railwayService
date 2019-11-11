@@ -27,7 +27,8 @@ public class ScheduleMapService {
         try {
             session.beginTransaction();
 
-            Query query = session.createQuery("select li.routeId, li.date, li.legNum, rl.departScheduledTime, " +
+            // TODO: Delete query
+            Query query = session.createQuery("select li.routeId, li.date, rl.departScheduledTime, " +
                     "rl.arrivalScheduledTime, depS.city, depS.name, arrS.city, arrS.name, li.trainId " +
                     "from LegInstanceEntity li " +
                     "inner join RouteLegEntity rl on li.routeId = rl.routeId and li.legNum = rl.legNum " +
@@ -35,23 +36,29 @@ public class ScheduleMapService {
                     "inner join StationEntity arrS on arrS.id = rl.arrivalStationId where " +
                     "(:date is null or li.date = :date)");
 
+            Query query1 = session.createNativeQuery("SELECT route_id, first_stat_date, " +
+                    "first_stat_dep_sched_time, last_stat_arr_sched_time, " +
+                    "first_station_city, first_station_name, last_station_city, last_station_name, train_id " +
+                    "FROM route_legs_stations where " +
+                    "(:date is null or first_stat_date = :date)");
+
+            query1.setParameter("date", date);
             query.setParameter("date", date);
 
-            results = query.getResultList();
+            results = query1.getResultList();
 
             if(!results.isEmpty()) {
                 for(Object[] result : results) {
-                    HashMap resultMap = new HashMap();
+                    HashMap<String, Object> resultMap = new HashMap();
                     resultMap.put("routeId", result[0]);
-                    resultMap.put("date", result[1]);
-                    resultMap.put("legNum", result[2]);
-                    resultMap.put("departScheduledTime", result[3]);
-                    resultMap.put("arrivalScheduledTime", result[4]);
-                    resultMap.put("departCity", result[5]);
-                    resultMap.put("departStationName", result[6]);
-                    resultMap.put("arrivalCity", result[7]);
-                    resultMap.put("arrivalStationName", result[8]);
-                    resultMap.put("trainId", result[9]);
+                    resultMap.put("date", result[1].toString()); // sql.Date is deprecated in JDBC
+                    resultMap.put("departScheduledTime", result[2].toString()); // sql.Time is deprecated
+                    resultMap.put("arrivalScheduledTime", result[3].toString()); // sql.Time is deprecated
+                    resultMap.put("departCity", result[4]);
+                    resultMap.put("departStationName", result[5]);
+                    resultMap.put("arrivalCity", result[6]);
+                    resultMap.put("arrivalStationName", result[7]);
+                    resultMap.put("trainId", result[8]);
                     data.add(resultMap);
                 }
             }
