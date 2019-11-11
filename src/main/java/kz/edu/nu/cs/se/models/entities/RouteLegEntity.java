@@ -14,6 +14,10 @@ public class RouteLegEntity {
     private String departScheduledTime;
     private String arrivalScheduledTime;
 
+    @ManyToOne
+    @JoinColumn(name = "depart_station_id")
+    private StationEntity departStation;
+
     @Id
     @Column(name = "route_id", nullable = false)
     public int getRouteId() {
