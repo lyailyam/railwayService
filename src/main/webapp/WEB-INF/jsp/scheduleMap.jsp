@@ -137,8 +137,12 @@
                 "type": "GET",
                 "url": "api/schedule-map?date=" + date,
                 "dataSrc": function (json) {
+                    // Once datatable is loaded
+
+                    // Save data
                     data = json;
 
+                    // Render map
                     getStations().then(function (r) {
                         mapStationsToCoord();
                         renderMap();
