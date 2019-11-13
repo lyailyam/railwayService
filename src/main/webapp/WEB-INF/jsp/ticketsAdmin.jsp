@@ -45,33 +45,47 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <form id="create-ticket-form">
-                                        User ID:<br>
-                                        <input type="text" name="userId" id="user_id">
-                                        <br>
-                                        Name:<br>
-                                        <input type="text" name="name" id="user_name">
-                                        <br>
-                                        Surname:<br>
-                                        <input type="text" name="surname" id="user_surname">
-                                        <br>
-                                        NationalID:<br>
-                                        <input type="text" name="nationalId" id="national_id">
-                                        <br>
-                                        RailcarNum:<br>
-                                        <input type="text" name="railcarNum" id="railcar_num">
-                                        <br>
-                                        TrainId:<br>
-                                        <input type="text" name="trainId" id="train_id">
-                                        <br>
-                                        SeatNum:<br>
-                                        <input type="text" name="seatNum" id="seat_num">
-                                        <br><br>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-primary" id="createTicketBtn">Create</button>
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <form class="form-i" id="create-ticket-form">
+                                        <div class="form-group">
+                                            <label class="control-label">User ID</label>
+                                            <input class="form-control" type="text" name="userId" id="user_id" value=""
+                                                placeholder="Enter User ID"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Name</label>
+                                            <input class="form-control" type="text" name="name" id="user_name" value=""
+                                                   placeholder="Enter first name of the user"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Surname</label>
+                                            <input class="form-control" type="text" name="surname" id="user_surname" value=""
+                                                   placeholder="Enter last name of the user"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">National ID</label>
+                                            <input class="form-control" type="text" name="nationalId" id="national_id" value=""
+                                                   placeholder="Enter National ID number of the user"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Railcar</label>
+                                            <input class="form-control" type="number" name="railcarNum" id="railcar_num" value=""
+                                                   placeholder="Enter railcar number"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Train</label>
+                                            <input class="form-control" type="number" name="trainId" id="train_id" value=""
+                                                   placeholder="Enter Train ID"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Seat</label>
+                                            <input class="form-control" type="number" name="seatNum" id="seat_num" value=""
+                                                   placeholder="Enter seat number"/>
                                         </div>
                                     </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" id="createTicketBtn">Create</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                 </div>
                             </div>
                         </div>
@@ -89,10 +103,12 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <form id="get-ticket-form">
-                                        Ticket id:<br>
-                                        <input type="number" name="ticketId" id="ticket_id">
-                                        <br><br>
+                                    <form class="form-i" id="get-ticket-form">
+                                        <div class="form-group">
+                                            <label class="control-label">Ticket ID</label>
+                                            <input class="form-control" type="number" id="ticket_id" value=""
+                                                   placeholder="Enter Ticket ID">
+                                        </div>
                                     </form>
                                 </div>
                                 <div class="modal-footer">
@@ -110,6 +126,9 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title">Ticket</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
                                 </div>
                                 <div class="modal-body">
                                 </div>
@@ -259,34 +278,43 @@
     function populateTicketModal(res) {
         console.log(res);
         $('#ticketModal').find('.modal-body').html(
-            "<form>\n" +
-            "Ticket ID:<br>\n" +
-            "<input type=\"text\" name=\"ticketId\" id=\"m_ticket_id\" value=" + res.id + ">\n" +
-            "<br>\n" +
-            "Status:<br>\n" +
-            "<input type=\"text\" name=\"status\" id=\"m_ticket_status\" value=" + res.status + ">\n" +
-            "<br>\n" +
-            "User ID:<br>\n" +
-            "<input type=\"text\" name=\"userId\" id=\"m_user_id\" value=" + res.userId + ">\n" +
-            "<br>\n" +
-            "Name:<br>\n" +
-            "<input type=\"text\" name=\"name\" id=\"m_user_name\" value=" + res.name + ">\n" +
-            "<br>\n" +
-            "Surname:<br>\n" +
-            "<input type=\"text\" name=\"surname\" id=\"m_user_surname\" value=" + res.surname + ">\n" +
-            "<br>\n" +
-            "National ID:<br>\n" +
-            "<input type=\"text\" name=\"nationalId\" id=\"m_national_id\" value=" + res.nationalId + ">\n" +
-            "<br>\n" +
-            "Railcar Num:<br>\n" +
-            "<input type=\"number\" name=\"railcarNum\" id=\"m_railcarNum\" value=" + res.railcarNum + ">\n" +
-            "<br>\n" +
-            "Train ID:<br>\n" +
-            "<input type=\"number\" name=\"trainId\" id=\"m_train_id\" value=" + res.trainId + ">\n" +
-            "<br>\n" +
-            "Seat Num:<br>\n" +
-            "<input type=\"number\" name=\"seatNum\" id=\"m_seat_num\" value=" + res.seatNum + ">\n" +
-            "<br><br>\n" +
+            "<form class=\"form-i\">\n" +
+                "<div class=\"form-group\">" +
+                    "<label class=\"control-label\">Ticket ID</label>\n" +
+                    "<input class=\"form-control\" id=\"m_ticket_id\" type=\"text\" value=" + res.id + ">\n" +
+                "</div>" +
+                "<div class=\"form-group\">" +
+                    "<label class=\"control-label\">Status</label>\n" +
+                    "<input class=\"form-control\" id=\"m_ticket_status\" type=\"text\" value=" + res.status + ">\n" +
+                "</div>" +
+                "<div class=\"form-group\">" +
+                    "<label class=\"control-label\">User ID</label>\n" +
+                    "<input class=\"form-control\" id=\"m_user_id\" type=\"text\" value=" + res.userId + ">\n" +
+                "</div>" +
+                "<div class=\"form-group\">" +
+                    "<label class=\"control-label\">Name</label>\n" +
+                    "<input class=\"form-control\" id=\"m_user_name\" type=\"text\" value=" + res.name + ">\n" +
+                "</div>" +
+                "<div class=\"form-group\">" +
+                    "<label class=\"control-label\">Surname</label>\n" +
+                    "<input class=\"form-control\" id=\"m_user_surname\" type=\"text\" value=" + res.surname + ">\n" +
+                "</div>" +
+                "<div class=\"form-group\">" +
+                    "<label class=\"control-label\">National ID</label>\n" +
+                    "<input class=\"form-control\" id=\"m_national_id\" type=\"text\" value=" + res.nationalId + ">\n" +
+                "</div>" +
+                "<div class=\"form-group\">" +
+                    "<label class=\"control-label\">Railcar</label>\n" +
+                    "<input class=\"form-control\" id=\"m_railcarNum\" type=\"number\" value=" + res.railcarNum + ">\n" +
+                "</div>" +
+                "<div class=\"form-group\">" +
+                    "<label class=\"control-label\">Train ID</label>\n" +
+                    "<input class=\"form-control\" id=\"m_train_id\" type=\"number\" value=" + res.trainId + ">\n" +
+                "</div>" +
+                "<div class=\"form-group\">" +
+                    "<label class=\"control-label\">Seat</label>\n" +
+                    "<input class=\"form-control\" id=\"m_seat_num\" type=\"number\" value=" + res.seatNum + ">\n" +
+                "</div>" +
             "</form>"
         );
     }
