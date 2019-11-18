@@ -92,64 +92,42 @@
 <script src="https://www.amcharts.com/lib/4/maps.js"></script>
 <script src="https://www.amcharts.com/lib/4/geodata/worldLow.js"></script>
 <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
+<script src="./js/Map.js"></script>
 
 <script type="text/javascript">
 
-    var data = [];
-    var date = null;
-    var cities = [];
-    var originCities = [];
-    var destinationCities = [];
-    var chart = null;
-
     $(document).ready(function () {
+        let map = new Map("chartdiv");
+        map.render();
+
         let datePicker = $('#datepicker').datepicker({
             format: 'yyyy/mm/dd',
         });
-        date = new Date().toISOString().split('T')[0];
 
-        console.log(date);
+        let date = new Date().toISOString().split('T')[0];
 
         datePicker.datepicker("setDate", date);
 
-        initializeDataTable();
+        let datatable = $("#schedule").DataTable({
+            "paging": false,
+            "processing": true,
+            "language": {
+                processing: '<i class="fa fa-spinner fa-spin fa-2x fa-fw"></i><span class="sr-only">Loading...</span> '
+            },
+            "serverSide": true,
+            ajax: {
+                url: "api/schedule-map?date=" + date,
+                dataSrc: function(schedule) {
 
-
-        $('#date-form').submit(function (e) {
-            e.preventDefault();
-
-            date = $('#date-input').val();
-            reloadDataTable();
-            console.log(date);
-        })
-    });
-
-    function reloadDataTable() {
-        $("#schedule").DataTable().destroy();
-        chart = null;
-        initializeDataTable();
-    }
-
-    function initializeDataTable() {
-        $("#schedule").DataTable({
-            "destroy": true,
-            "ajax" : {
-                "type": "GET",
-                "url": "api/schedule-map?date=" + date,
-                "dataSrc": function (json) {
-                    // Once datatable is loaded
-
-                    // Save data
-                    data = json;
-
-                    // Render map
-                    getStations().then(function (r) {
-                        mapStationsToCoord();
-                        renderMap();
+                    getStations().then(function (stations) {
+                        let mappedStations = mapStationsToCoord(schedule, stations);
+                        map.update(mappedStations.originCities, mappedStations.destinationCities);
+                    }).then(function () {
+                        map.updateLines();
                     });
 
-                    return json;
-                }
+                    return schedule;
+                },
             },
             "columns" : [
                 { "data" : "routeId"},
@@ -161,24 +139,35 @@
             ],
         });
 
-    }
+
+        $('#date-form').submit(function (e) {
+            e.preventDefault();
+            date = $('#date-input').val();
+
+            datatable.ajax.url("api/schedule-map?date=" + date);
+            datatable.ajax.reload();
+
+            map.update();
+        })
+    });
 
     function getStations() {
         return $.ajax({
             url: 'api/schedule-map/stations',
             success: function (results) {
-                cities = results;
+                return results;
             }
         })
     }
 
-    function mapStationsToCoord() {
-        originCities = [];
-        data.forEach(function (route) {
-            let arrCity = cities.find(x => x.title == route.arrivalCity);
-            let depCity = cities.find(x => x.title == route.departCity);
+    function mapStationsToCoord(schedule, stations) {
+        let originCities = [];
 
-            if (originCities.find(x => x.id == route.departCity) == undefined) {
+        schedule.forEach(function (route) {
+            let arrCity = stations.find(x => x.title == route.arrivalCity);
+            let depCity = stations.find(x => x.title == route.departCity);
+
+            if (originCities.find(x => x.id == route.departCity) === undefined) {
                 let k =  {
                     "id": route.departStationName,
                     "title": depCity.title,
@@ -192,196 +181,27 @@
                 };
                 originCities.push(k)
             } else {
-                let k = originCities.find(x => x.id == route.departCity);
-                if (k.destinations.find(x => x == route.arrivalCity) == undefined) {
+                let k = originCities.find(x => x.id === route.departCity);
+                if (k.destinations.find(x => x === route.arrivalCity) === undefined) {
                     k.destinations.push(route.arrivalCity);
                 }
             }
         });
-        destinationCities = [];
-        cities.forEach(function (city) {
-            if (originCities.find(x => x.id == city.title) == undefined) {
+
+        let destinationCities = [];
+
+        stations.forEach(function (city) {
+            if (originCities.find(x => x.id === city.title) === undefined) {
                 destinationCities.push(city);
             }
-        })
-    }
-
-    function renderMap() {
-        am4core.ready(function() {
-
-            // Themes begin
-            am4core.useTheme(am4themes_animated);
-            // Themes end
-
-            // Create map instance
-            chart = am4core.create("chartdiv", am4maps.MapChart);
-
-            var interfaceColors = new am4core.InterfaceColorSet();
-
-            // Set map definition
-            chart.geodata = am4geodata_worldLow;
-
-            // Set projection
-            chart.projection = new am4maps.projections.Mercator();
-
-            // Data for general and map use
-
-
-            // Default to Astana view
-            chart.homeGeoPoint = { "longitude": 71.4704, "latitude": 51.1605 };
-            chart.centerGeoPoint = { "longitude": 71.4704, "latitude": 51.1605 };
-            chart.homeZoomLevel = 3;
-
-            var targetSVG = "M9,0C4.029,0,0,4.029,0,9s4.029,9,9,9s9-4.029,9-9S13.971,0,9,0z M9,15.93 c-3.83,0-6.93-3.1-6.93-6.93S5.17,2.07,9,2.07s6.93,3.1,6.93,6.93S12.83,15.93,9,15.93 M12.5,9c0,1.933-1.567,3.5-3.5,3.5S5.5,10.933,5.5,9S7.067,5.5,9,5.5 S12.5,7.067,12.5,9z";
-
-            // Texts
-            var labelsContainer = chart.createChild(am4core.Container);
-            labelsContainer.isMeasured = false;
-            labelsContainer.x = 80;
-            labelsContainer.y = 27;
-            labelsContainer.layout = "horizontal";
-            labelsContainer.zIndex = 10;
-
-
-            var title = labelsContainer.createChild(am4core.Label);
-            title.text = "Train routes";
-            title.fill = am4core.color("#cc0000");
-            title.fontSize = 20;
-            title.valign = "middle";
-            title.dy = 2;
-            title.marginLeft = 15;
-
-            var changeLink = chart.createChild(am4core.TextLink);
-            changeLink.text = "Click to change origin city";
-            changeLink.isMeasured = false;
-
-            changeLink.events.on("hit", function() {
-                if (currentOrigin == originImageSeries.dataItems.getIndex(0)) {
-                    showLines(originImageSeries.dataItems.getIndex(1));
-                }
-                else {
-                    showLines(originImageSeries.dataItems.getIndex(0));
-                }
-            })
-
-            changeLink.x = 100;
-            changeLink.y = 72;
-            changeLink.fontSize = 13;
-
-
-// The world
-            var worldPolygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
-            worldPolygonSeries.useGeodata = true;
-            worldPolygonSeries.fillOpacity = 0.6;
-            worldPolygonSeries.exclude = ["AQ"];
-
-// Origin series (big targets, London and Vilnius)
-            var originImageSeries = chart.series.push(new am4maps.MapImageSeries());
-
-            var originImageTemplate = originImageSeries.mapImages.template;
-
-            originImageTemplate.propertyFields.latitude = "latitude";
-            originImageTemplate.propertyFields.longitude = "longitude";
-            originImageTemplate.propertyFields.id = "id";
-
-            originImageTemplate.cursorOverStyle = am4core.MouseCursorStyle.pointer;
-            originImageTemplate.nonScaling = true;
-            originImageTemplate.tooltipText = "{title}";
-
-            originImageTemplate.setStateOnChildren = true;
-            originImageTemplate.states.create("hover");
-
-            originImageTemplate.horizontalCenter = "middle";
-            originImageTemplate.verticalCenter = "middle";
-
-            var originHitCircle = originImageTemplate.createChild(am4core.Circle);
-            originHitCircle.radius = 11;
-            originHitCircle.fill = interfaceColors.getFor("background");
-
-            var originTargetIcon = originImageTemplate.createChild(am4core.Sprite);
-            originTargetIcon.fill = interfaceColors.getFor("alternativeBackground");
-            originTargetIcon.strokeWidth = 0;
-            originTargetIcon.scale = 1.3;
-            originTargetIcon.horizontalCenter = "middle";
-            originTargetIcon.verticalCenter = "middle";
-            originTargetIcon.path = targetSVG;
-
-            var originHoverState = originTargetIcon.states.create("hover");
-            originHoverState.properties.fill = chart.colors.getIndex(1);
-
-// when hit on city, change lines
-            originImageTemplate.events.on("hit", function(event) {
-                showLines(event.target.dataItem);
-            })
-
-// destination series (small targets)
-            var destinationImageSeries = chart.series.push(new am4maps.MapImageSeries());
-            var destinationImageTemplate = destinationImageSeries.mapImages.template;
-
-            destinationImageTemplate.nonScaling = true;
-            destinationImageTemplate.tooltipText = "{title}";
-            destinationImageTemplate.fill = interfaceColors.getFor("alternativeBackground");
-            destinationImageTemplate.setStateOnChildren = true;
-            destinationImageTemplate.states.create("hover");
-
-            destinationImageTemplate.propertyFields.latitude = "latitude";
-            destinationImageTemplate.propertyFields.longitude = "longitude";
-            destinationImageTemplate.propertyFields.id = "id";
-
-            var destinationHitCircle = destinationImageTemplate.createChild(am4core.Circle);
-            destinationHitCircle.radius = 7;
-            destinationHitCircle.fillOpacity = 1;
-            destinationHitCircle.fill = interfaceColors.getFor("background");
-
-            var destinationTargetIcon = destinationImageTemplate.createChild(am4core.Sprite);
-            destinationTargetIcon.scale = 0.7;
-            destinationTargetIcon.path = targetSVG;
-            destinationTargetIcon.horizontalCenter = "middle";
-            destinationTargetIcon.verticalCenter = "middle";
-
-            originImageSeries.data = originCities;
-            destinationImageSeries.data = destinationCities;
-
-// Line series
-            var lineSeries = chart.series.push(new am4maps.MapLineSeries());
-            lineSeries.mapLines.template.line.strokeOpacity = 0.5;
-
-            chart.events.on("ready", function() {
-                showLines(originImageSeries.dataItems.getIndex(0));
-            })
-
-
-            var currentOrigin;
-
-            function showLines(origin) {
-
-                var dataContext = origin.dataContext;
-                var destinations = dataContext.destinations;
-                // clear old
-                lineSeries.mapLines.clear();
-                lineSeries.toBack();
-                worldPolygonSeries.toBack();
-
-                currentOrigin = origin;
-
-                if (destinations) {
-                    for (var i = 0; i < destinations.length; i++) {
-                        var line = lineSeries.mapLines.create();
-                        line.imagesToConnect = [origin.mapImage.id, destinations[i]];
-                    }
-                }
-
-                title.text = "Routes from " + dataContext.title;
-
-                chart.zoomToGeoPoint({ latitude: dataContext.zoomLatitude, longitude: dataContext.zoomLongitude }, dataContext.zoomLevel, true);
-            }
-
-            var graticuleSeries = chart.series.push(new am4maps.GraticuleSeries());
-            graticuleSeries.mapLines.template.line.strokeOpacity = 0.05;
-
-
         });
+
+        return {
+            destinationCities: destinationCities,
+            originCities: originCities
+        }
     }
+
 
 </script>
 
