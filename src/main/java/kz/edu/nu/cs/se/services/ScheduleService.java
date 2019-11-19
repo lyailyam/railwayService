@@ -1,13 +1,8 @@
 package kz.edu.nu.cs.se.services;
 
 import com.google.gson.Gson;
-import kz.edu.nu.cs.se.ConfiguredSessionFactory;
 import kz.edu.nu.cs.se.DBConnector;
 import kz.edu.nu.cs.se.models.Schedule;
-import kz.edu.nu.cs.se.models.TicketInfo;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.query.Query;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
