@@ -1,8 +1,6 @@
 package kz.edu.nu.cs.se.services;
 
-import kz.edu.nu.cs.se.ConfiguredSessionFactory;
-import kz.edu.nu.cs.se.models.Ticket;
-import kz.edu.nu.cs.se.models.entities.StationEntity;
+import kz.edu.nu.cs.se.SessionFactoryListener;
 import kz.edu.nu.cs.se.models.entities.TicketEntity;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -24,7 +22,7 @@ public class TicketService_ {
                                @QueryParam("nationalId") String nationalId){
         List result;
 
-        Session session = ConfiguredSessionFactory.getSession();
+        Session session = SessionFactoryListener.getSession();
         session.beginTransaction();
 
         Query query = session.createQuery("from TicketEntity where" +
@@ -51,7 +49,7 @@ public class TicketService_ {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addTicket(TicketEntity ticket) {
-        Session session = ConfiguredSessionFactory.getSession();
+        Session session = SessionFactoryListener.getSession();
 
         try {
             session.beginTransaction();
@@ -73,7 +71,7 @@ public class TicketService_ {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public Response putTicket(TicketEntity ticket) {
-        Session session = ConfiguredSessionFactory.getSession();
+        Session session = SessionFactoryListener.getSession();
 
         try {
             session.beginTransaction();
@@ -97,7 +95,7 @@ public class TicketService_ {
     public Response getTicket(@PathParam("ticket_id") Integer ticketId) {
         TicketEntity result;
 
-        Session session = ConfiguredSessionFactory.getSession();
+        Session session = SessionFactoryListener.getSession();
         try {
             session.beginTransaction();
 
@@ -121,7 +119,7 @@ public class TicketService_ {
     @Path("/{ticket_id: [0-9]+}")
     @DELETE
     public Response deleteTicket(@PathParam("ticket_id") Integer ticketId) {
-        Session session = ConfiguredSessionFactory.getSession();
+        Session session = SessionFactoryListener.getSession();
 
         try {
             session.beginTransaction();

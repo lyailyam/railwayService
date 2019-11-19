@@ -1,6 +1,6 @@
 package kz.edu.nu.cs.se.services;
 
-import kz.edu.nu.cs.se.ConfiguredSessionFactory;
+import kz.edu.nu.cs.se.SessionFactoryListener;
 import kz.edu.nu.cs.se.models.entities.SeatEntity;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -23,7 +23,7 @@ public class SeatService {
 
         List result = null;
 
-        Session session = ConfiguredSessionFactory.getSession();
+        Session session = SessionFactoryListener.getSession();
         try {
             session.beginTransaction();
 
@@ -56,7 +56,7 @@ public class SeatService {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addSeat(SeatEntity seat) {
-        Session session = ConfiguredSessionFactory.getSession();
+        Session session = SessionFactoryListener.getSession();
 
         try {
             session.beginTransaction();
@@ -78,7 +78,7 @@ public class SeatService {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public Response putSeat(SeatEntity seat) {
-        Session session = ConfiguredSessionFactory.getSession();
+        Session session = SessionFactoryListener.getSession();
 
         try {
             session.beginTransaction();
@@ -104,7 +104,7 @@ public class SeatService {
                                 @PathParam("num") Integer num) {
         SeatEntity result = null;
 
-        Session session = ConfiguredSessionFactory.getSession();
+        Session session = SessionFactoryListener.getSession();
         try {
             session.beginTransaction();
 
@@ -135,7 +135,7 @@ public class SeatService {
                                    @PathParam("railcar_num") Integer railcarNum,
                                    @PathParam("num") Integer num) {
 
-        Session session = ConfiguredSessionFactory.getSession();
+        Session session = SessionFactoryListener.getSession();
 
         try {
             session.beginTransaction();

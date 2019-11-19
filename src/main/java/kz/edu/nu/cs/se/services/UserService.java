@@ -1,6 +1,6 @@
 package kz.edu.nu.cs.se.services;
 
-import kz.edu.nu.cs.se.ConfiguredSessionFactory;
+import kz.edu.nu.cs.se.SessionFactoryListener;
 import org.hibernate.Session;
 
 import javax.ws.rs.GET;
@@ -17,7 +17,7 @@ public class UserService {
     public Response getUsers() {
         List result = null;
 
-        Session session = ConfiguredSessionFactory.getSession();
+        Session session = SessionFactoryListener.getSession();
         session.beginTransaction();
 
         result = session.createQuery("from UserEntity ").list();

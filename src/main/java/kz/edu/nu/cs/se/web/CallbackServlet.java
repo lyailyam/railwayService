@@ -9,7 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import javax.inject.Inject;
 import com.auth0.jwt.interfaces.Claim;
-import kz.edu.nu.cs.se.ConfiguredSessionFactory;
+import kz.edu.nu.cs.se.SessionFactoryListener;
 import kz.edu.nu.cs.se.models.entities.UserEntity;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -42,7 +42,7 @@ public class CallbackServlet extends HttpServlet {
 
             Integer userId = null;
 
-            Session session = ConfiguredSessionFactory.getSession();
+            Session session = SessionFactoryListener.getSession();
 
             Query query = session.createQuery("from UserEntity u where u.email = :email ");
             query.setParameter("email", claims.get("email").asString());
