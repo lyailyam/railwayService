@@ -1,8 +1,7 @@
 package kz.edu.nu.cs.se.services;
 
-import kz.edu.nu.cs.se.ConfiguredSessionFactory;
+import kz.edu.nu.cs.se.SessionFactoryListener;
 import kz.edu.nu.cs.se.models.entities.LegInstanceEntity;
-import kz.edu.nu.cs.se.models.entities.RouteLegEntity;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -26,7 +25,7 @@ public class LegInstanceService {
                                  @QueryParam("trainId") Integer trainId) {
         List result = null;
 
-        Session session = ConfiguredSessionFactory.getSession();
+        Session session = SessionFactoryListener.getSession();
         try {
             session.beginTransaction();
 
@@ -65,7 +64,7 @@ public class LegInstanceService {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addLegInstance(LegInstanceEntity legInstance) {
-        Session session = ConfiguredSessionFactory.getSession();
+        Session session = SessionFactoryListener.getSession();
 
         try {
             session.beginTransaction();
@@ -87,7 +86,7 @@ public class LegInstanceService {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public Response putLegInstance(LegInstanceEntity legInstance) {
-        Session session = ConfiguredSessionFactory.getSession();
+        Session session = SessionFactoryListener.getSession();
 
         try {
             session.beginTransaction();
@@ -113,7 +112,7 @@ public class LegInstanceService {
                                 @PathParam("date") String date) {
         LegInstanceEntity result = null;
 
-        Session session = ConfiguredSessionFactory.getSession();
+        Session session = SessionFactoryListener.getSession();
         try {
             session.beginTransaction();
 
@@ -144,7 +143,7 @@ public class LegInstanceService {
                                    @PathParam("leg_num") Integer legNum,
                                    @PathParam("date") String date) {
 
-        Session session = ConfiguredSessionFactory.getSession();
+        Session session = SessionFactoryListener.getSession();
 
         try {
             session.beginTransaction();
