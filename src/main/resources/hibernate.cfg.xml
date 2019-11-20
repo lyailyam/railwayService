@@ -8,7 +8,6 @@
     <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
     <property name="connection.username">root</property>
     <property name="connection.password">seProject2019!</property>
-    <property name="hibernate.hbm2ddl.auto">update</property>
 
     <property name="hibernate.c3p0.min_size">10</property>
     <property name="hibernate.c3p0.max_size">20</property>
