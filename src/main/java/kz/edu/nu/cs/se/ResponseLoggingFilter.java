@@ -12,7 +12,10 @@ import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.ext.Provider;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.security.Principal;
+import java.util.stream.Collectors;
 
 @Logged
 @Provider
@@ -41,8 +44,14 @@ public class ResponseLoggingFilter implements ContainerResponseFilter {
         System.out.println(userId);
         System.out.println(java.time.LocalTime.now());
         System.out.println(requestContext.getMethod());
-        System.out.println(requestContext.getUriInfo().getAbsolutePath().toASCIIString());
+        System.out.println(requestContext.getUriInfo().getRequestUri().toASCIIString());
+        String requestBody = new BufferedReader(new InputStreamReader(requestContext.getEntityStream()))
+                .lines()
+                .collect(Collectors.joining("\n"));
+
+        System.out.println(requestBody);
 
         LOGGER.info(" userId: " + userId + " time: " + java.time.LocalDateTime.now() + " method: " + requestContext.getMethod());
+
     }
 }
