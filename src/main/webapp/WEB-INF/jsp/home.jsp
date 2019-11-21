@@ -30,7 +30,7 @@
                         <c:when test="${appMetadata
                                             .getJSONObject(\"app_metadata\")
                                             .getJSONObject(\"authorization\")
-                                            .getJSONArray(\"roles\").get(0).equals(\"station_manager\")}">
+                                            .getJSONArray(\"roles\").get(0).equals(\"station-manager\")}">
                             <div class="mt-5">
                                 <div class="text-center hero my-5">
                                     <p class="lead">

@@ -38,18 +38,21 @@ public class ResponseLoggingFilter implements ContainerResponseFilter {
 //        }
 
         JSONObject obj =  (JSONObject) session.getAttribute("appMetadata");
-        System.out.println("logged role="
-                + obj.getJSONObject("app_metadata").getJSONObject("authorization").getJSONArray("roles").get(0));
+        if(obj != null) {
+            System.out.println("logged role="
+                    + obj.getJSONObject("app_metadata").getJSONObject("authorization").getJSONArray("roles").get(0));
+        }
+
         Integer userId = (Integer) session.getAttribute("userId");
         System.out.println(userId);
         System.out.println(java.time.LocalTime.now());
         System.out.println(requestContext.getMethod());
         System.out.println(requestContext.getUriInfo().getRequestUri().toASCIIString());
-        String requestBody = new BufferedReader(new InputStreamReader(requestContext.getEntityStream()))
-                .lines()
-                .collect(Collectors.joining("\n"));
-
-        System.out.println(requestBody);
+//        String requestBody = new BufferedReader(new InputStreamReader(requestContext.getEntityStream()))
+//                .lines()
+//                .collect(Collectors.joining("\n"));
+//
+//        System.out.println(requestBody);
 
         LOGGER.info(" userId: " + userId + " time: " + java.time.LocalDateTime.now() + " method: " + requestContext.getMethod());
 
