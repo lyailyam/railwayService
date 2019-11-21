@@ -153,7 +153,6 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-        // Create tickets modal -> Create ticket
         $('#createTicketBtn').click( function() {
             var jsonData = '{'
                 +'"userId": ' + $("#user_id").val()
@@ -167,19 +166,16 @@
             createTicket(jsonData);
         });
 
-        // Cancel/change tickets modal -> Retrieve individual ticket to change or delete it
         $('#cancelTicketBtn').click(function() {
             var ticketId = $("#ticket_id").val();
             getIndividualTicket(ticketId);
         });
 
-        // TicketModal -> Delete ticket
-        $('#deleteTicketBtn').click( function() {
+        $('#deleteTicketBtn').click(function() {
             var ticketId = $("#ticket_id").val();
             deleteTicket(ticketId);
         });
 
-        // TicketModal -> Change ticket
         $('#applyChangesBtn').click(function() {
             var ticketId = $("#ticket_id").val();
             var jsonData = '{'
@@ -195,7 +191,6 @@
             modifyTicket(ticketId, jsonData);
         });
 
-        // Remove backdrops when modals are closed
         $('#ticketModal').on('hidden.bs.modal', function(){
             $('.modal-backdrop').remove();
         })
