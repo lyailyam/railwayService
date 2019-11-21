@@ -1,5 +1,8 @@
 package kz.edu.nu.cs.se.models;
 
+import java.sql.Date;
+import java.sql.Time;
+
 public class TicketInfo {
 
     private int ticketId;
@@ -9,27 +12,27 @@ public class TicketInfo {
     private String travelerSurname;
     private String travelerNationId;
     private int buyerId;
-    private String buyerName;
-    private String buyerSurname;
-    private String buyerNationId;
-    private int userActivateStatus;
-    private String userEmail;
+    private String buyerName; //?
+    private String buyerSurname; //?
+    private String buyerNationId; //?
+    private int userActivateStatus; //?
+    private String userEmail; //?
     private int routeId;
     private int firstStatLegNum;
     private String firstStatDepSchedTime;
-    private String firstStatArrSchedTime;
+    private String firstStatArrSchedTime; //
     private int lastStatLegNum;
-    private String lastStatDepSchedTime;
+    private String lastStatDepSchedTime; //
     private String lastStatArrSchedTime;
     private String firstStatDate;
     private String firstStatDepActualTime;
-    private String firstStatArrActualTime;
-    private int firstStatLegAvailSeats;
+    private String firstStatArrActualTime; //
+    private int firstStatLegAvailSeats; //
     private int trainId;
     private String lastStatDate;
-    private String lastStatDepActualTime;
+    private String lastStatDepActualTime; //
     private String lastStatArrActualTime;
-    private int lastStatLegAvailSeats;
+    private int lastStatLegAvailSeats; //
     private int firstStatId;
     private String firstStatName;
     private String firstStatCity;
@@ -45,6 +48,8 @@ public class TicketInfo {
     private String railcarType;
     private int seatNum;
     private String seatLocation;
+
+
 
 
     public TicketInfo() {}

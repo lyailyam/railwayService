@@ -109,7 +109,7 @@
                     "defaultContent": ""
                 },
                 { data: null, render: function ( data) {
-                        return data.buyerName+' '+data.buyerSurname;
+                        return data.travelerName+' '+data.travelerSurname;
                     } },
                 { data: null, render: function ( data) {
                         return data.firstStatName+' - '+data.lastStatName;
