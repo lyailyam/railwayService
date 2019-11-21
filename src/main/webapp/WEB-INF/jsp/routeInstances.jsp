@@ -99,7 +99,7 @@
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Buy a ticket</h5>
+                                <h5 class="modal-title">Update a trip</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -111,36 +111,52 @@
                                 <div id="alert-error" class="alert alert-danger" role="alert" style="display: none">
                                     Error occurred while updating a trip.
                                 </div>
-                                <form class="form-i">
+                                <form class="form-i" id="form">
                                     <div class="form-group">
                                         <label class="control-label">Route ID</label>
-                                        <input class="form-control" id="depStat" type="text" value="" disabled/>
+                                        <input class="form-control" id="route-id" type="text" value="" disabled/>
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label">Date</label>
-                                        <input class="form-control" id="arrStat" type="text" value="" disabled/>
+                                        <input class="form-control" id="date" type="text" value="" required/>
                                     </div>
                                     <div class="form-group">
-                                        <label class="control-label">First Name</label>
-                                        <input class="form-control" id="name" placeholder="Enter first name of the person" type="text"/>
+                                        <label class="control-label">Train ID</label>
+                                        <input class="form-control" id="train-id" type="text" value="" required/>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="control-label">Last Name</label>
-                                        <input class="form-control" id="surname" placeholder="Enter last name of the person" type="text"/>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label class="control-label">From</label>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label class="control-label">To</label>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="control-label">National ID</label>
-                                        <input class="form-control" id="national-id" placeholder="Enter national ID of the person" type="text"/>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label">Seat</label>
-                                        <select class="form-control" name="seat-num" id="select-seat-num"></select>
-                                    </div>
+                                    <template>
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label class="control-label"></label>
+                                                    <input class="form-control" id="from-time" type="text" value="" required/>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label class="control-label"></label>
+                                                    <input class="form-control" id="to-time" type="text" value="" required/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
                                 </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-primary" id="buy-ticket">Buy</button>
-                                <button type="button" class="btn btn-secondary" id="cancel-buy-ticket" data-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary" id="update-ticket">Update</button>
+                                <button type="button" class="btn btn-secondary" id="cancel-update-ticket" data-dismiss="modal">Cancel</button>
                             </div>
                         </div>
                     </div>
@@ -255,8 +271,32 @@
             if (action == 'update') {
 
                 $('#myModal').modal('show');
-                $('.modal-body #depStat').val(data['route_id']);
-                $('.modal-body #arrStat').val(data['date']);
+                $('.modal-body #route-id').val(data['route_id']);
+                $('.modal-body #date').val(data['date']);
+                $('.modal-body #train-id').val(data['train_id']);
+                var temp = document.getElementsByTagName("template")[0];
+                var legRow = temp.content.querySelector("div");
+                for (var i = 0; i < data['legs'].length; i++) {
+                    var leg = data['legs'][i];
+                    var a = document.importNode(legRow, true);
+                    var columns = a.children;
+                    var fromForm = columns[0].children[0];
+                    var toForm = columns[1].children[0];
+                    fromForm.children[0].innerHTML = leg['depart_station_name'];
+                    fromForm.children[1].defaultValue = leg['depart_actual_time'];
+                    toForm.children[0].innerHTML = leg['arrival_station_name'];
+                    toForm.children[1].defaultValue = leg['arrival_actual_time'];
+                    a.defaultValue = leg['depart_station_name'];
+                    document.getElementById("form").appendChild(a);
+                }
+                $.ajax({
+                    type: 'GET',
+                    url: 'api/trains',
+                    success: function(result) {
+
+                        document.getElementById("form").appendChild(a);
+                    }
+                })
                 <%--$.ajax({--%>
                 <%--    type: 'GET',--%>
                 <%--    url: 'api/leg_instances/'+data['routeId']+'/'+data['firstStatLegNum']+'/'+data['depDate'],--%>
@@ -272,7 +312,7 @@
                 <%--                    $(select).append('<option value=' + i + '>' + seats[i]['num'] + '</option>');--%>
                 <%--                }--%>
                 <%--                $(select).val(0);--%>
-                <%--                $('#buy-ticket').on('click', function () {--%>
+                <%--                $('#update-ticket').on('click', function () {--%>
                 <%--                    var seatNum = $("#select-seat-num :selected").text();--%>
                 <%--                    var seatVal = $("#select-seat-num :selected").val();--%>
                 <%--                    var json = '{'--%>
@@ -311,7 +351,7 @@
                 <%--                        }--%>
                 <%--                    });--%>
                 <%--                });--%>
-                <%--                $("#cancel-buy-ticket").on('click', function () {--%>
+                <%--                $("#cancel-update-ticket").on('click', function () {--%>
                 <%--                    $("#name").val("");--%>
                 <%--                    $("#surname").val("");--%>
                 <%--                    $("#national-id").val("");--%>
