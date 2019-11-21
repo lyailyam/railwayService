@@ -1,5 +1,6 @@
 package kz.edu.nu.cs.se.services;
 
+import kz.edu.nu.cs.se.Logged;
 import kz.edu.nu.cs.se.SessionFactoryListener;
 import kz.edu.nu.cs.se.models.entities.SeatEntity;
 import org.hibernate.HibernateException;
@@ -15,6 +16,7 @@ import java.util.List;
 public class SeatService {
 
     @GET
+    @Logged
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSeats(@QueryParam("num") Integer num,
                                  @QueryParam("railcarNum") Integer railcarNum,
@@ -54,6 +56,7 @@ public class SeatService {
     }
 
     @POST
+    @Logged
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addSeat(SeatEntity seat) {
         Session session = SessionFactoryListener.getSession();
@@ -76,6 +79,7 @@ public class SeatService {
     }
 
     @PUT
+    @Logged
     @Consumes(MediaType.APPLICATION_JSON)
     public Response putSeat(SeatEntity seat) {
         Session session = SessionFactoryListener.getSession();
@@ -99,6 +103,7 @@ public class SeatService {
 
     @Path("/{train_id: [0-9]+}/{railcar_num: [0-9]+}/{num}")
     @GET
+    @Logged
     public Response getSeat(@PathParam("train_id") Integer trainId,
                                 @PathParam("railcar_num") Integer railcarNum,
                                 @PathParam("num") Integer num) {
@@ -131,6 +136,7 @@ public class SeatService {
 
     @Path("/{train_id: [0-9]+}/{railcar_num: [0-9]+}/{num}")
     @DELETE
+    @Logged
     public Response deleteSeat(@PathParam("train_id") Integer trainId,
                                    @PathParam("railcar_num") Integer railcarNum,
                                    @PathParam("num") Integer num) {

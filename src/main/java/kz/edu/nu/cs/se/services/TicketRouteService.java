@@ -1,5 +1,6 @@
 package kz.edu.nu.cs.se.services;
 
+import kz.edu.nu.cs.se.Logged;
 import kz.edu.nu.cs.se.SessionFactoryListener;
 import kz.edu.nu.cs.se.models.entities.TicketRouteEntity;
 import org.hibernate.HibernateException;
@@ -15,6 +16,7 @@ import java.util.List;
 public class TicketRouteService {
 
     @GET
+    @Logged
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTicketRoutes(@QueryParam("date") String date,
                                  @QueryParam("routeId") Integer routeId,
@@ -53,6 +55,7 @@ public class TicketRouteService {
     }
 
     @POST
+    @Logged
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addTicketRoute(TicketRouteEntity ticketRoute) {
         Session session = SessionFactoryListener.getSession();
@@ -75,6 +78,7 @@ public class TicketRouteService {
     }
 
     @PUT
+    @Logged
     @Consumes(MediaType.APPLICATION_JSON)
     public Response putTicketRoute(TicketRouteEntity ticketRoute) {
         Session session = SessionFactoryListener.getSession();
@@ -98,6 +102,7 @@ public class TicketRouteService {
 
     @Path("/{route_id: [0-9]+}/{leg_num: [0-9]+}/{date}/{ticket_id}")
     @GET
+    @Logged
     public Response getTicketRoute(@PathParam("route_id") Integer routeId,
                                    @PathParam("leg_num") Integer legNum,
                                    @PathParam("date") String date,
@@ -132,6 +137,7 @@ public class TicketRouteService {
 
     @Path("/{route_id: [0-9]+}/{leg_num: [0-9]+}/{date}/{ticket_id}")
     @DELETE
+    @Logged
     public Response deleteTicketRoute(@PathParam("route_id") Integer routeId,
                                       @PathParam("leg_num") Integer legNum,
                                       @PathParam("date") String date,

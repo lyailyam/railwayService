@@ -2,6 +2,7 @@ package kz.edu.nu.cs.se.services;
 
 import com.google.gson.Gson;
 import kz.edu.nu.cs.se.DBConnector;
+import kz.edu.nu.cs.se.Logged;
 import kz.edu.nu.cs.se.models.Schedule;
 
 import javax.ws.rs.*;
@@ -18,6 +19,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class ScheduleService {
 
     @GET
+    @Logged
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTickets(@QueryParam("from") String departCity,
                                @QueryParam("to") String arrivalCity,
