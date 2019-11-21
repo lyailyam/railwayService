@@ -46,10 +46,6 @@
             <tr>
                 <th></th>
                 <th>Log</th>
-<%--                <th>From-To</th>--%>
-<%--                <th>Departure time</th>--%>
-<%--                <th>Arrival time</th>--%>
-<%--                <th>Ticket Status</th>--%>
             </tr>
             </thead>
         </table>
@@ -69,7 +65,7 @@
         return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
             '<tr>'+
             '<td>Log:</td>'+
-            '<td>'+d.logMessage+'</td>'+
+            '<td>'+d+'</td>'+
             '</tr>'+
             '</table>';
     }
@@ -87,7 +83,7 @@
                     "defaultContent": ""
                 },
                 { data: null, render: function ( data) {
-                        return data.logMessage;
+                        return data;
                     } },
             ],
 
