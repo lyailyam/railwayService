@@ -1,6 +1,6 @@
 package kz.edu.nu.cs.se.services;
 
-import kz.edu.nu.cs.se.ConfiguredSessionFactory;
+import kz.edu.nu.cs.se.SessionFactoryListener;
 import kz.edu.nu.cs.se.models.entities.StationEntity;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -19,7 +19,7 @@ public class StationService {
                                 @QueryParam("name") String name) {
         List result = null;
 
-        Session session = ConfiguredSessionFactory.getSession();
+        Session session = SessionFactoryListener.getSession();
         session.beginTransaction();
 
         Query query = session.createQuery("from StationEntity where" +
@@ -40,7 +40,7 @@ public class StationService {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addStation(StationEntity station) {
-        Session session = ConfiguredSessionFactory.getSession();
+        Session session = SessionFactoryListener.getSession();
 
         try {
             session.beginTransaction();
@@ -62,7 +62,7 @@ public class StationService {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public Response putStation(StationEntity station) {
-        Session session = ConfiguredSessionFactory.getSession();
+        Session session = SessionFactoryListener.getSession();
 
         try {
             session.beginTransaction();
@@ -86,7 +86,7 @@ public class StationService {
     public Response getStation(@PathParam("station_id") Integer stationId) {
         StationEntity result = null;
 
-        Session session = ConfiguredSessionFactory.getSession();
+        Session session = SessionFactoryListener.getSession();
         try {
             session.beginTransaction();
 
@@ -110,7 +110,7 @@ public class StationService {
     @Path("/{station_id: [0-9]+}")
     @DELETE
     public Response deleteStation(@PathParam("station_id") Integer stationId) {
-        Session session = ConfiguredSessionFactory.getSession();
+        Session session = SessionFactoryListener.getSession();
 
         try {
             session.beginTransaction();

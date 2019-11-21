@@ -1,6 +1,6 @@
 package kz.edu.nu.cs.se.services;
 
-import kz.edu.nu.cs.se.ConfiguredSessionFactory;
+import kz.edu.nu.cs.se.SessionFactoryListener;
 import kz.edu.nu.cs.se.models.entities.RouteLegEntity;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -22,7 +22,7 @@ public class RouteLegService {
                                  @QueryParam("departScheduledTime") String departScheduledTime) {
         List result = null;
 
-        Session session = ConfiguredSessionFactory.getSession();
+        Session session = SessionFactoryListener.getSession();
         try {
             session.beginTransaction();
 
@@ -55,7 +55,7 @@ public class RouteLegService {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addRouteLeg(RouteLegEntity routeLeg) {
-        Session session = ConfiguredSessionFactory.getSession();
+        Session session = SessionFactoryListener.getSession();
 
         try {
             session.beginTransaction();
@@ -77,7 +77,7 @@ public class RouteLegService {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public Response putRouteLeg(RouteLegEntity routeLeg) {
-        Session session = ConfiguredSessionFactory.getSession();
+        Session session = SessionFactoryListener.getSession();
 
         try {
             session.beginTransaction();
@@ -102,7 +102,7 @@ public class RouteLegService {
                                @PathParam("leg_num") Integer legNum) {
         RouteLegEntity result = null;
 
-        Session session = ConfiguredSessionFactory.getSession();
+        Session session = SessionFactoryListener.getSession();
         try {
             session.beginTransaction();
 
@@ -130,7 +130,7 @@ public class RouteLegService {
     @DELETE
     public Response deleteRouteLeg(@PathParam("route_id") Integer routeId,
                                 @PathParam("leg_num") Integer legNum) {
-        Session session = ConfiguredSessionFactory.getSession();
+        Session session = SessionFactoryListener.getSession();
 
         try {
             session.beginTransaction();

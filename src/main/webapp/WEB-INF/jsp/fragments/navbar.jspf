@@ -18,6 +18,10 @@
                                     <li>
                                         <a href="${pageContext.request.contextPath}/schedule" class="nav-link">Search tickets</a>
                                     </li>
+
+                                    <li>
+                                        <a href="${pageContext.request.contextPath}/schedule-map" class="nav-link">Schedule with a map</a>
+                                    </li>
                                 </c:when>
                             </c:choose>
                         </c:when>

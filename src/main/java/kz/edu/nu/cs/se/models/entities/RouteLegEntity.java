@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.sql.Time;
 
 @Entity
-@Table(name = "route_leg", schema = "railwayway", catalog = "")
+@Table(name = "route_leg", schema = "railwaysdb", catalog = "")
 @IdClass(RouteLegEntityPK.class)
 public class RouteLegEntity {
     private int routeId;
@@ -13,6 +13,10 @@ public class RouteLegEntity {
     private int arrivalStationId;
     private String departScheduledTime;
     private String arrivalScheduledTime;
+
+    @ManyToOne
+    @JoinColumn(name = "depart_station_id")
+    private StationEntity departStation;
 
     @Id
     @Column(name = "route_id", nullable = false)

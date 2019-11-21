@@ -5,7 +5,7 @@ import java.sql.Date;
 import java.sql.Time;
 
 @Entity
-@Table(name = "leg_instance", schema = "railwayway", catalog = "")
+@Table(name = "leg_instance", schema = "railwaysdb", catalog = "")
 @IdClass(LegInstanceEntityPK.class)
 public class LegInstanceEntity {
     private String date;

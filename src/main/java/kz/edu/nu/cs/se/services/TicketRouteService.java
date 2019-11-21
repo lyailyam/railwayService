@@ -1,9 +1,6 @@
 package kz.edu.nu.cs.se.services;
 
-import kz.edu.nu.cs.se.ConfiguredSessionFactory;
-import kz.edu.nu.cs.se.models.Ticket;
-import kz.edu.nu.cs.se.models.entities.LegInstanceEntity;
-import kz.edu.nu.cs.se.models.entities.TicketEntity;
+import kz.edu.nu.cs.se.SessionFactoryListener;
 import kz.edu.nu.cs.se.models.entities.TicketRouteEntity;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -25,7 +22,7 @@ public class TicketRouteService {
                                  @QueryParam("ticketId") Integer ticketId) {
         List result = null;
 
-        Session session = ConfiguredSessionFactory.getSession();
+        Session session = SessionFactoryListener.getSession();
         try {
             session.beginTransaction();
 
@@ -58,7 +55,7 @@ public class TicketRouteService {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addTicketRoute(TicketRouteEntity ticketRoute) {
-        Session session = ConfiguredSessionFactory.getSession();
+        Session session = SessionFactoryListener.getSession();
 
         try {
             session.beginTransaction();
@@ -80,7 +77,7 @@ public class TicketRouteService {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public Response putTicketRoute(TicketRouteEntity ticketRoute) {
-        Session session = ConfiguredSessionFactory.getSession();
+        Session session = SessionFactoryListener.getSession();
 
         try {
             session.beginTransaction();
@@ -107,7 +104,7 @@ public class TicketRouteService {
                                    @PathParam("ticket_id") Integer ticketId) {
         TicketRouteEntity result = null;
 
-        Session session = ConfiguredSessionFactory.getSession();
+        Session session = SessionFactoryListener.getSession();
         try {
             session.beginTransaction();
 
@@ -140,7 +137,7 @@ public class TicketRouteService {
                                       @PathParam("date") String date,
                                       @PathParam("ticket_id") Integer ticketId) {
 
-        Session session = ConfiguredSessionFactory.getSession();
+        Session session = SessionFactoryListener.getSession();
 
         try {
             session.beginTransaction();

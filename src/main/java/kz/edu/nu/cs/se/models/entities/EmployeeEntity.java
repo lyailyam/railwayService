@@ -3,7 +3,7 @@ package kz.edu.nu.cs.se.models.entities;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "employee", schema = "railwayway", catalog = "")
+@Table(name = "employee", schema = "railwaysdb", catalog = "")
 @IdClass(EmployeeEntityPK.class)
 public class EmployeeEntity {
     private int id;
