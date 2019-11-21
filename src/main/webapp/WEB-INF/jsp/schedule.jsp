@@ -192,7 +192,8 @@
         $('#trip-options tbody').on( 'click', 'button', function () {
 
             var data = table.row( $(this).parents('tr') ).data();
-            console.log("data['depStationName']: ", data['depStationName']);
+            // console.log(table.row($(this).parents('tr')));
+            // console.log("data['depStationName']: ", data['depStationName']);
             $('#myModal').modal('show');
             $('.modal-body #depStat').val(data['depStationName']);
             $('.modal-body #arrStat').val(data['arrStationName']);
