@@ -54,7 +54,7 @@ public class ResponseLoggingFilter implements ContainerResponseFilter {
 //
 //        System.out.println(requestBody);
 
-        LOGGER.info(requestContext.getMethod());
+        LOGGER.info(userId);
 
     }
 }
