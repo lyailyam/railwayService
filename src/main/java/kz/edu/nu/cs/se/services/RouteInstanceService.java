@@ -4,12 +4,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.google.gson.Gson;
-import kz.edu.nu.cs.se.ConfiguredSessionFactory;
 import kz.edu.nu.cs.se.DBConnector;
 import kz.edu.nu.cs.se.models.*;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.query.Query;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -118,6 +114,67 @@ public class RouteInstanceService {
             return Response.status(500).build();
         }
     }
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateTrip(RouteInstance routeInstance) {
+        String date = routeInstance.getDate();
+        long route_id = routeInstance.getRouteId();
+        List<LegInstance> legInstances = routeInstance.getLegs();
+        long train_id = routeInstance.getTrainId();
+        boolean fuckPassengers = routeInstance.getFuckPassengers();
+        String sql;
+        Connection conn = DBConnector.getDatabaseConnection();
+        try
+        {
+            int rs;
+            Statement stmt = conn.createStatement();
+            if (fuckPassengers) {
+                sql = "delete from ticket_route where route_id = "+route_id+"  and gdate = '"+date+"';";
+                rs = stmt.executeUpdate(sql);
+            }
+            for (LegInstance leg : legInstances) {
+                sql = "update leg_instance " +
+                        "set depart_actual_time = '"+leg.getDepart_actual_time()+
+                        "', arrival_actual_time = '"+leg.getArrival_actual_time()+
+                        "', train_id =  " + train_id +
+                        " where date = '"+date+"' and route_id = "+route_id+" and leg_num = " + leg.getLegnum();
+                rs = stmt.executeUpdate(sql);
+            }
+            return Response.ok().build();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            try {
+                conn.rollback();
+            }
+            catch (SQLException se) {
+                se.printStackTrace();
+            }
+            return Response.status(404).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.status(500).build();
+        }
+    }
+
+//    @POST
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    public Response insertTrip(RouteInstance routeInstance) {
+//
+//        String sql = "delete from leg_instance where date = '" + date + "' and route_id = " + routeId;
+//
+//        try(Connection conn = DBConnector.getDatabaseConnection();
+//            Statement stmt = conn.createStatement())
+//        {
+//            int rs = stmt.executeUpdate(sql);
+//            return Response.ok(rs).build();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            return Response.status(404).build();
+//        } catch (Exception e) {
+//            return Response.status(500).build();
+//        }
+//    }
 
 }
 

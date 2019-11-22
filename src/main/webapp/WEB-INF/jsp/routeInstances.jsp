@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="https://cdn.auth0.com/js/auth0-samples-theme/1.0/css/auth0-theme.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/monokai-sublime.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+
     <style>
         td.details-control {
             background-image: url("https://img.icons8.com/pastel-glyph/2x/plus.png") ;
@@ -111,6 +113,12 @@
                                 <div id="alert-error" class="alert alert-danger" role="alert" style="display: none">
                                     Error occurred while updating a trip.
                                 </div>
+                                <div id="you-fucked-up-time-alert" class="alert alert-danger" role="alert" style="display: none">
+                                    Invalid time inputs!
+                                </div>
+                                <div id="you-fucked-up-date-alert" class="alert alert-danger" role="alert" style="display: none">
+                                    Invalid date input!
+                                </div>
                                 <form class="form-i" id="form">
                                     <div class="form-group">
                                         <label class="control-label">Route ID</label>
@@ -118,40 +126,21 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label">Date</label>
-                                        <input class="form-control" id="date" type="text" value="" required/>
+                                        <input class="form-control" id="date" name="date" type="text" value="" required/>
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label">Train ID</label>
-                                        <input class="form-control" id="train-id" type="text" value="" required/>
+                                        <select class="form-control" id="train-id" type="text" value="" required></select>
                                     </div>
                                     <div class="row">
                                         <div class="col">
-                                            <div class="form-group">
-                                                <label class="control-label">From</label>
-                                            </div>
+                                            <h5>From</h5>
                                         </div>
                                         <div class="col">
-                                            <div class="form-group">
-                                                <label class="control-label">To</label>
-                                            </div>
+                                            <h5>To</h5>
                                         </div>
                                     </div>
-                                    <template>
-                                        <div class="row">
-                                            <div class="col">
-                                                <div class="form-group">
-                                                    <label class="control-label"></label>
-                                                    <input class="form-control" id="from-time" type="text" value="" required/>
-                                                </div>
-                                            </div>
-                                            <div class="col">
-                                                <div class="form-group">
-                                                    <label class="control-label"></label>
-                                                    <input class="form-control" id="to-time" type="text" value="" required/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </template>
+                                    <div id="legs"></div>
                                 </form>
                             </div>
                             <div class="modal-footer">
@@ -169,6 +158,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/highlight.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+
 <script>hljs.initHighlightingOnLoad();</script>
 <script charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
 <script type="text/javascript">
@@ -198,6 +189,7 @@
     }
 
     $(document).ready(function() {
+
         var table = $('#all-route-instances').DataTable({
             "ajax" : {
                 "url" : 'api/route_instances',
@@ -234,7 +226,7 @@
                 {
                     orderable: false,
                     "data": null,
-                    "render": function ( data, type, row, meta  ) {
+                    "render": function ( data ) {
                         var d = new Date(),
                             month = '' + (d.getMonth() + 1),
                             day = '' + d.getDate(),
@@ -273,97 +265,103 @@
                 $('#myModal').modal('show');
                 $('.modal-body #route-id').val(data['route_id']);
                 $('.modal-body #date').val(data['date']);
-                $('.modal-body #train-id').val(data['train_id']);
-                var temp = document.getElementsByTagName("template")[0];
-                var legRow = temp.content.querySelector("div");
+                $("#legs").html("");
                 for (var i = 0; i < data['legs'].length; i++) {
                     var leg = data['legs'][i];
-                    var a = document.importNode(legRow, true);
-                    var columns = a.children;
-                    var fromForm = columns[0].children[0];
-                    var toForm = columns[1].children[0];
-                    fromForm.children[0].innerHTML = leg['depart_station_name'];
-                    fromForm.children[1].defaultValue = leg['depart_actual_time'];
-                    toForm.children[0].innerHTML = leg['arrival_station_name'];
-                    toForm.children[1].defaultValue = leg['arrival_actual_time'];
-                    a.defaultValue = leg['depart_station_name'];
-                    document.getElementById("form").appendChild(a);
+                    var string =
+                    '<div class="row">' +
+                    '<div class="col">' +
+                    '<div class="form-group">' +
+                    '<label class="control-label">'+leg['depart_station_name']+'</label>' +
+                    '<input class="form-control" id="from-time-'+leg['leg_num']+'" type="text" value="'+leg['depart_actual_time']+'" required/>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="col">' +
+                    '<div class="form-group">' +
+                    '<label class="control-label">'+leg['arrival_station_name']+'</label>' +
+                    '<input class="form-control" id="to-time-'+leg['leg_num']+'" type="text" value="'+leg['arrival_actual_time']+'" required/>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>';
+                    $("#legs").append(string);
                 }
                 $.ajax({
                     type: 'GET',
                     url: 'api/trains',
                     success: function(result) {
-
-                        document.getElementById("form").appendChild(a);
+                        var train_id = data['train_id'];
+                        $("#train-id").html("");
+                        result.forEach(function (e) {
+                            if (e === train_id) {
+                                $("#train-id").append('<option selected>'+e+'</option>');
+                            }
+                            else
+                                $("#train-id").append('<option>'+e+'</option>');
+                        })
                     }
-                })
-                <%--$.ajax({--%>
-                <%--    type: 'GET',--%>
-                <%--    url: 'api/leg_instances/'+data['routeId']+'/'+data['firstStatLegNum']+'/'+data['depDate'],--%>
-                <%--    success: function(result) {--%>
-                <%--        $.ajax({--%>
-                <%--            type: 'GET',--%>
-                <%--            url: '${pageContext.request.contextPath}/api/seats/?trainId='+result['trainId'],--%>
-                <%--            success: function(seats) {--%>
-                <%--                console.log(seats);--%>
-                <%--                var select = document.getElementById('select-seat-num');--%>
-                <%--                $(select).empty();--%>
-                <%--                for(var i in seats) {--%>
-                <%--                    $(select).append('<option value=' + i + '>' + seats[i]['num'] + '</option>');--%>
-                <%--                }--%>
-                <%--                $(select).val(0);--%>
-                <%--                $('#update-ticket').on('click', function () {--%>
-                <%--                    var seatNum = $("#select-seat-num :selected").text();--%>
-                <%--                    var seatVal = $("#select-seat-num :selected").val();--%>
-                <%--                    var json = '{'--%>
-                <%--                        +'"name": "' + $("#name").val() + '"'--%>
-                <%--                        +', "nationalId": ' + $("#national-id").val()--%>
-                <%--                        +', "railcarNum": ' + seats[seatVal]['railcarNum']--%>
-                <%--                        +', "seatNum": ' + parseInt(seatNum)--%>
-                <%--                        +', "surname": "' + $("#surname").val() + '"'--%>
-                <%--                        +', "status": "bought"'--%>
-                <%--                        +', "trainId": ' + seats[seatVal]['trainId']--%>
-                <%--                        +', "userId": ${userId}'--%>
-                <%--                        +'}';--%>
-                <%--                    console.log(json)--%>
-                <%--                    $.ajax({--%>
-                <%--                        type: 'POST',--%>
-                <%--                        url: 'api/tickets/',--%>
-                <%--                        data: json,--%>
-                <%--                        contentType: 'application/json',--%>
-                <%--                        success: function (result) {--%>
-                <%--                            console.log(result);--%>
-                <%--                            $("#alert-success").show();--%>
-                <%--                            setTimeout(function() {--%>
-                <%--                                $("#alert-success").remove();--%>
-                <%--                                $("#name").val("");--%>
-                <%--                                $("#surname").val("");--%>
-                <%--                                $("#national-id").val("");--%>
-                <%--                                $("#myModal").modal('hide');--%>
-                <%--                            }, 5000);--%>
-                <%--                        },--%>
-                <%--                        error: function (error) {--%>
-                <%--                            console.log(error);--%>
-                <%--                            $("#alert-error").show();--%>
-                <%--                            setTimeout(function() {--%>
-                <%--                                $("#alert-error").remove();--%>
-                <%--                            }, 5000);--%>
-                <%--                        }--%>
-                <%--                    });--%>
-                <%--                });--%>
-                <%--                $("#cancel-update-ticket").on('click', function () {--%>
-                <%--                    $("#name").val("");--%>
-                <%--                    $("#surname").val("");--%>
-                <%--                    $("#national-id").val("");--%>
-                <%--                    $("#myModal").modal('hide');--%>
-                <%--                });--%>
-                <%--            },--%>
-                <%--        });--%>
-                <%--    },--%>
-                <%--    error: function(error) {--%>
-                <%--        console.log(error);--%>
-                <%--    }--%>
-                // })
+                });
+                var date_input = $('input#date');
+                var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
+                var options = {
+                    format: 'yyyy-mm-dd',
+                    container: container,
+                    todayHighlight: true,
+                    autoclose: true,
+                    startDate: "new Date()",
+                    defaultViewDate: data['date']
+                };
+                date_input.datepicker(options);
+                $('#update-ticket').click(function() {
+                    var json = "{";
+                    json += '"date": "' + $("#date").val() + '",';
+                    json += '"route_id": ' + $("#route-id").val() + ",";
+                    json += '"legs": [';
+                    var toTime = 0;
+                    var invalidTime = false;
+                    var legs = data['legs'];
+                    for (var i = 0; i < legs.length; i++) {
+                        var leg = data['legs'][i];
+                        var leg_num = leg['leg_num'];
+                        var fromTime = $("#from-time-" + leg_num).val();
+                        if (fromTime < toTime)
+                            invalidTime = true;
+                        toTime = $("#to-time-" + leg_num).val();
+                        if (toTime <= fromTime)
+                            invalidTime = true;
+                        if ((!/^\d{1,2}:\d{1,2}:\d{1,2}$/.test(fromTime)))
+                            invalidTime = true;
+                        json += '{'
+                            +'"leg_num": ' + leg_num
+                            +', "depart_actual_time": "' + fromTime
+                            +'", "arrival_actual_time": "' + toTime
+                            +'", "available_seats": ' + leg['available_seats']
+                            +', "depart_station_name": "' + leg['depart_station_name']
+                            +'", "arrival_station_name": "' + leg['arrival_station_name']
+                            +'", "depart_station_id": ' + leg['depart_station_id']
+                            +', "arrival_station_id": ' + leg['arrival_station_id']
+                            +'},';
+                    }
+
+                    json = json.substring(0, json.length - 1);
+                    json += "],";
+                    var train_id = $("#train-id").val();
+                    json += '"train_id": ' + train_id + ', "fuckPassengers": '; //todo check if train is not occupied this date
+                    if (train_id != data['train_id']) {
+                        console.log(data['train_id'] == train_id);
+                        json += 'true';
+                    }
+                    else
+                        json += 'false';
+                    json += "}";
+                    if (invalidTime)
+                        $("#you-fucked-up-time-alert").show();
+                    else if (!/^\d{4}-\d{1,2}-\d{1,2}$/.test($("#date").val()))
+                        $("#you-fucked-up-date-alert").show();
+                    else {
+                        console.log(json);
+                        update(json);
+                    }
+                });
             }
         });
 
@@ -382,6 +380,30 @@
         } );
     });
 
+    function update(data) {
+        $.ajax({
+            type: 'PUT',
+            url: 'api/route_instances',
+            data: data,
+            contentType: 'application/json',
+            success: function() {
+                $("#alert-success").show();
+                setTimeout(function() {
+                    $("#alert-success").remove();
+                    $("#myModal").modal('hide');
+                }, 5000);
+                $('#all-route-instances').DataTable().ajax.reload();
+            },
+            error: function (jqXHR) {
+                console.log("AAAAAA");
+                console.log(jqXHR);
+                $("#alert-error").show();
+                setTimeout(function() {
+                    $("#alert-error").remove();
+                }, 10000);
+            }
+        })
+    }
     function deleteRouteInstance(route_id, date) {
         $.ajax({
             url: 'api/route_instances/'+route_id+'/'+date,
