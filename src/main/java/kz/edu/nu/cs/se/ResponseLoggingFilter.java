@@ -38,9 +38,9 @@ public class ResponseLoggingFilter implements ContainerResponseFilter {
 //        }
 
         JSONObject obj =  (JSONObject) session.getAttribute("appMetadata");
+        String role = "";
         if(obj != null) {
-            System.out.println("logged role="
-                    + obj.getJSONObject("app_metadata").getJSONObject("authorization").getJSONArray("roles").get(0));
+            role = (String) obj.getJSONObject("app_metadata").getJSONObject("authorization").getJSONArray("roles").get(0);
         }
 
         Integer userId = (Integer) session.getAttribute("userId");
@@ -54,7 +54,7 @@ public class ResponseLoggingFilter implements ContainerResponseFilter {
 //
 //        System.out.println(requestBody);
 
-        LOGGER.info(" userId: " + userId + " time: " + java.time.LocalDateTime.now() + " method: " + requestContext.getMethod());
+        LOGGER.info(requestContext.getMethod());
 
     }
 }
