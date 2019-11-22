@@ -105,6 +105,12 @@
                         </button>
                     </div>
                     <div class="modal-body">
+                        <div id="alert-success" class="alert alert-success" role="alert" style="display: none">
+                            Paycheck has been issued successfully.
+                        </div>
+                        <div id="alert-error" class="alert alert-danger" role="alert" style="display: none">
+                            Error occurred while issuing paycheck.
+                        </div>
                         <form class="form-i" id="make-payroll-form">
                             <div class="form-group">
                                 <label class="control-label">Employee ID</label>
@@ -296,31 +302,31 @@
                 "<form class=\"form-i\" id=\"daysForm\">\n" +
                 "<div class=\"form-group\">" +
                     "<label class=\"control-label\">Employee ID</label>\n" +
-                    "<input class=\"form-control\" id=\"m_employeeId\" type=\"text\" value=" + data['id'] + " disabled>\n" +
+                    "<input class=\"form-control\" id=\"m_employeeId\" type=\"text\" value=" + data['id'] + " disabled />\n" +
                 "</div>" +
                 "<div class=\"form-group\">" +
                     "<label class=\"control-label\">First Name</label>\n" +
-                    "<input class=\"form-control\" id=\"m_firstName\" type=\"text\" value=" + data['firstName'] + " disabled>\n" +
+                    "<input class=\"form-control\" id=\"m_firstName\" type=\"text\" value=" + data['firstName'] + " disabled />\n" +
                 "</div>" +
                 "<div class=\"form-group\">" +
                     "<label class=\"control-label\">Surname</label>\n" +
-                    "<input class=\"form-control\" id=\"m_surname\" type=\"text\" value=" + data['surname'] + " disabled>\n" +
+                    "<input class=\"form-control\" id=\"m_surname\" type=\"text\" value=" + data['surname'] + " disabled />\n" +
                 "</div>" +
                 "<div class=\"form-group\">" +
                     "<label class=\"control-label\">Salary</label>\n" +
-                    "<input class=\"form-control\" id=\"m_role\" type=\"text\" value=" + data['salary'] + " disabled>\n" +
+                    "<input class=\"form-control\" id=\"m_role\" type=\"text\" value=" + data['salary'] + " disabled />\n" +
                 "</div>" +
                 "<div class=\"form-group\">" +
                     "<label class=\"control-label\">Role</label>\n" +
-                    "<input class=\"form-control\" id=\"m_role\" type=\"text\" value=" + role + " disabled>\n" +
+                    "<input class=\"form-control\" id=\"m_role\" type=\"text\" value=" + role + " disabled />\n" +
                 "</div>" +
                 "<div class=\"form-group\">" +
                     "<label class=\"control-label\">Station ID</label>\n" +
-                    "<input class=\"form-control\" id=\"m_stationId\" type=\"text\" value=" + data['stationId'] + " disabled>\n" +
+                    "<input class=\"form-control\" id=\"m_stationId\" type=\"text\" value=" + data['stationId'] + " disabled />\n" +
                 "</div>" +
-                "<div class=\"form-group\">" +
+                "<hr><div class=\"form-group\">" +
                     "<label class=\"control-label\"><b>Schedule</b></label>\n" +
-                "</div><hr>";
+                "</div>";
 
             var schedule = data['schedule'];
             for (var key in schedule) {
@@ -335,10 +341,10 @@
                         "<label for=" + key + "><b>Select day</b></label>\n" +
                         "<select class=\"form-control\" id=" + key + ">\n";
 
-                    select += "<option value=" + key + " selected=\"selected\">" + weekDays[key] + "</option>\n";
+                    select += "<option value=" + key + " selected=\"selected\">" + weekDays[key] + "</option>";
                     for (var num in weekNums) {
                         if (weekNums[num] !== parseInt(key)) {
-                            select += "<option value=" + weekNums[num] + ">" + weekDays[weekNums[num]] + "</option>\n";
+                            select += "<option value=" + weekNums[num] + ">" + weekDays[weekNums[num]] + "</option>";
                         }
                     }
                     select += "</select></div>";
@@ -348,22 +354,16 @@
                         "<div class=\"form-row\">\n" +
                             "<div class=\"form-group col-md-6\">\n" +
                                 "<label for=\"from\">From</label>\n" +
-                                "<input type=\"text\" class=\"form-control\" id=" + fromId + " placeholder=\"Enter start time\" value=" + time[0] + ">\n" +
+                                "<input type=\"text\" class=\"form-control\" id=" + fromId + " placeholder=\"Enter start time\" value=" + time[0] + " />\n" +
                             "</div>\n" +
                             "<div class=\"form-group col-md-6\">\n" +
                                 "<label for=\"to\">To</label>\n" +
-                                "<input type=\"text\" class=\"form-control\" id=" + toId + " placeholder=\"Enter end time\" value=" + time[1] + ">\n" +
+                                "<input type=\"text\" class=\"form-control\" id=" + toId + " placeholder=\"Enter end time\" value=" + time[1] + " />\n" +
                             "</div>\n" +
                         "</div>";
                 }
             }
             body += "</form>";
-            // TODO(aadadambek): Finish if you have time
-            // body += "<button class=\"btn btn-primary\" name=\"addDay\" type=\"submit\" onclick=\"addDays()\">Add day</button>";
-            // console.log("in #adjustHoursModal numDays=" + numDays);
-            // if (numDays > 7) {
-            //     document.getElementById("addDay").disabled = true;
-            // }
 
             $('#adjustHoursModal').find('.modal-body').html(body);
         });
@@ -384,6 +384,7 @@
         });
 
         $('#adjust-hours-btn').click(function() {
+            var totalHours = 0;
             var jsonList = "[";
 
             for (var num in weekNums) {
@@ -392,6 +393,9 @@
                     var startTime = $("#from" +  weekNums[num]).val();
                     var endTime = $("#to" +  weekNums[num]).val();
                     var employeeId = $("#m_employeeId").val();
+
+                    var hours = parseInt(endTime.split(":")[0]) - parseInt(startTime.split(":")[0]);
+                    totalHours += hours;
 
                     jsonList += '{'
                         +'"employeeId": ' + employeeId
@@ -404,7 +408,12 @@
             jsonList = jsonList.substring(0, jsonList.length - 1);
             jsonList += "]";
 
-            // TODO(aadambek): make sure total #hours stays the same
+            if (totalHours > 45) {
+                alert("Cannot set a working week with more than 45 hours");
+                return false;
+            }
+
+            console.log(jsonList);
             adjustHours(jsonList);
         });
     });
@@ -415,22 +424,27 @@
             url: 'api/payroll',
             data: data,
             contentType: 'application/json',
-            success: function() {
-                alert("Paycheck for employee with ID=" + data['employeeId'] + " successfully made!");
-                $('#makePayrollModal').hide();
-                $('.modal-backdrop').remove();
-                $('#employees-table').DataTable().ajax.reload();
+            success: function () {
+                console.log("paycheck made");
+                $("#alert-success").show();
+                setTimeout(function() {
+                    $("#alert-success").remove();
+                    $('#makePayrollModal').modal('hide');
+                    $('#employees-table').DataTable().ajax.reload();
+                }, 5000);
             },
-            error: function (jqXHR, status, error) {
-                console.log(jqXHR);
-                alert("Could not make a paycheck for employee with ID=" + data['employeeId']
-                    + ". Status: " + jqXHR.status);
-                $('#employees-table').DataTable().ajax.reload();
+            error: function (error) {
+                console.log(error);
+                $("#alert-error").show();
+                setTimeout(function() {
+                    $("#alert-error").remove();
+                }, 5000);
             }
         });
     }
 
     function adjustHours(data) {
+        console.log(data);
         $.ajax({
             type: 'PUT',
             url: 'api/employees',
@@ -438,8 +452,7 @@
             contentType: 'application/json',
             success: function() {
                 alert("Schedule for employee with ID=" + data['employeeId'] + " successfully modified!");
-                $('#adjustHoursModal').hide();
-                $('.modal-backdrop').remove();
+                $("#adjustHoursModal").modal('hide');
                 $('#employees-table').DataTable().ajax.reload();
             },
             error: function (jqXHR, status, error) {
