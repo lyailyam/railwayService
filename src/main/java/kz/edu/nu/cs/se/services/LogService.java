@@ -11,6 +11,7 @@ import org.hibernate.query.Query;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.security.PublicKey;
 import java.util.List;
 
 @Path("/logs")
@@ -98,6 +99,58 @@ public class LogService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response enableLogs() {
         logger.setLevel(Logger.LoggerLevel.ON);
+        return Response.ok().build();
+    }
+
+    @Path("/users/clear")
+    @DELETE
+    @Logged
+    public Response clearUserLogs() {
+        Session session = SessionFactoryListener.getSession();
+        try {
+            session.beginTransaction();
+
+            Query query = session.createQuery("delete from LogUserEntity ");
+            query.executeUpdate();
+
+            session.getTransaction().commit();
+        } catch (HibernateException e) {
+            session.getTransaction().rollback();
+            e.printStackTrace();
+            return Response.status(400).build();
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+            e.printStackTrace();
+            return Response.status(500).build();
+        } finally {
+            session.close();
+        }
+        return Response.ok().build();
+    }
+
+    @Path("/api/clear")
+    @DELETE
+    @Logged
+    public Response clearApiLogs() {
+        Session session = SessionFactoryListener.getSession();
+        try {
+            session.beginTransaction();
+
+            Query query = session.createQuery("delete from LogApiEntity ");
+            query.executeUpdate();
+
+            session.getTransaction().commit();
+        } catch (HibernateException e) {
+            session.getTransaction().rollback();
+            e.printStackTrace();
+            return Response.status(400).build();
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+            e.printStackTrace();
+            return Response.status(500).build();
+        } finally {
+            session.close();
+        }
         return Response.ok().build();
     }
 }
