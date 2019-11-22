@@ -18,6 +18,7 @@
 
     <mapping class="kz.edu.nu.cs.se.models.entities.EmployeeEntity"/>
     <mapping class="kz.edu.nu.cs.se.models.entities.LegInstanceEntity"/>
+    <mapping class="kz.edu.nu.cs.se.models.entities.PayrollEntity"/>
     <mapping class="kz.edu.nu.cs.se.models.entities.RailcarEntity"/>
     <mapping class="kz.edu.nu.cs.se.models.entities.RoleEntity"/>
     <mapping class="kz.edu.nu.cs.se.models.entities.RouteLegEntity"/>
@@ -30,6 +31,7 @@
     <mapping class="kz.edu.nu.cs.se.models.entities.UserEntity"/>
     <mapping class="kz.edu.nu.cs.se.models.entities.LogApiEntity"/>
     <mapping class="kz.edu.nu.cs.se.models.entities.LogUserEntity"/>
+    <mapping class="kz.edu.nu.cs.se.models.entities.AdvisoryEntity"/>
 
   </session-factory>
 </hibernate-configuration>
