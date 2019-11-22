@@ -80,15 +80,34 @@ public class LogService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUserLogs() {
 
-        List result = null;
+        List<Object[]> results = null;
+        List data = new ArrayList<HashMap>();
 
         Session session = SessionFactoryListener.getSession();
         try {
             session.beginTransaction();
 
-            Query query = session.createQuery("from LogUserEntity l left join UserEntity u on l.userId = u.id");
+            Query query = session.createQuery("select l.logId,  l.timestamp, l.activity, l.userId," +
+                    "u.nationalId, u.surname, u.email, u.firstname " +
+                    "from LogUserEntity l left join UserEntity u on l.userId = u.id");
 
-            result = query.list();
+
+            results = query.getResultList();
+
+            if(!results.isEmpty()) {
+                for(Object[] result : results) {
+                    HashMap<String, Object> resultMap = new HashMap();
+                    resultMap.put("logId", result[0]);
+                    resultMap.put("timestamp", result[1]); // sql.Time is deprecated
+                    resultMap.put("activity", result[2]); // sql.Time is deprecated
+                    resultMap.put("userId", result[3]);
+                    resultMap.put("nationalId", result[4]);
+                    resultMap.put("surname", result[5]);
+                    resultMap.put("email", result[6]);
+                    resultMap.put("firstname", result[7]);
+                    data.add(resultMap);
+                }
+            }
 
             session.getTransaction().commit();
 
@@ -103,7 +122,7 @@ public class LogService {
         } finally {
             session.close();
         }
-        return Response.ok().entity(result).build();
+        return Response.ok().entity(data).build();
     }
 
     @Path("/disable")
