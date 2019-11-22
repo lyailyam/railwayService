@@ -31,34 +31,34 @@
             <div class="row mt-5">
                 <div class="col">
                     <h2>Administration Panel</h2>
-                    <h3>API Requests Logs</h3>
-                    <form action="${pageContext.request.contextPath}/api/logs/api/clear" method="DELETE">
-                        <input type="submit" id="api_logs_clear" class="btn btn-primary btn-block" value="delete-logs-api"/>
-                    </form>
-                    <table id="log_api" class="display" style="width:100%">
-                        <thead>
-                        <tr>
-                            <th>User</th>
-                            <th>Role</th>
-                            <th>Timestamp</th>
-                            <th>Method</th>
-                            <th>URI</th>
-                        </tr>
-                        </thead>
-                    </table>
-                    <h3>LogIn/LogOut Logs</h3>
-                    <form action="${pageContext.request.contextPath}/api/logs/user/clear" method="DELETE">
-                        <input type="submit" id="api_users_clear" class="btn btn-primary btn-block" value="delete-logs-user"/>
-                    </form>
-                    <table id="log_users" class="display" style="width:100%">
-                        <thead>
-                        <tr>
-                            <th>User</th>
-                            <th>Timestamp</th>
-                            <th>Activity</th>
-                        </tr>
-                        </thead>
-                    </table>
+                    <div>
+                        <h3>API Requests Logs</h3>
+                        <button type="submit" id="api_logs_clear" class="btn btn-primary">Clear API requests logs</button>
+                        <table id="log_api" class="display" style="width:100%">
+                            <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Role</th>
+                                <th>Timestamp</th>
+                                <th>Method</th>
+                                <th>URI</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div>
+                        <h3>LogIn/LogOut Logs</h3>
+                        <button type="submit" id="api_users_clear" class="btn btn-primary">Clear login/logout logs</button>
+                        <table id="log_users" class="display" style="width:100%">
+                            <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Timestamp</th>
+                                <th>Activity</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -80,6 +80,7 @@
         var userName;
         var table_api = $('#log_api').DataTable({
             "destroy": true,
+            "lengthMenu": [ 5, 10 ],
             "ajax": {
                 "url": 'api/logs/api',
                 dataSrc: '',
@@ -100,6 +101,7 @@
 
         var table_users = $('#log_users').DataTable({
             "destroy": true,
+            "lengthMenu": [ 5, 10 ],
             "ajax": {
                 "url": 'api/logs/users',
                 dataSrc: '',
@@ -111,6 +113,26 @@
                 ],
 
             "order": [[1, 'asc']]
+        });
+
+        $("#api_logs_clear").on('click', function(){
+            $.ajax({
+                url: 'api/logs/api/clear',
+                method: "DELETE"
+            })
+            .catch(function (err) {
+                console.log("error while deleting log apis: ", err);
+            });
+        });
+
+        $("#api_users_clear").on('click', function(){
+            $.ajax({
+                url: 'api/logs/user/clear',
+                method: "DELETE"
+            })
+                .catch(function (err) {
+                    console.log("error while deleting log users: ", err);
+                });
         });
     });
 </script>
