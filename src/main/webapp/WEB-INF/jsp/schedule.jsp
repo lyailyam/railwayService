@@ -198,17 +198,17 @@
             var data = table.row( $(this).parents('tr') ).data();
             // console.log(table.row($(this).parents('tr')));
             // console.log("data['depStationName']: ", data['depStationName']);
-            var json_ticket_route_first = '{'
-                +'"routeId": ' + parseInt(data['routeId'])
-                +', "legNum": ' + parseInt(data['firstStatLegNum'])
-                +', "date": "' + depDate + '"'
-                +'}';
-
-            var json_ticket_route_second = '{'
-                +'"routeId": ' + parseInt(data['routeId'])
-                +', "legNum": ' + parseInt(data['lastStatLegNum'])
-                +', "date": "' + arrDate + '"'
-                +'}';
+            // var json_ticket_route_first = '{'
+            //     +'"routeId": ' + parseInt(data['routeId'])
+            //     +', "legNum": ' + parseInt(data['firstStatLegNum'])
+            //     +', "date": "' + depDate + '"'
+            //     +'}';
+            //
+            // var json_ticket_route_second = '{'
+            //     +'"routeId": ' + parseInt(data['routeId'])
+            //     +', "legNum": ' + parseInt(data['lastStatLegNum'])
+            //     +', "date": "' + arrDate + '"'
+            //     +'}';
 
             $('#myModal').modal('show');
             $('.modal-body #depStat').val(data['depStationName']);
@@ -268,33 +268,33 @@
                                     }
                                 });
 
-                                console.log(json_ticket_route_first);
-                                $.ajax({
-                                    type: 'POST',
-                                    url: 'api/ticket_route',
-                                    data: json_ticket_route_first,
-                                    contentType: 'application/json',
-                                    success: function (result) {
-                                        console.log(result);
-                                    },
-                                    error: function (error) {
-                                        console.log(error);
-                                    }
-                                });
-
-                                console.log(json_ticket_route_second);
-                                $.ajax({
-                                    type: 'POST',
-                                    url: 'api/ticket_route',
-                                    data: json_ticket_route_second,
-                                    contentType: 'application/json',
-                                    success: function (result) {
-                                        console.log(result);
-                                    },
-                                    error: function (error) {
-                                        console.log(error);
-                                    }
-                                });
+                                // console.log(json_ticket_route_first);
+                                // $.ajax({
+                                //     type: 'POST',
+                                //     url: 'api/ticket_route',
+                                //     data: json_ticket_route_first,
+                                //     contentType: 'application/json',
+                                //     success: function (result) {
+                                //         console.log(result);
+                                //     },
+                                //     error: function (error) {
+                                //         console.log(error);
+                                //     }
+                                // });
+                                //
+                                // console.log(json_ticket_route_second);
+                                // $.ajax({
+                                //     type: 'POST',
+                                //     url: 'api/ticket_route',
+                                //     data: json_ticket_route_second,
+                                //     contentType: 'application/json',
+                                //     success: function (result) {
+                                //         console.log(result);
+                                //     },
+                                //     error: function (error) {
+                                //         console.log(error);
+                                //     }
+                                // });
                             });
                             $("#cancel-buy-ticket").on('click', function () {
                                 $("#name").val("");
