@@ -3,10 +3,9 @@ package kz.edu.nu.cs.se.web;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import kz.edu.nu.cs.se.ResponseLoggingFilter;
+import kz.edu.nu.cs.se.logging.Logger;
 import kz.edu.nu.cs.se.security.Auth0AuthenticationConfig;
 import kz.edu.nu.cs.se.security.Auth0JwtPrincipal;
-import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import javax.inject.Inject;
@@ -17,7 +16,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
-import javax.security.auth.callback.Callback;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,12 +23,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.Principal;
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -42,7 +37,7 @@ public class CallbackServlet extends HttpServlet {
     @Inject
     private Auth0AuthenticationConfig config;
 
-    static final Logger LOGGER = Logger.getLogger(CallbackServlet.class);
+    private Logger logger = Logger.getInstance();
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -131,9 +126,7 @@ public class CallbackServlet extends HttpServlet {
                 System.out.println("role="
                         + obj.getJSONObject("app_metadata").getJSONObject("authorization").getJSONArray("roles").get(0));
 
-                // Logging
-                Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now(ZoneId.of("UTC")));
-                LOGGER.info(" userId: " + userId + " time: " + timestamp + " action: " + "logged in");
+                logger.logLogin(userId);
             } catch (UnirestException e) {
                 e.printStackTrace();
             }

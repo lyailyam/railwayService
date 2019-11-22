@@ -1,4 +1,4 @@
-package kz.edu.nu.cs.se;
+package kz.edu.nu.cs.se.logging;
 
 import javax.ws.rs.NameBinding;
 import java.lang.annotation.ElementType;
