@@ -40,7 +40,7 @@
                                 <c:when test="${appMetadata
                                             .getJSONObject(\"app_metadata\")
                                             .getJSONObject(\"authorization\")
-                                            .getJSONArray(\"roles\").get(0).equals(\"station_manager\")}">
+                                            .getJSONArray(\"roles\").get(0).equals(\"station-manager\")}">
                                     <li class="nav-item">
                                         <p><i>Station Manager</i></p>
                                     </li>
@@ -90,7 +90,7 @@
                                 <c:when test="${appMetadata
                                     .getJSONObject(\"app_metadata\")
                                     .getJSONObject(\"authorization\")
-                                    .getJSONArray(\"roles\").get(0).equals(\"station_manager\")}">
+                                    .getJSONArray(\"roles\").get(0).equals(\"station-manager\")}">
                                     <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle" href="#" id="profileDropDown" data-toggle="dropdown">
                                             <img src="${profile.get('picture').asString()}"  alt="Profile picture" class="nav-user-profile rounded-circle" width="50"/>
