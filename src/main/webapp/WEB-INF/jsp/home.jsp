@@ -22,7 +22,7 @@
                                 <div class="text-center hero my-5">
                                     <p class="lead">
                                         This is the Passenger Panel. From this panel you should be able to access
-                                        all the admin privileges of the Railway Service.
+                                        the user panel of the Railway Service.
                                     </p>
                                 </div>
                             </div>
@@ -30,13 +30,16 @@
                         <c:when test="${appMetadata
                                             .getJSONObject(\"app_metadata\")
                                             .getJSONObject(\"authorization\")
-                                            .getJSONArray(\"roles\").get(0).equals(\"station_manager\")}">
+                                            .getJSONArray(\"roles\").get(0).equals(\"station-manager\")}">
                             <div class="mt-5">
                                 <div class="text-center hero my-5">
                                     <p class="lead">
                                         This is the Station Manager Panel. From this panel you should be able to access
                                         all the admin privileges of the Railway Service.
                                     </p>
+                                    <form action="${pageContext.request.contextPath}/manager" method="GET">
+                                        <input type="submit" class="btn btn-primary btn-block" value="Go to Admin Panel"/>
+                                    </form>
                                 </div>
                             </div>
                         </c:when>
