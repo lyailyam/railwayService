@@ -1,6 +1,7 @@
 package kz.edu.nu.cs.se.models.entities;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "employee", schema = "railwaysdb", catalog = "")
@@ -13,6 +14,7 @@ public class EmployeeEntity {
     private Double salary;
     private int roleId;
     private int stationId;
+    @Temporal(TemporalType.DATE) private String employedDate;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -84,33 +86,47 @@ public class EmployeeEntity {
         this.stationId = stationId;
     }
 
+    @Basic
+    @Column(name = "employed_date", nullable = false)
+    public String getEmployedDate() {
+        return employedDate;
+    }
+
+    public void setEmployedDate(String employedDate) {
+        this.employedDate = employedDate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         EmployeeEntity that = (EmployeeEntity) o;
-
-        if (id != that.id) return false;
-        if (roleId != that.roleId) return false;
-        if (stationId != that.stationId) return false;
-        if (email != null ? !email.equals(that.email) : that.email != null) return false;
-        if (firstname != null ? !firstname.equals(that.firstname) : that.firstname != null) return false;
-        if (surname != null ? !surname.equals(that.surname) : that.surname != null) return false;
-        if (salary != null ? !salary.equals(that.salary) : that.salary != null) return false;
-
-        return true;
+        return id == that.id &&
+                roleId == that.roleId &&
+                stationId == that.stationId &&
+                email.equals(that.email) &&
+                firstname.equals(that.firstname) &&
+                surname.equals(that.surname) &&
+                salary.equals(that.salary) &&
+                employedDate.equals(that.employedDate);
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (firstname != null ? firstname.hashCode() : 0);
-        result = 31 * result + (surname != null ? surname.hashCode() : 0);
-        result = 31 * result + (salary != null ? salary.hashCode() : 0);
-        result = 31 * result + roleId;
-        result = 31 * result + stationId;
-        return result;
+        return Objects.hash(id, email, firstname, surname, salary, roleId, stationId, employedDate);
+    }
+
+    @Override
+    public String toString() {
+        return "EmployeeEntity{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", firstname='" + firstname + '\'' +
+                ", surname='" + surname + '\'' +
+                ", salary=" + salary +
+                ", roleId=" + roleId +
+                ", stationId=" + stationId +
+                ", employedDate='" + employedDate + '\'' +
+                '}';
     }
 }
