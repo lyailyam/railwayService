@@ -5,7 +5,7 @@ import javax.ws.rs.core.Response;
 
 import com.google.gson.Gson;
 import kz.edu.nu.cs.se.DBConnector;
-import kz.edu.nu.cs.se.Logged;
+import kz.edu.nu.cs.se.logging.Logged;
 import kz.edu.nu.cs.se.models.*;
 
 import java.sql.Connection;
