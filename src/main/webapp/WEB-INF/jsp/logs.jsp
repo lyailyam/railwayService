@@ -51,27 +51,6 @@
                     <h2>Logging Panel</h2>
                 </div>
             </div>
-
-            <!-- TODO More responsive design -->
-            <div class="row">
-                <div class="col-3">
-                    <button type="button" class="btn btn-primary" id="api-log-btn">API logs</button>
-                    <button type="button" class="btn btn-primary" id="user-log-btn">User logs</button>
-                </div>
-            </div>
-
-            <!-- Table -->
-            <div class="wrap-table100">
-                <table id="logs" class="display" style="width:100%">
-                    <thead>
-                    <tr>
-                        <th></th>
-                        <th>Log</th>
-                    </tr>
-                    </thead>
-                </table>
-            </div>
-
         </div>
     </div>
 </div>
@@ -107,49 +86,23 @@
             showUserLogs();
         });
 
-        var table = $('#logs').DataTable({
+        var table = $('#log_api').DataTable({
+            "destroy": true,
             "ajax": {
-                "url": 'api/logs,
+                "url": 'api/log_api',
                 dataSrc: ''
             },
             "columns": [
-                {
-                    "class": "details-control",
-                    "orderable": false,
-                    "data": null,
-                    "defaultContent": ""
-                },
-                {
-                    data: null, render: function (data) {
-                        return data;
-                    }
-                },
-            ],
+                { "data" : "userId"},
+                { "data" : "role"},
+                { "data" : "timestamp"},
+                { "data" : "method" },
+                { "data" : "uri"
+                }],
 
             "order": [[1, 'asc']]
         });
-
-        $('#logs tbody').on('click', 'td.details-control', function () {
-            var tr = $(this).closest('tr');
-            var row = table.row(tr);
-
-            if (row.child.isShown()) {
-                row.child.hide();
-                tr.removeClass('shown');
-            } else {
-                row.child(format(row.data())).show();
-                tr.addClass('shown');
-            }
-        });
     });
-
-    function showAPILogs(){
-        alert("API logs")
-    }
-
-    function showUserLogs() {
-        alert("User logs")
-    }
 </script>
 
 
