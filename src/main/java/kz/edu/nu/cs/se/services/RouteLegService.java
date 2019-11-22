@@ -1,6 +1,6 @@
 package kz.edu.nu.cs.se.services;
 
-import kz.edu.nu.cs.se.Logged;
+import kz.edu.nu.cs.se.logging.Logged;
 import kz.edu.nu.cs.se.SessionFactoryListener;
 import kz.edu.nu.cs.se.models.entities.RouteLegEntity;
 import org.hibernate.HibernateException;
