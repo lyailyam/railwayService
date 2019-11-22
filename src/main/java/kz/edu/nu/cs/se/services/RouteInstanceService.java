@@ -106,6 +106,7 @@ public class RouteInstanceService {
             Statement stmt = conn.createStatement())
         {
             int rs = stmt.executeUpdate(sql);
+            AdvisoryService.cancelRouteMessage((long)routeId, date);
             return Response.ok(rs).build();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -132,6 +133,8 @@ public class RouteInstanceService {
             if (fuckPassengers) {
                 sql = "delete from ticket_route where route_id = "+route_id+"  and gdate = '"+date+"';";
                 rs = stmt.executeUpdate(sql);
+                AdvisoryService.addMessage("Dear Passengers travelling on the trip with route ID: " + route_id + " and date: " +
+                        date + ",\nYour tickets have been invalidated because of the change of train. Your money are refunded. Please purchase new tickets if you still need them!");
             }
             for (LegInstance leg : legInstances) {
                 sql = "update leg_instance " +
@@ -141,6 +144,8 @@ public class RouteInstanceService {
                         " where date = '"+date+"' and route_id = "+route_id+" and leg_num = " + leg.getLegnum();
                 rs = stmt.executeUpdate(sql);
             }
+
+            AdvisoryService.updateRouteMessage(route_id,date);
             return Response.ok().build();
         } catch (SQLException e) {
             e.printStackTrace();

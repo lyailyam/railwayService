@@ -55,7 +55,7 @@ public class AdvisoryService {
         addMessage(message);
     }
 
-    private static void addMessage(String message) {
+    public static void addMessage(String message) {
         Timestamp timestamp = new Timestamp(new Date().getTime());
         AdvisoryEntity entity = new AdvisoryEntity();
         entity.setDatetime(timestamp);
