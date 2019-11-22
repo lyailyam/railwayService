@@ -20,21 +20,6 @@
             margin-right: 164px;
             margin-left: 164px;
         }
-
-        td.details-control {
-            background-image: url("https://img.icons8.com/pastel-glyph/2x/plus.png");
-            background-position: center;
-            background-size: 28px 28px;
-            background-repeat: no-repeat;
-            cursor: pointer;
-        }
-
-        tr.shown td.details-control {
-            background-image: url("https://img.icons8.com/pastel-glyph/2x/minus.png");
-            background-size: 28px 28px;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
     </style>
 </head>
 
@@ -47,14 +32,30 @@
                 <div class="col">
                     <h2>Administration Panel</h2>
                     <h3>API Requests Logs</h3>
+                    <form action="${pageContext.request.contextPath}/api/logs/api/clear" method="DELETE">
+                        <input type="submit" id="api_logs_clear" class="btn btn-primary btn-block" value="delete-logs-api"/>
+                    </form>
                     <table id="log_api" class="display" style="width:100%">
                         <thead>
                         <tr>
-                            <th>User ID</th>
+                            <th>User</th>
                             <th>Role</th>
                             <th>Timestamp</th>
                             <th>Method</th>
                             <th>URI</th>
+                        </tr>
+                        </thead>
+                    </table>
+                    <h3>LogIn/LogOut Logs</h3>
+                    <form action="${pageContext.request.contextPath}/api/logs/user/clear" method="DELETE">
+                        <input type="submit" id="api_users_clear" class="btn btn-primary btn-block" value="delete-logs-user"/>
+                    </form>
+                    <table id="log_users" class="display" style="width:100%">
+                        <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Timestamp</th>
+                            <th>Activity</th>
                         </tr>
                         </thead>
                     </table>
@@ -75,38 +76,39 @@
 <script charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
 <script type="text/javascript">
 
-
-    function format(d) {
-        // `d` is the original data object for the row
-        return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
-            '<tr>' +
-            '<td>Log:</td>' +
-            '<td>' + d + '</td>' +
-            '</tr>' +
-            '</table>';
-    }
-
     $(document).ready(function () {
-        $.ajax({
-            type: 'GET',
-            url: '${pageContext.request.contextPath}/api/seats/?trainId='+result['trainId'],
-            success: function(seats) {
-
-            });
-        
-        var table = $('#log_api').DataTable({
+        var userName;
+        var table_api = $('#log_api').DataTable({
             "destroy": true,
             "ajax": {
                 "url": 'api/logs/api',
-                dataSrc: ''
+                dataSrc: '',
+                // success: function(data) {
+                //     userName = getUserName(data);
+                // }
             },
             "columns": [
                 { "data" : "userId"},
                 { "data" : "role"},
                 { "data" : "timestamp"},
                 { "data" : "method" },
-                { "data" : "uri"
-                }],
+                { "data" : "uri"}
+                ],
+
+            "order": [[1, 'asc']]
+        });
+
+        var table_users = $('#log_users').DataTable({
+            "destroy": true,
+            "ajax": {
+                "url": 'api/logs/users',
+                dataSrc: '',
+            },
+            "columns": [
+                { "data" : "userId"},
+                { "data" : "timestamp"},
+                { "data" : "activity" },
+                ],
 
             "order": [[1, 'asc']]
         });
