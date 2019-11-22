@@ -2,6 +2,7 @@ package kz.edu.nu.cs.se.services;
 
 import kz.edu.nu.cs.se.SessionFactoryListener;
 import kz.edu.nu.cs.se.logging.Logged;
+import kz.edu.nu.cs.se.logging.Logger;
 import kz.edu.nu.cs.se.models.entities.SeatEntity;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Path("/logs")
 public class LogService {
+    private Logger logger = Logger.getInstance();
 
     @Path("/api")
     @GET
@@ -79,5 +81,23 @@ public class LogService {
             session.close();
         }
         return Response.ok().entity(result).build();
+    }
+
+    @Path("/disable")
+    @POST
+    @Logged
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response disableLogs() {
+        logger.setLevel(Logger.LoggerLevel.OFF);
+        return Response.ok().build();
+    }
+
+    @Path("/enable")
+    @POST
+    @Logged
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response enableLogs() {
+        logger.setLevel(Logger.LoggerLevel.ON);
+        return Response.ok().build();
     }
 }
