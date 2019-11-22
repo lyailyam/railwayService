@@ -34,11 +34,8 @@
             background-size: 28px 28px;
             background-repeat: no-repeat;
             background-position: center;
-
-
         }
     </style>
-
 </head>
 
 <body>
@@ -48,7 +45,19 @@
         <div class="container">
             <div class="row mt-5">
                 <div class="col">
-                    <h2>Logging Panel</h2>
+                    <h2>Administration Panel</h2>
+                    <h3>API Requests Logs</h3>
+                    <table id="log_api" class="display" style="width:100%">
+                        <thead>
+                        <tr>
+                            <th>User ID</th>
+                            <th>Role</th>
+                            <th>Timestamp</th>
+                            <th>Method</th>
+                            <th>URI</th>
+                        </tr>
+                        </thead>
+                    </table>
                 </div>
             </div>
         </div>
@@ -78,18 +87,17 @@
     }
 
     $(document).ready(function () {
-        $("#api-log-btn").on('click', function() {
-            showAPILogs();
-        });
+        $.ajax({
+            type: 'GET',
+            url: '${pageContext.request.contextPath}/api/seats/?trainId='+result['trainId'],
+            success: function(seats) {
 
-        $("#user-log-btn").on('click', function () {
-            showUserLogs();
-        });
-
+            });
+        
         var table = $('#log_api').DataTable({
             "destroy": true,
             "ajax": {
-                "url": 'api/log_api',
+                "url": 'api/logs/api',
                 dataSrc: ''
             },
             "columns": [
