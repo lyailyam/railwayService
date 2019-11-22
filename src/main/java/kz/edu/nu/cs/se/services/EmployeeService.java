@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import kz.edu.nu.cs.se.DBConnector;
 import kz.edu.nu.cs.se.SessionFactoryListener;
 import kz.edu.nu.cs.se.models.Employee;
-import kz.edu.nu.cs.se.models.Schedule;
 import kz.edu.nu.cs.se.models.entities.EmployeeEntity;
 import kz.edu.nu.cs.se.models.entities.ScheduleEntity;
 import org.hibernate.HibernateException;
@@ -15,10 +14,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Path("/employees")
