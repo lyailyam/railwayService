@@ -31,12 +31,8 @@
             <div class="row mt-5">
                 <div class="col">
                     <h2>Administration Panel</h2>
-                        <input class="btn btn-secondary active">
-                            <input type="radio" name="options" id="logs_enabled" autocomplete="off">Enable Logging
-                        </input>
-                        <label class="btn btn-secondary">
-                            <input type="radio" name="options" id="logs_disabled" autocomplete="off">Disable Logging
-                        </label>
+                        <button class="btn btn-primary" id="log-disable-btn">Disable logs</button>
+                        <button class="btn btn-primary" id="log-enable-btn">Enable logs</button>
                     <br>
                     <br>
                     <h3>API Requests Logs</h3>
@@ -98,19 +94,6 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-        $.ajax({
-            type: 'GET',
-            url: 'api/logs/status',
-            success: function(result) {
-                console.log(result);
-                if (result == "OFF") {
-                    $("#logs_disabled").button('toggle');
-                } else {
-                    $("#logs_enabled").button('toggle');
-                }
-            }
-        });
-
         var table_api = $('#log_api').DataTable({
             "destroy": true,
             "lengthMenu": [ 5, 10 ],
@@ -191,34 +174,24 @@
                 });
         });
 
-        $("#logs_enabled").on('click', function(){
-            $("#logs_enabled").button('toggle');
+        $("#log-enable-btn").on('click', function () {
             $.ajax({
                 url: 'api/logs/enable',
                 method: 'POST',
-                contentType: 'application/json',
-                success: function(result) {
-                    console.log(result);
-                },
-                error: function(error) {
-                    console.log(error);
+                success: function () {
+                    alert("Logs were enabled");
                 }
-            });
+            })
         });
 
-        $("#logs_disabled").on('click', function(){
-            $("#logs_disabled").button('toggle');
+        $("#log-disable-btn").on('click', function () {
             $.ajax({
                 url: 'api/logs/disable',
                 method: 'POST',
-                contentType: 'application/json',
-                success: function(result) {
-                    console.log(result);
-                },
-                error: function(error) {
-                    console.log(error);
+                success: function () {
+                    alert("Logs were disabled")
                 }
-            });
+            })
         });
     });
 </script>
