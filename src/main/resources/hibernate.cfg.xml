@@ -28,6 +28,7 @@
     <mapping class="kz.edu.nu.cs.se.models.entities.TicketRouteEntity"/>
     <mapping class="kz.edu.nu.cs.se.models.entities.TrainEntity"/>
     <mapping class="kz.edu.nu.cs.se.models.entities.UserEntity"/>
+    <mapping class="kz.edu.nu.cs.se.models.entities.AdvisoryEntity"/>
 
   </session-factory>
 </hibernate-configuration>
