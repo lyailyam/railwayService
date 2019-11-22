@@ -83,6 +83,41 @@ public class RouteService {
 //            }
 //    ]
 //}]
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addRoute(Route route) {
+
+        try(Connection conn = DBConnector.getDatabaseConnection();
+            Statement stmt = conn.createStatement())
+        {
+
+            String sql = "select distinct route_id from route_leg order by route_id";
+            ResultSet rs = stmt.executeQuery(sql);
+            int route_id = 0;
+            while (rs.next()) {
+                int hi = rs.getInt("route_id");
+                if (hi == route_id) route_id++;
+                else break;
+            }
+            for (Leg leg : route.getLegs()) {
+                sql = "INSERT INTO route_leg " + "VALUES (" +
+                        route_id + ", "+
+                        leg.getLeg_num()+ ", " +
+                        leg.getDepart_station_id() + ", " +
+                        leg.getArrival_station_id() + ", '" +
+                        leg.getDepart_scheduled_time() + "', '"+
+                        leg.getArrival_scheduled_time() + "');";
+                int res = stmt.executeUpdate(sql);
+            }
+            return Response.ok().build();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return Response.status(404).build();
+        } catch (Exception e) {
+            return Response.status(500).build();
+        }
+    }
 }
 
 

@@ -157,24 +157,35 @@ public class RouteInstanceService {
         }
     }
 
-//    @POST
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    public Response insertTrip(RouteInstance routeInstance) {
-//
-//        String sql = "delete from leg_instance where date = '" + date + "' and route_id = " + routeId;
-//
-//        try(Connection conn = DBConnector.getDatabaseConnection();
-//            Statement stmt = conn.createStatement())
-//        {
-//            int rs = stmt.executeUpdate(sql);
-//            return Response.ok(rs).build();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            return Response.status(404).build();
-//        } catch (Exception e) {
-//            return Response.status(500).build();
-//        }
-//    }
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response insertTrip(RouteInstance routeInstance) {
+        long route_id = routeInstance.getRouteId();
+        String date = routeInstance.getDate();
+        long train_id = routeInstance.getTrainId();
+
+        try(Connection conn = DBConnector.getDatabaseConnection();
+            Statement stmt = conn.createStatement())
+        {
+            for (LegInstance leg : routeInstance.getLegs()) {
+                String sql = "INSERT INTO leg_instance\n" + "VALUES ('" +
+                        date + "', " +
+                        route_id + ", "+
+                        leg.getLegnum()+ ", '" +
+                        leg.getDepart_actual_time() + "', '" +
+                        leg.getArrival_actual_time() + "', " +
+                        leg.getAvailable_seats() + ", "+
+                        train_id + ");";
+                int rs = stmt.executeUpdate(sql);
+            }
+            return Response.ok().build();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return Response.status(404).build();
+        } catch (Exception e) {
+            return Response.status(500).build();
+        }
+    }
 
 }
 

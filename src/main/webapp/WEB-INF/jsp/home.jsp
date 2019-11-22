@@ -40,6 +40,12 @@
                                     <form action="${pageContext.request.contextPath}/manager" method="GET">
                                         <input type="submit" class="btn btn-primary btn-block" value="Go to Admin Panel"/>
                                     </form>
+                                    <form action="${pageContext.request.contextPath}/routes" method="GET">
+                                        <input type="submit" class="btn btn-primary btn-block" value="Routes"/>
+                                    </form>
+                                    <form action="${pageContext.request.contextPath}/routeinstances" method="GET">
+                                        <input type="submit" class="btn btn-primary btn-block" value="Route Instances"/>
+                                    </form>
                                 </div>
                             </div>
                         </c:when>
