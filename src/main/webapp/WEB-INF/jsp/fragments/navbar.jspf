@@ -8,6 +8,9 @@
                     <li class="nav-item">
                         <a href="${pageContext.request.contextPath}" class="nav-link">Home</a>
                     </li>
+                    <li class="nav-item">
+                        <a href="${pageContext.request.contextPath}/advisories" class="nav-link">Advisories</a>
+                    </li>
                     <c:choose>
                         <c:when test="${not empty profile}">
                             <c:choose>
