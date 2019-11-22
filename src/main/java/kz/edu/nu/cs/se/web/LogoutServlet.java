@@ -1,5 +1,6 @@
 package kz.edu.nu.cs.se.web;
 
+import kz.edu.nu.cs.se.logging.Logger;
 import kz.edu.nu.cs.se.security.Auth0AuthenticationConfig;
 
 import javax.inject.Inject;
@@ -16,9 +17,14 @@ import java.io.IOException;
 public class LogoutServlet extends HttpServlet {
 
     @Inject private Auth0AuthenticationConfig config;
+    private Logger logger = Logger.getInstance();
 
     @Override
     protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws IOException {
+        // Logging
+        Integer userId = (Integer) request.getSession().getAttribute("userId");
+        logger.logLogout(userId);
+
         clearSession(request);
         response.sendRedirect(getLogoutUrl(request));
     }

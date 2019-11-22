@@ -1,5 +1,6 @@
 package kz.edu.nu.cs.se.services;
 
+import kz.edu.nu.cs.se.logging.Logged;
 import kz.edu.nu.cs.se.SessionFactoryListener;
 import org.hibernate.Session;
 
@@ -12,7 +13,9 @@ import java.util.List;
 
 @Path("/users")
 public class UserService {
+
     @GET
+    @Logged
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUsers() {
         List result = null;

@@ -1,5 +1,6 @@
 package kz.edu.nu.cs.se.services;
 
+import kz.edu.nu.cs.se.logging.Logged;
 import kz.edu.nu.cs.se.SessionFactoryListener;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -18,6 +19,7 @@ import java.util.List;
 @Path("/schedule-map")
 public class ScheduleMapService {
     @GET
+    @Logged
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSchedule(@QueryParam("date") String date) {
         List<Object[]> results = null;
@@ -78,6 +80,7 @@ public class ScheduleMapService {
 
     @Path("/stations")
     @GET
+    @Logged
     @Produces(MediaType.APPLICATION_JSON)
     public Response getStations(@QueryParam("city") String city,
                                 @QueryParam("id") Integer id) {

@@ -97,6 +97,7 @@
     }
     $(document).ready(function() {
         var table = $('#upcoming-trips').DataTable({
+            "destroy": true,
             "ajax" : {
                 "url" : 'api/ticketsInfo?userId='+${userId},
                 dataSrc : ''

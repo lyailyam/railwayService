@@ -1,5 +1,6 @@
 package kz.edu.nu.cs.se.services;
 
+import kz.edu.nu.cs.se.logging.Logged;
 import kz.edu.nu.cs.se.SessionFactoryListener;
 import kz.edu.nu.cs.se.models.entities.RouteLegEntity;
 import org.hibernate.HibernateException;
@@ -15,6 +16,7 @@ import java.util.List;
 public class RouteLegService {
 
     @GET
+    @Logged
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRouteLegs(@QueryParam("departStationId") Integer departStation,
                                  @QueryParam("arrivalStationId") Integer arriveStation,
@@ -53,6 +55,7 @@ public class RouteLegService {
     }
 
     @POST
+    @Logged
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addRouteLeg(RouteLegEntity routeLeg) {
         Session session = SessionFactoryListener.getSession();
@@ -75,6 +78,7 @@ public class RouteLegService {
     }
 
     @PUT
+    @Logged
     @Consumes(MediaType.APPLICATION_JSON)
     public Response putRouteLeg(RouteLegEntity routeLeg) {
         Session session = SessionFactoryListener.getSession();
@@ -98,6 +102,7 @@ public class RouteLegService {
 
     @Path("/{route_id: [0-9]+}/{leg_num: [0-9]+}")
     @GET
+    @Logged
     public Response getRouteLeg(@PathParam("route_id") Integer routeId,
                                @PathParam("leg_num") Integer legNum) {
         RouteLegEntity result = null;
@@ -128,6 +133,7 @@ public class RouteLegService {
 
     @Path("/{route_id: [0-9]+}/{leg_num: [0-9]+}")
     @DELETE
+    @Logged
     public Response deleteRouteLeg(@PathParam("route_id") Integer routeId,
                                 @PathParam("leg_num") Integer legNum) {
         Session session = SessionFactoryListener.getSession();

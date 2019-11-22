@@ -4,6 +4,12 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1"
          metadata-complete="false">
+    <display-name>Log4jWebApp</display-name>
+
+    <context-param>
+        <param-name>log4j-config-location</param-name>
+        <param-value>WEB-INF/log4j.properties</param-value>
+    </context-param>
     <env-entry>
         <env-entry-name>auth0.domain</env-entry-name>
         <env-entry-type>java.lang.String</env-entry-type>

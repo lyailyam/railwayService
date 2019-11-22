@@ -1,5 +1,6 @@
 package kz.edu.nu.cs.se.services;
 
+import kz.edu.nu.cs.se.logging.Logged;
 import kz.edu.nu.cs.se.SessionFactoryListener;
 import kz.edu.nu.cs.se.models.entities.LegInstanceEntity;
 import org.hibernate.HibernateException;
@@ -15,6 +16,7 @@ import java.util.List;
 public class LegInstanceService {
 
     @GET
+    @Logged
     @Produces(MediaType.APPLICATION_JSON)
     public Response getLegInstances(@QueryParam("date") String date,
                                  @QueryParam("routeId") Integer routeId,
@@ -62,6 +64,7 @@ public class LegInstanceService {
     }
 
     @POST
+    @Logged
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addLegInstance(LegInstanceEntity legInstance) {
         Session session = SessionFactoryListener.getSession();
@@ -84,6 +87,7 @@ public class LegInstanceService {
     }
 
     @PUT
+    @Logged
     @Consumes(MediaType.APPLICATION_JSON)
     public Response putLegInstance(LegInstanceEntity legInstance) {
         Session session = SessionFactoryListener.getSession();
@@ -107,6 +111,7 @@ public class LegInstanceService {
 
     @Path("/{route_id: [0-9]+}/{leg_num: [0-9]+}/{date}")
     @GET
+    @Logged
     public Response getLegInstance(@PathParam("route_id") Integer routeId,
                                 @PathParam("leg_num") Integer legNum,
                                 @PathParam("date") String date) {
@@ -139,6 +144,7 @@ public class LegInstanceService {
 
     @Path("/{route_id: [0-9]+}/{leg_num: [0-9]+}/{date}")
     @DELETE
+    @Logged
     public Response deleteLegInstance(@PathParam("route_id") Integer routeId,
                                    @PathParam("leg_num") Integer legNum,
                                    @PathParam("date") String date) {
