@@ -139,6 +139,8 @@
 <script type="text/javascript">
 
     $(document).ready(function(){
+        var depDate;
+        var arrDate;
         var date_input=$('input[name="date"]'); //our date input has the name "date"
         var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
         var options={
@@ -173,11 +175,13 @@
                 { "data" : "arrStationName" },
                 {
                     data: null, render: function ( data) {
+                        depDate = data.depDate;
                         return data.depDate+' - '+data.depSchedTime;
                     }
                 },
                 {
                     data: null, render: function ( data) {
+                        arrDate = data.arrDate;
                         return data.arrDate+' - '+data.arrSchedTime;
                     }
                 },
@@ -194,9 +198,22 @@
             var data = table.row( $(this).parents('tr') ).data();
             // console.log(table.row($(this).parents('tr')));
             // console.log("data['depStationName']: ", data['depStationName']);
+            var json_ticket_route_first = '{'
+                +'"routeId": ' + parseInt(data['routeId'])
+                +', "legNum": ' + parseInt(data['firstStatLegNum'])
+                +', "date": "' + depDate + '"'
+                +'}';
+
+            var json_ticket_route_second = '{'
+                +'"routeId": ' + parseInt(data['routeId'])
+                +', "legNum": ' + parseInt(data['lastStatLegNum'])
+                +', "date": "' + arrDate + '"'
+                +'}';
+
             $('#myModal').modal('show');
             $('.modal-body #depStat').val(data['depStationName']);
             $('.modal-body #arrStat').val(data['arrStationName']);
+
             $.ajax({
                 type: 'GET',
                 url: 'api/leg_instances/'+data['routeId']+'/'+data['firstStatLegNum']+'/'+data['depDate'],
@@ -215,7 +232,7 @@
                             $('#buy-ticket').on('click', function () {
                                 var seatNum = $("#select-seat-num :selected").text();
                                 var seatVal = $("#select-seat-num :selected").val();
-                                var json = '{'
+                                var json_ticket = '{'
                                     +'"name": "' + $("#name").val() + '"'
                                     +', "nationalId": ' + $("#national-id").val()
                                     +', "railcarNum": ' + seats[seatVal]['railcarNum']
@@ -225,11 +242,11 @@
                                     +', "trainId": ' + seats[seatVal]['trainId']
                                     +', "userId": ${userId}'
                                 +'}';
-                                console.log(json)
+                                console.log(json_ticket);
                                 $.ajax({
                                     type: 'POST',
                                     url: 'api/tickets/',
-                                    data: json,
+                                    data: json_ticket,
                                     contentType: 'application/json',
                                     success: function (result) {
                                         console.log(result);
@@ -240,14 +257,42 @@
                                             $("#surname").val("");
                                             $("#national-id").val("");
                                             $("#myModal").modal('hide');
-                                        }, 5000);
+                                        }, 3000);
                                     },
                                     error: function (error) {
                                         console.log(error);
                                         $("#alert-error").show();
                                         setTimeout(function() {
                                             $("#alert-error").remove();
-                                        }, 5000);
+                                        }, 3000);
+                                    }
+                                });
+
+                                console.log(json_ticket_route_first);
+                                $.ajax({
+                                    type: 'POST',
+                                    url: 'api/ticket_route',
+                                    data: json_ticket_route_first,
+                                    contentType: 'application/json',
+                                    success: function (result) {
+                                        console.log(result);
+                                    },
+                                    error: function (error) {
+                                        console.log(error);
+                                    }
+                                });
+
+                                console.log(json_ticket_route_second);
+                                $.ajax({
+                                    type: 'POST',
+                                    url: 'api/ticket_route',
+                                    data: json_ticket_route_second,
+                                    contentType: 'application/json',
+                                    success: function (result) {
+                                        console.log(result);
+                                    },
+                                    error: function (error) {
+                                        console.log(error);
                                     }
                                 });
                             });

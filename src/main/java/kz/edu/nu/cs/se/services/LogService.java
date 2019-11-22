@@ -143,6 +143,14 @@ public class LogService {
         return Response.ok().build();
     }
 
+    @Path("/status")
+    @GET
+    @Logged
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getStatus() {
+        return Response.ok().entity(logger.getLevel()).build();
+    }
+
     @Path("/users/clear")
     @DELETE
     @Logged

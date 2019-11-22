@@ -31,34 +31,55 @@
             <div class="row mt-5">
                 <div class="col">
                     <h2>Administration Panel</h2>
-                    <div>
-                        <h3>API Requests Logs</h3>
-                        <button type="submit" id="api_logs_clear" class="btn btn-primary">Clear API requests logs</button>
-                        <table id="log_api" class="display" style="width:100%">
-                            <thead>
-                            <tr>
-                                <th>User</th>
-                                <th>Role</th>
-                                <th>Timestamp</th>
-                                <th>Method</th>
-                                <th>URI</th>
-                            </tr>
-                            </thead>
-                        </table>
+                        <input class="btn btn-secondary active">
+                            <input type="radio" name="options" id="logs_enabled" autocomplete="off">Enable Logging
+                        </input>
+                        <label class="btn btn-secondary">
+                            <input type="radio" name="options" id="logs_disabled" autocomplete="off">Disable Logging
+                        </label>
+                    <br>
+                    <br>
+                    <h3>API Requests Logs</h3>
+                    <div id="alert-success-api" class="alert alert-success" role="alert" style="display: none">
+                        You have successfully cleared API request logs.
                     </div>
-                    <div>
-                        <h3>LogIn/LogOut Logs</h3>
-                        <button type="submit" id="api_users_clear" class="btn btn-primary">Clear login/logout logs</button>
-                        <table id="log_users" class="display" style="width:100%">
-                            <thead>
-                            <tr>
-                                <th>User</th>
-                                <th>Timestamp</th>
-                                <th>Activity</th>
-                            </tr>
-                            </thead>
-                        </table>
+                    <div id="alert-error-api" class="alert alert-danger" role="alert" style="display: none">
+                        Error occurred while clearing API request logs.
                     </div>
+                    <button type="submit" id="api_logs_clear" class="btn btn-link">Clear API requests logs</button>
+                    <table id="log_api" class="display" style="width:100%">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Timestamp</th>
+                            <th>Method</th>
+                            <th>URI</th>
+                        </tr>
+                        </thead>
+                    </table>
+                    <br>
+                    <h3>LogIn/LogOut Logs</h3>
+                    <div id="alert-success-users" class="alert alert-success" role="alert" style="display: none">
+                        You have successfully cleared login/logout logs.
+                    </div>
+                    <div id="alert-error-users" class="alert alert-danger" role="alert" style="display: none">
+                        Error occurred while clearing login/logout logs.
+                    </div>
+                    <button type="submit" id="api_users_clear" class="btn btn-link">Clear login/logout logs</button>
+                    <table id="log_users" class="display" style="width:100%">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Timestamp</th>
+                            <th>Activity</th>
+                        </tr>
+                        </thead>
+                    </table>
                 </div>
             </div>
         </div>
@@ -77,19 +98,30 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-        var userName;
+        $.ajax({
+            type: 'GET',
+            url: 'api/logs/status',
+            success: function(result) {
+                console.log(result);
+                if (result == "OFF") {
+                    $("#logs_disabled").button('toggle');
+                } else {
+                    $("#logs_enabled").button('toggle');
+                }
+            }
+        });
+
         var table_api = $('#log_api').DataTable({
             "destroy": true,
             "lengthMenu": [ 5, 10 ],
             "ajax": {
                 "url": 'api/logs/api',
                 dataSrc: '',
-                // success: function(data) {
-                //     userName = getUserName(data);
-                // }
             },
             "columns": [
-                { "data" : "userId"},
+                { "data" : "firstname"},
+                { "data" : "surname"},
+                { "data" : "email"},
                 { "data" : "role"},
                 { "data" : "timestamp"},
                 { "data" : "method" },
@@ -107,7 +139,9 @@
                 dataSrc: '',
             },
             "columns": [
-                { "data" : "userId"},
+                { "data" : "firstname"},
+                { "data" : "surname"},
+                { "data" : "email"},
                 { "data" : "timestamp"},
                 { "data" : "activity" },
                 ],
@@ -120,19 +154,71 @@
                 url: 'api/logs/api/clear',
                 method: "DELETE"
             })
-            .catch(function (err) {
-                console.log("error while deleting log apis: ", err);
-            });
+                .then(function (value) {
+                    $("#alert-success-api").show();
+                    table_api.ajax.reload();
+                    setTimeout(function() {
+                        $("#alert-success-api").remove();
+                    }, 3000);
+                })
+                .catch(function (err) {
+                    console.log("error while deleting log apis: ", err);
+                    $("#alert-error-api").show();
+                    setTimeout(function() {
+                        $("#alert-error-api").remove();
+                    }, 3000);
+                });
         });
 
         $("#api_users_clear").on('click', function(){
             $.ajax({
-                url: 'api/logs/user/clear',
-                method: "DELETE"
+                url: 'api/logs/users/clear',
+                method: 'DELETE'
             })
+                .then(function (value) {
+                    $("#alert-success-users").show();
+                    table_users.ajax.reload();
+                    setTimeout(function() {
+                        $("#alert-success-users").remove();
+                    }, 3000);
+                })
                 .catch(function (err) {
-                    console.log("error while deleting log users: ", err);
+                    console.log("error while deleting log apis: ", err);
+                    $("#alert-error-users").show();
+                    setTimeout(function() {
+                        $("#alert-error-users").remove();
+                    }, 3000);
                 });
+        });
+
+        $("#logs_enabled").on('click', function(){
+            $("#logs_enabled").button('toggle');
+            $.ajax({
+                url: 'api/logs/enable',
+                method: 'POST',
+                contentType: 'application/json',
+                success: function(result) {
+                    console.log(result);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+
+        $("#logs_disabled").on('click', function(){
+            $("#logs_disabled").button('toggle');
+            $.ajax({
+                url: 'api/logs/disable',
+                method: 'POST',
+                contentType: 'application/json',
+                success: function(result) {
+                    console.log(result);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
         });
     });
 </script>
