@@ -12,6 +12,7 @@ import javax.ws.rs.container.ContainerRequestContext;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Date;
 
 public class Logger {
     public static enum LoggerLevel {
@@ -52,7 +53,7 @@ public class Logger {
             }
 
             Integer userId = (Integer) webSession.getAttribute("userId");
-            Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now(ZoneId.of("UTC")));
+            Timestamp timestamp = new Timestamp(new Date().getTime());
             String method = requestContext.getMethod();
             String requestUri  = requestContext.getUriInfo().getRequestUri().toASCIIString();
 
@@ -84,7 +85,7 @@ public class Logger {
 
     public void logLogin(Integer userId) {
         if (level != LoggerLevel.OFF) {
-            Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now(ZoneId.of("UTC")));
+            Timestamp timestamp = new Timestamp(new Date().getTime());
             String activity = "Login";
 
             LogUserEntity entity = new LogUserEntity();
@@ -113,7 +114,7 @@ public class Logger {
 
     public void logLogout(Integer userId) {
         if (level != LoggerLevel.OFF) {
-            Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now(ZoneId.of("UTC")));
+            Timestamp timestamp = new Timestamp(new Date().getTime());
             String activity = "Logout";
 
             LogUserEntity entity = new LogUserEntity();
