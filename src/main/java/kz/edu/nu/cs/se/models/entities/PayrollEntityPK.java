@@ -1,14 +1,14 @@
 package kz.edu.nu.cs.se.models.entities;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import java.io.Serializable;
 import java.util.Objects;
 
-@Entity
-@Table(name = "payroll", schema = "railwaysdb", catalog = "")
-@IdClass(PayrollEntityPK.class)
-public class PayrollEntity {
+public class PayrollEntityPK implements Serializable {
     private int employeeId;
-    private Double paymentAmount;
     @Temporal(TemporalType.DATE) private String paymentDate;
 
     @Id
@@ -19,16 +19,6 @@ public class PayrollEntity {
 
     public void setEmployeeId(int employeeId) {
         this.employeeId = employeeId;
-    }
-
-    @Basic
-    @Column(name = "payment_amount", nullable = false, precision = 0)
-    public Double getPaymentAmount() {
-        return paymentAmount;
-    }
-
-    public void setPaymentAmount(Double paymentAmount) {
-        this.paymentAmount = paymentAmount;
     }
 
     @Id
@@ -45,23 +35,13 @@ public class PayrollEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PayrollEntity that = (PayrollEntity) o;
+        PayrollEntityPK that = (PayrollEntityPK) o;
         return employeeId == that.employeeId &&
-                paymentAmount.equals(that.paymentAmount) &&
                 paymentDate.equals(that.paymentDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(employeeId, paymentAmount, paymentDate);
-    }
-
-    @Override
-    public String toString() {
-        return "PayrollEntity{" +
-                "employeeId=" + employeeId +
-                ", paymentAmount=" + paymentAmount +
-                ", paymentDate='" + paymentDate + '\'' +
-                '}';
+        return Objects.hash(employeeId, paymentDate);
     }
 }
