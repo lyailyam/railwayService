@@ -11,10 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.Principal;
 
-@WebServlet(urlPatterns = {"/notifications"})
-public class NotificationsViewServlet extends HttpServlet {
+@WebServlet(urlPatterns = {"/advisories"})
+public class AdvisoriesViewServlet extends HttpServlet {
 
-    public NotificationsViewServlet() {
+    public AdvisoriesViewServlet() {
         super();
     }
 
@@ -29,6 +29,6 @@ public class NotificationsViewServlet extends HttpServlet {
         String id = request.getParameter("id");
 
         request.setAttribute("id", id);
-        request.getRequestDispatcher("WEB-INF/jsp/notificationsTable.jsp").forward(request, response);
+        request.getRequestDispatcher("WEB-INF/jsp/advisoriesTable.jsp").forward(request, response);
     }
 }

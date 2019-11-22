@@ -164,6 +164,8 @@
                 +', "trainId": ' + $("#train_id").val()
                 +', "seatNum": ' + $("#seat_num").val()
                 + '}';
+            var jsonData2 = '{'
+                +'"userId": ' + $("#user_id").val()
             createTicket(jsonData);
         });
 
@@ -223,7 +225,7 @@
         });
     }
 
-    function createTicket(data) {
+    function createTicket(data, date2) {
         $.ajax({
             type: 'POST',
             url: 'api/tickets',
@@ -233,6 +235,12 @@
                 alert("Ticket successfully created!");
                 $('#createTicketsModal').hide();
                 $('.modal-backdrop').remove();
+                $.ajax({
+                        type: 'POST',
+                        url: 'api/ticket_route',
+                        data: data2,
+                        contentType: 'application/json'
+                });
             },
             error: function (jqXHR, status, error) {
                 console.log(jqXHR);

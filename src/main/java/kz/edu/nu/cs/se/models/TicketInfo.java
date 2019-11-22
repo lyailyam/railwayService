@@ -1,7 +1,5 @@
 package kz.edu.nu.cs.se.models;
 
-import java.sql.Date;
-import java.sql.Time;
 
 public class TicketInfo {
 

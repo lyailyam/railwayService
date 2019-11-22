@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="en" class="h-100">
 <head>
-    <title>All Notifications</title>
+    <title>All Advisory Messages</title>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -42,14 +42,13 @@
 <div class="h-100 d-flex flex-column">
     <%@include file="fragments/navbar.jspf"%>
     <div class="wrap-table100">
-        <table id="notifications" class="display" style="width:100%">
+        <table id="advisories" class="display" style="width:100%">
             <thead>
             <tr>
                 <th></th>
-                <th>Old Route # - Old Leg # - Old Date</th>
-                <th>Old Departure Time - Old Arrival Time</th>
-                <th>New Route # - New Leg # - New Date</th>
-                <th>New Departure Time - New Arrival Time</th>
+                <th>Message</th>
+                <th>Date of creation</th>
+                <th>Time of creation</th>
             </tr>
             </thead>
         </table>
@@ -64,24 +63,7 @@
 <script type="text/javascript">
 
 
-    function format ( d ) {
-        // `d` is the original data object for the row
-        return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
-            '<tr>'+
-            '<td>Changed on:</td>'+
-            '<td>'+d.dateCreated+'</td>'+
-            '</tr>'+
-            '<tr>'+
-            '<tr>'+
-            '<td>Changed at:</td>'+
-            '<td>'+d.timeCreated+'</td>'+
-            '</tr>'+
-            '<tr>'+
-            '<td>Message:</td>'+
-            '<td>'+d.message+'</td>'+
-            '</tr>'+
-            '</table>';
-    }
+
     $(document).ready(function() {
         var table = $('#notifications').DataTable({
             "ajax" : {
