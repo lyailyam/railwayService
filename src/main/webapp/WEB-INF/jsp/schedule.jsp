@@ -139,8 +139,6 @@
 <script type="text/javascript">
 
     $(document).ready(function(){
-        var depDate;
-        var arrDate;
         var date_input=$('input[name="date"]'); //our date input has the name "date"
         var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
         var options={
@@ -196,19 +194,20 @@
         $('#trip-options tbody').on( 'click', 'button', function () {
 
             var data = table.row( $(this).parents('tr') ).data();
-            // console.log(table.row($(this).parents('tr')));
-            // console.log("data['depStationName']: ", data['depStationName']);
-            // var json_ticket_route_first = '{'
-            //     +'"routeId": ' + parseInt(data['routeId'])
-            //     +', "legNum": ' + parseInt(data['firstStatLegNum'])
-            //     +', "date": "' + depDate + '"'
-            //     +'}';
-            //
-            // var json_ticket_route_second = '{'
-            //     +'"routeId": ' + parseInt(data['routeId'])
-            //     +', "legNum": ' + parseInt(data['lastStatLegNum'])
-            //     +', "date": "' + arrDate + '"'
-            //     +'}';
+            console.log("data: ", data);
+            var json_ticket_route_first = '{'
+                +'"routeId": ' + parseInt(data['routeId'])
+                +', "legNum": ' + parseInt(data['firstStatLegNum'])
+                +', "date": "' + depDate + '"';
+
+            var sameLegNum = false;
+            if(data['firstStatLegNum'] === data['lastStatLegNum']) {
+                sameLegNum = true;
+            }
+            var json_ticket_route_second = '{'
+                +'"routeId": ' + parseInt(data['routeId'])
+                +', "legNum": ' + parseInt(data['lastStatLegNum'])
+                +', "date": "' + arrDate + '"';
 
             $('#myModal').modal('show');
             $('.modal-body #depStat').val(data['depStationName']);
@@ -220,7 +219,7 @@
                 success: function(result) {
                     $.ajax({
                         type: 'GET',
-                        url: '${pageContext.request.contextPath}/api/seats/?trainId='+result['trainId'],
+                        url: 'api/seats/?trainId='+result['trainId'],
                         success: function(seats) {
                             console.log(seats);
                             var select = document.getElementById('select-seat-num');
@@ -249,7 +248,37 @@
                                     data: json_ticket,
                                     contentType: 'application/json',
                                     success: function (result) {
-                                        console.log(result);
+                                        json_ticket_route_first += ', "ticketId": ' + result + '}';
+                                        json_ticket_route_second += ', "ticketId": ' + result + '}';
+
+                                        console.log(json_ticket_route_first);
+                                        $.ajax({
+                                            type: 'POST',
+                                            url: 'api/ticket_route',
+                                            data: json_ticket_route_first,
+                                            contentType: "application/json; charset=utf-8",
+                                            success: function (result) {
+                                            },
+                                            error: function (error) {
+                                                console.log(error);
+                                            }
+                                        });
+
+                                        if(!sameLegNum) {
+                                            console.log(json_ticket_route_second);
+                                            $.ajax({
+                                                type: 'POST',
+                                                url: 'api/ticket_route',
+                                                data: json_ticket_route_second,
+                                                contentType: "application/json; charset=utf-8",
+                                                success: function (result) {
+                                                },
+                                                error: function (error) {
+                                                    console.log(error);
+                                                }
+                                            });
+                                        }
+
                                         $("#alert-success").show();
                                         setTimeout(function() {
                                             $("#alert-success").remove();
@@ -267,34 +296,6 @@
                                         }, 3000);
                                     }
                                 });
-
-                                // console.log(json_ticket_route_first);
-                                // $.ajax({
-                                //     type: 'POST',
-                                //     url: 'api/ticket_route',
-                                //     data: json_ticket_route_first,
-                                //     contentType: 'application/json',
-                                //     success: function (result) {
-                                //         console.log(result);
-                                //     },
-                                //     error: function (error) {
-                                //         console.log(error);
-                                //     }
-                                // });
-                                //
-                                // console.log(json_ticket_route_second);
-                                // $.ajax({
-                                //     type: 'POST',
-                                //     url: 'api/ticket_route',
-                                //     data: json_ticket_route_second,
-                                //     contentType: 'application/json',
-                                //     success: function (result) {
-                                //         console.log(result);
-                                //     },
-                                //     error: function (error) {
-                                //         console.log(error);
-                                //     }
-                                // });
                             });
                             $("#cancel-buy-ticket").on('click', function () {
                                 $("#name").val("");
