@@ -53,11 +53,13 @@ public class TicketService_ {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addTicket(TicketEntity ticket) {
         Session session = SessionFactoryListener.getSession();
+        Integer id = null;
 
         try {
             session.beginTransaction();
 
-            session.save(ticket);
+            id = (Integer)session.save(ticket);
+            System.out.println("ticketId: " + id);
 
             session.getTransaction().commit();
         } catch (HibernateException e)
@@ -68,7 +70,7 @@ public class TicketService_ {
         } finally {
             session.close();
         }
-        return Response.ok().build();
+        return Response.ok(id).build();
     }
 
     @PUT

@@ -17,6 +17,7 @@ public class TicketEntity {
     private String nationalId;
 
     @Id
+    @GeneratedValue(generator = "increment")
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
