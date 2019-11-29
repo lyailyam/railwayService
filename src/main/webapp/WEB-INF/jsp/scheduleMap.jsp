@@ -88,10 +88,10 @@
 <script type="text/javascript"
         src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
 
-<script src="https://www.amcharts.com/lib/4/core.js"></script>
-<script src="https://www.amcharts.com/lib/4/maps.js"></script>
-<script src="https://www.amcharts.com/lib/4/geodata/worldLow.js"></script>
-<script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
+<script src="./js/amcharts/core.js"></script>
+<script src="./js/amcharts/maps.js"></script>
+<script src="./js/amcharts/geodata/worldLow.js"></script>
+<script src="./js/amcharts/themes/animated.js"></script>
 <script src="./js/Map.js"></script>
 
 <script type="text/javascript">
