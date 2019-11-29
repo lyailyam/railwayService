@@ -41,7 +41,7 @@ public class ScheduleMapService {
             Query query1 = session.createNativeQuery("SELECT route_id, first_stat_date, " +
                     "first_stat_dep_sched_time, last_stat_arr_sched_time, " +
                     "first_station_city, first_station_name, last_station_city, last_station_name, train_id " +
-                    "FROM route_legs_stations where " +
+                    "FROM new_view where " +
                     "(:date is null or first_stat_date = :date)");
 
             query1.setParameter("date", date);
