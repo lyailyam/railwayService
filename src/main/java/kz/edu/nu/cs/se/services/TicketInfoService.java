@@ -23,131 +23,142 @@ public class TicketInfoService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTickets(@QueryParam("userId") Integer userId) {
 
-        String sql;
+        String legsTicketSql = null;
+        String userTicketsSql = null;
         if (userId != null) {
-            sql = "select ticket.id as ticket_id, ticket.price, ticket.status as ticket_status, " +
-                    "ticket.name as traveler_name, ticket.surname as traveler_surname, " +
-                    "ticket.national_id as traveler_nation_id, user.id as buyer_id, " +
-                    "user.firstname as buyer_name, user.surname as buyer_surname, " +
-                    "user.national_id as buyer_nation_id, user.activated as buyer_activate_status, user.email as buyer_email, " +
-                    " route_legs_stations.route_id, route_legs_stations.first_stat_leg_num, route_legs_stations.first_stat_dep_sched_time, " +
-                    "route_legs_stations.first_stat_arr_sched_time, route_legs_stations.last_stat_leg_num, " +
-                    "route_legs_stations.last_stat_dep_sched_time, route_legs_stations.last_stat_arr_sched_time, " +
-                    "route_legs_stations.first_stat_date, route_legs_stations.first_stat_dep_actual_time, " +
-                    "route_legs_stations.first_stat_arr_actual_time, route_legs_stations.first_stat_leg_avail_seats, " +
-                    "route_legs_stations.train_id, " +
-                    "route_legs_stations.last_stat_date, route_legs_stations.last_stat_dep_actual_time, " +
-                    "route_legs_stations.last_stat_arr_actual_time, route_legs_stations.last_stat_leg_avail_seats, " +
-                    "route_legs_stations.first_station_id, route_legs_stations.first_station_name, route_legs_stations.first_station_city, " +
-                    "route_legs_stations.first_station_longitude, route_legs_stations.first_station_latitude, " +
-                    "route_legs_stations.last_station_id, route_legs_stations.last_station_name, route_legs_stations.last_station_city," +
-                    "route_legs_stations.last_station_longitude, route_legs_stations.arrive_station_latitude, " +
-                    "railcar.num as railcar_num, railcar.capacity as railcar_capacity, railcar.type as railcar_type, " +
-                    "seat.num as seat_num, seat.location as seat_location " +
-                    "from ticket inner join user on ticket.user_id = user.id " +
-                    "inner join seat on seat.num = ticket.seat_num " +
-                    "inner join railcar on railcar.num = seat.railcar_num " +
-                    "inner join train on train.id = railcar.train_id " +
-                    "inner join route_legs_stations on route_legs_stations.train_id = train.id " +
-                    "WHERE user.id = " + userId + " ORDER BY first_stat_dep_sched_time ";
-        } else {
-            sql = "select ticket.id as ticket_id, ticket.price, ticket.status as ticket_status, " +
-                    "ticket.name as traveler_name, ticket.surname as traveler_surname, " +
-                    "ticket.national_id as traveler_nation_id, user.id as buyer_id, " +
-                    "user.firstname as buyer_name, user.surname as buyer_surname, " +
-                    "user.national_id as buyer_nation_id, user.activated as buyer_activate_status, user.email as buyer_email, " +
-                    " route_legs_stations.route_id, route_legs_stations.first_stat_leg_num, route_legs_stations.first_stat_dep_sched_time, " +
-                    "route_legs_stations.first_stat_arr_sched_time, route_legs_stations.last_stat_leg_num, " +
-                    "route_legs_stations.last_stat_dep_sched_time, route_legs_stations.last_stat_arr_sched_time, " +
-                    "route_legs_stations.first_stat_date, route_legs_stations.first_stat_dep_actual_time, " +
-                    "route_legs_stations.first_stat_arr_actual_time, route_legs_stations.first_stat_leg_avail_seats, " +
-                    "route_legs_stations.train_id, " +
-                    "route_legs_stations.last_stat_date, route_legs_stations.last_stat_dep_actual_time, " +
-                    "route_legs_stations.last_stat_arr_actual_time, route_legs_stations.last_stat_leg_avail_seats, " +
-                    "route_legs_stations.first_station_id, route_legs_stations.first_station_name, route_legs_stations.first_station_city, " +
-                    "route_legs_stations.first_station_longitude, route_legs_stations.first_station_latitude, " +
-                    "route_legs_stations.last_station_id, route_legs_stations.last_station_name, route_legs_stations.last_station_city," +
-                    "route_legs_stations.last_station_longitude, route_legs_stations.arrive_station_latitude, " +
-                    "railcar.num as railcar_num, railcar.capacity as railcar_capacity, railcar.type as railcar_type, " +
-                    "seat.num as seat_num, seat.location as seat_location " +
-                    "from ticket inner join user on ticket.user_id = user.id " +
-                    "inner join seat on seat.num = ticket.seat_num " +
-                    "inner join railcar on railcar.num = seat.railcar_num " +
-                    "inner join train on train.id = railcar.train_id " +
-                    "inner join route_legs_stations on route_legs_stations.train_id = train.id " +
-                    "ORDER BY first_stat_dep_sched_time ";
+            //limit 1 just for checking
+            userTicketsSql = "select * from ticket where user_id = " + userId ;
         }
+
 
         Gson gson = new Gson();
 
-        try(Connection conn = DBConnector.getDatabaseConnection();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql)) {
+        if(userId == null) return Response.status(404, "No data found").build();
+        try
+        {
+            Connection conn = DBConnector.getDatabaseConnection();
+            Statement stmt3 = conn.createStatement();
+            ResultSet rs3 = stmt3.executeQuery(userTicketsSql);
             // TODO : Check if id exists at the first place
             List<TicketInfo> ticketList = new CopyOnWriteArrayList<>();
+            //List<TicketInfo> ticketList = new ArrayList<TicketInfo>();
 
-            while (rs.next()) {
-                TicketInfo t = new TicketInfo();
+            int uniqTid = -1;
+            while (rs3.next()) {
+                TicketInfo ticket = new TicketInfo();
 
-                t.setTicketId(rs.getInt("ticket_id"));
-                t.setPrice(rs.getDouble("price"));
-                t.setTicketStatus(rs.getString("ticket_status"));
+                if(uniqTid == rs3.getInt("id")) continue;
+                uniqTid = rs3.getInt("id");
+                ticket.setTicketId(uniqTid);
+                ticket.setPrice(rs3.getDouble("price"));
+                ticket.setTicketStatus(rs3.getString("status"));
 
-                t.setTravelerName(rs.getString("traveler_name"));
-                t.setTravelerSurname(rs.getString("traveler_surname"));
-                t.setTravelerNationId(rs.getString("traveler_nation_id"));
+                ticket.setTravelerName(rs3.getString("name"));
+                ticket.setTravelerSurname(rs3.getString("surname"));
+                ticket.setTravelerNationId(rs3.getString("national_id"));
 
-                t.setBuyerId(rs.getInt("buyer_id"));
-                t.setBuyerName(rs.getString("buyer_name"));
-                t.setBuyerSurname(rs.getString("buyer_surname"));
-                t.setBuyerNationId(rs.getString("buyer_nation_id"));
+                ticket.setBuyerId(rs3.getInt("user_id"));
 
-                t.setFirstStatDepSchedTime(rs.getString("first_stat_dep_sched_time"));
-                t.setFirstStatArrSchedTime(rs.getString("first_stat_arr_sched_time"));
-                t.setLastStatDepSchedTime(rs.getString("last_stat_dep_sched_time"));
-                t.setLastStatArrSchedTime(rs.getString("last_stat_arr_sched_time"));
+                ticket.setTrainId(rs3.getInt("train_id"));
+                ticket.setRailcarNum(rs3.getInt("railcar_num"));
+                ticket.setSeatNum(rs3.getInt("seat_num"));
 
-                t.setFirstStatDate(rs.getString("first_stat_date"));
-                t.setFirstStatDepActualTime(rs.getString("first_stat_dep_actual_time"));
-                t.setFirstStatArrActualTime(rs.getString("first_stat_arr_actual_time"));
-                t.setFirstStatLegAvailSeats(rs.getInt("first_stat_leg_avail_seats"));
-
-                t.setLastStatDate(rs.getString("last_stat_date"));
-                t.setLastStatDepActualTime(rs.getString("last_stat_dep_actual_time"));
-                t.setLastStatArrActualTime(rs.getString("last_stat_arr_actual_time"));
-                t.setLastStatLegAvailSeats(rs.getInt("last_stat_leg_avail_seats"));
-
-                t.setTrainId(rs.getInt("train_id"));
-
-                t.setFirstStatId(rs.getInt("first_station_id"));
-                t.setFirstStatName(rs.getString("first_station_name"));
-                t.setFirstStatCity(rs.getString("first_station_city"));
-                t.setFirstStatLongitude(rs.getDouble("first_station_longitude"));
-                t.setFirstStatLatitude(rs.getDouble("first_station_latitude"));
-
-                t.setLastStatId(rs.getInt("last_station_id"));
-                t.setLastStatName(rs.getString("last_station_name"));
-                t.setLastStatCity(rs.getString("last_station_city"));
-                t.setLastStatLongitude(rs.getDouble("last_station_longitude"));
-                t.setLastStatLatitude(rs.getDouble("arrive_station_latitude"));
-
-                t.setRailcarNum(rs.getInt("railcar_num"));
-                t.setRailcarCapacity(rs.getInt("railcar_capacity"));
-                t.setRailcarType(rs.getString("railcar_type"));
-
-                t.setSeatNum(rs.getInt("seat_num"));
-                t.setSeatLocation(rs.getString("seat_location"));
-
-                ticketList.add(t);
+                ticketList.add(ticket);
             }
 
+            //if(ticketList.isEmpty()) --> return "no tickets"
+            int size = ticketList.size();
+            for(int i=0; i<size; i++) {
+                TicketInfo currTicket = ticketList.remove(0);
+                int tid = currTicket.getTicketId();
+
+                //all leg_instances associated with this ticket_id
+                legsTicketSql = "select * from ticket inner join ticket_route on ticket.id = ticket_route.ticket_id " +
+                        "inner join leg_instance on leg_instance.route_id = ticket_route.route_id and leg_instance.leg_num = ticket_route.leg_num " +
+                        "and leg_instance.date = ticket_route.date " +
+                        "inner join route_leg on route_leg.route_id = leg_instance.route_id and route_leg.leg_num = leg_instance.leg_num " +
+                        "where ticket.user_id = " + userId + " and ticket.id = " + tid + " order by ticket_route.leg_num;";
+                Statement stmt1 = conn.createStatement();
+                ResultSet rs1 = stmt1.executeQuery(legsTicketSql);
+
+                //first leg_instance
+                rs1.next();
+
+                currTicket.setRouteId(rs1.getInt("ticket_route.route_id"));
+                currTicket.setFirstStatLegNum(rs1.getInt("ticket_route.leg_num"));
+                currTicket.setFirstStatDate(rs1.getDate("ticket_route.date").toString());
+
+                currTicket.setFirstStatDepActualTime(rs1.getTime("leg_instance.depart_actual_time").toString());
+                currTicket.setFirstStatDepSchedTime(rs1.getTime("route_leg.depart_scheduled_time").toString());
+
+                int firstStatId = rs1.getInt("route_leg.depart_station_id");
+                currTicket.setFirstStatId(firstStatId);
+
+                //last leg_instance
+                if(!rs1.last()) {
+                    rs1.beforeFirst();
+                    rs1.next();
+                }
+                currTicket.setLastStatLegNum(rs1.getInt("ticket_route.leg_num"));
+                currTicket.setLastStatDate(rs1.getDate("ticket_route.date").toString());
+
+                currTicket.setLastStatArrActualTime(rs1.getTime("leg_instance.arrival_actual_time").toString());
+                currTicket.setLastStatArrSchedTime(rs1.getTime("route_leg.arrival_scheduled_time").toString());
+
+                int lastStatId = rs1.getInt("route_leg.arrival_station_id");
+                currTicket.setLastStatId(lastStatId);
+
+
+                //first station
+                String firstStatSql = "select * from station where id = " + firstStatId;
+                Statement stmt2 = conn.createStatement();
+                ResultSet rs2 = stmt2.executeQuery(firstStatSql);
+
+                rs2.next();
+
+                currTicket.setFirstStatName(rs2.getString("name"));
+                currTicket.setFirstStatCity(rs2.getString("city"));
+                currTicket.setFirstStatLongitude(rs2.getDouble("longitude"));
+                currTicket.setFirstStatLatitude(rs2.getDouble("latitude"));
+
+                //last station
+                String lastStatSql = "select * from station where id = " + lastStatId;
+                Statement stmt4 = conn.createStatement();
+                ResultSet rs4 = stmt4.executeQuery(lastStatSql);
+
+                rs4.next();
+
+                currTicket.setLastStatName(rs4.getString("name"));
+                currTicket.setLastStatCity(rs4.getString("city"));
+                currTicket.setLastStatLongitude(rs4.getDouble("longitude"));
+                currTicket.setLastStatLatitude(rs4.getDouble("latitude"));
+
+                String railcarSql = "select * from seat inner join railcar on railcar.train_id = seat.train_id and railcar.num = seat.railcar_num " +
+                        "where seat.num = " + currTicket.getSeatNum() + " and seat.train_id = " + currTicket.getTrainId() +
+                        " and seat.railcar_num = " + currTicket.getRailcarNum();
+                Statement stmt5 = conn.createStatement();
+                ResultSet rs5 = stmt5.executeQuery(railcarSql);
+
+                rs5.next();
+                currTicket.setRailcarType(rs5.getString("type"));
+                currTicket.setRailcarCapacity(rs5.getInt("capacity"));
+                currTicket.setSeatLocation(rs5.getString("location"));
+
+                ticketList.add(currTicket);
+
+            }
+
+            conn.close();
             return Response.ok(gson.toJson(ticketList)).build();
+
         } catch (SQLException e) {
             e.printStackTrace();
             return Response.status(404).build();
         } catch (Exception e) {
             return Response.status(500).build();
         }
+
+
     }
 
 //    @POST
